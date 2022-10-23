@@ -1,44 +1,40 @@
 package com.example.lunchmunch;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class IngredientsActivity extends AppCompatActivity {
+public class RecipesActivity extends AppCompatActivity {
 
-    Button RecipesNav, MealPlanNav, ShoppingListNav;
-
+    Button IngredientsNav, MealPlanNav, ShoppingListNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         intiViews();
 
-        RecipesNav.setOnClickListener(view -> {
-            startActivity(new Intent(IngredientsActivity.this, RecipesActivity.class));
+        IngredientsNav.setOnClickListener(view -> {
+            startActivity(new Intent(RecipesActivity.this, IngredientsActivity.class));
         });
 
         MealPlanNav.setOnClickListener(view -> {
-            startActivity(new Intent(IngredientsActivity.this, MealPlanActivity.class));
+            startActivity(new Intent(RecipesActivity.this, MealPlanActivity.class));
         });
 
         ShoppingListNav.setOnClickListener(view -> {
-            startActivity(new Intent(IngredientsActivity.this, ShoppingListActivity.class));
+            startActivity(new Intent(RecipesActivity.this, ShoppingListActivity.class));
         });
 
 
     }
 
     private void intiViews() {
-        RecipesNav = findViewById(R.id.recipesNav);
+        IngredientsNav = findViewById(R.id.ingredientsNav);
         MealPlanNav = findViewById(R.id.mealPlanNav);
         ShoppingListNav = findViewById(R.id.shoppingListNav);
     }
 
 }
-
