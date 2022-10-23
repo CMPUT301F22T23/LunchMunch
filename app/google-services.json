@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "98008165565",
+    "project_id": "lunchmuncht23",
+    "storage_bucket": "lunchmuncht23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98008165565:android:75917bcf3dedf49e869bd4",
+        "android_client_info": {
+          "package_name": "com.example.lunchmunch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98008165565-kiailp2994ngsqrlvec92kmo1mrobmod.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2zeSiQo8n7KHbHOUjfxPhiBt0CuU_gZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98008165565-kiailp2994ngsqrlvec92kmo1mrobmod.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

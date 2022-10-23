@@ -3,8 +3,6 @@ package com.example.lunchmunch;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -18,18 +16,16 @@ public class MainActivity extends AppCompatActivity {
     private Button mealButton;
     private Button shoppingButton;
 
-    private ActivityMainBinding binding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        ingredientsButton = (Button) findViewById(R.id.ingredients);
-        recipesButton = (Button) findViewById(R.id.recipes);
-        mealButton = (Button) findViewById(R.id.meal_plan);
-        shoppingButton = (Button) findViewById(R.id.shopping_list);
+        ingredientsButton = findViewById(R.id.ingredients);
+        recipesButton = findViewById(R.id.recipes);
+        mealButton = findViewById(R.id.meal_plan);
+        shoppingButton = findViewById(R.id.shopping_list);
 
         ingredientsButton.setOnClickListener(new View.OnClickListener() {
             @Override
