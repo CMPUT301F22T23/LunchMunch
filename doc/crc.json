@@ -1,0 +1,135 @@
+[
+  {
+    "name": "Food",
+    "superclasses": "",
+    "subclasses": "",
+    "type": 1,
+    "responsibilities": [
+      "Description",
+      "Expiry Date",
+      "Location",
+      "Count",
+      "Cost"
+    ],
+    "collaborators": [
+      "Initialize a foods base attributes"
+    ]
+  },
+  {
+    "name": "Ingredient",
+    "superclasses": "Food",
+    "subclasses": "",
+    "type": 1,
+    "responsibilities": [
+      "Category",
+      "View Details",
+      "Edit Details",
+      "Delete"
+    ],
+    "collaborators": [
+      ""
+    ]
+  },
+  {
+    "name": "IngredientStorage",
+    "superclasses": "",
+    "subclasses": "",
+    "type": 1,
+    "responsibilities": [
+      "List of Ingredients",
+      "Add Ingredient",
+      "Edit Ingredient",
+      "Delete Ingredient",
+      "Remind user to fill in Food Attributes for each Ingredient"
+    ],
+    "collaborators": [
+      "Ingredients"
+    ]
+  },
+  {
+    "name": "Recipe",
+    "superclasses": "",
+    "subclasses": "",
+    "type": 1,
+    "responsibilities": [
+      "Title",
+      "Preparation Time",
+      "Number of Servings",
+      "Recipe Category",
+      "Comments",
+      "Photograph",
+      "List of Ingredients",
+      "Add an Ingredient",
+      "Delete an Ingredient",
+      "",
+      ""
+    ],
+    "collaborators": [
+      "Ingredient"
+    ]
+  },
+  {
+    "name": "Meal",
+    "superclasses": "",
+    "subclasses": "",
+    "type": 1,
+    "responsibilities": [
+      "Include a Recipe ",
+      "View a Recipe",
+      "Edit a Recipe",
+      "Delete a Recipe",
+      "List of Ingredients",
+      "Add an Ingredient to a Recipe",
+      "Additional List of ingredients (Not part of recipe)"
+    ],
+    "collaborators": [
+      "Ingredient",
+      "Recipe"
+    ]
+  },
+  {
+    "name": "Day",
+    "superclasses": "",
+    "subclasses": "",
+    "type": 1,
+    "responsibilities": [
+      "Date"
+    ],
+    "collaborators": [
+      ""
+    ]
+  },
+  {
+    "name": "MealPlan",
+    "superclasses": "Meal",
+    "subclasses": "",
+    "type": 1,
+    "responsibilities": [
+      "List of Days",
+      "Add a Day",
+      "Add a list of Meals to a Day",
+      "Scale Recipes my number of servings"
+    ],
+    "collaborators": [
+      "Day"
+    ]
+  },
+  {
+    "name": "ShoppingList",
+    "superclasses": "",
+    "subclasses": "",
+    "type": 1,
+    "responsibilities": [
+      "Initialize a shopping list with Ingredients",
+      "Sort function",
+      "Checklist for Ingredients",
+      "",
+      ""
+    ],
+    "collaborators": [
+      "Ingredients",
+      "IngredientStorage",
+      "MealPlan"
+    ]
+  }
+]

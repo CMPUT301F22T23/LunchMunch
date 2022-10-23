@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Lunch Munch</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <!--Strings used for home page.-->
+    <string name="welcome">Welcome!</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="recipes">Recipes</string>
+    <string name="meal_plan">Meal Plan</string>
+    <string name="shopping_list">Shopping List</string>
 </resources>
