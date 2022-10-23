@@ -5,13 +5,18 @@
       <map>
         <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/activity_ingredients.xml" value="0.10989583333333333" />
         <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/activity_main.xml" value="0.144" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/activity_recipe.xml" value="0.128" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/content_ingredients.xml" value="0.2" />
         <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/content_main.xml" value="0.10989583333333333" />
         <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/content_recipe.xml" value="0.10989583333333333" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/fragment_first.xml" value="0.10989583333333333" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/fragment_second.xml" value="0.10989583333333333" />
         <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/ingredients_activity.xml" value="0.25" />
         <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/meal_plan_page.xml" value="0.264" />
-        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/meal_plan_page_content.xml" value="0.264" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/meal_plan_page_content.xml" value="0.16799999999999998" />
         <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/mealplan_activity.xml" value="0.25" />
         <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/recipe_fragment.xml" value="0.10989583333333333" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/shoppinglist_activity.xml" value="0.190625" />
       </map>
     </option>
   </component>

@@ -3,6 +3,7 @@ package com.example.lunchmunch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,13 +31,16 @@ public class MealPlanActivity extends AppCompatActivity {
         });
 
 
+
     }
 
     private void intiViews() {
         IngredientsNav = findViewById(R.id.ingredientsNav);
         RecipesNav = findViewById(R.id.recipesNav);
         ShoppingListNav = findViewById(R.id.shoppingListNav);
+
     }
+
 
 }
 
