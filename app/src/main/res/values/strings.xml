@@ -24,4 +24,5 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_recipe">recipe</string>
     <string name="this_week">This Week</string>
+    <string name="Shopping">Shopping</string>
 </resources>
