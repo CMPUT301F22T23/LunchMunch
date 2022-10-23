@@ -1,5 +1,6 @@
 package com.example.lunchmunch;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -10,9 +11,11 @@ public class IngredientsActivity extends AppCompatActivity {
 
     Button RecipesNav, MealPlanNav, ShoppingListNav;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         intiViews();
 
@@ -38,3 +41,4 @@ public class IngredientsActivity extends AppCompatActivity {
     }
 
 }
+
