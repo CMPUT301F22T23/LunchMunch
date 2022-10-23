@@ -3,8 +3,6 @@ package com.example.lunchmunch;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -18,18 +16,12 @@ public class MainActivity extends AppCompatActivity {
     private Button mealButton;
     private Button shoppingButton;
 
-    private ActivityMainBinding binding;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.setContentView(R.layout.content_main);
         super.onCreate(savedInstanceState);
 
-
-        ingredientsButton = (Button) findViewById(R.id.ingredients);
-        recipesButton = (Button) findViewById(R.id.recipes);
-        mealButton = (Button) findViewById(R.id.meal_plan);
-        shoppingButton = (Button) findViewById(R.id.shopping_list);
+        initViews();
 
         ingredientsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,15 +30,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         recipesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openRecipes();
             }
         });
-
-        /*
 
         mealButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 openShopping();
             }
         });
-        */
+
     }
 
     public void openIngredients() {
@@ -72,6 +61,24 @@ public class MainActivity extends AppCompatActivity {
     public void openRecipes() {
         Intent intent = new Intent(this, RecipeActivity.class);
         startActivity(intent);
+    }
+
+    public void openMeal() {
+        Intent intent = new Intent(this, MealPlanActivity.class);
+        startActivity(intent);
+    }
+
+    public void openShopping() {
+        Intent intent = new Intent(this, ShoppingListActivity.class);
+        startActivity(intent);
+    }
+
+    private void initViews() {
+        ingredientsButton = findViewById(R.id.ingredients);
+        recipesButton = findViewById(R.id.recipes);
+        mealButton = findViewById(R.id.meal_plan);
+        shoppingButton = findViewById(R.id.shopping_list);
+
     }
 
 }

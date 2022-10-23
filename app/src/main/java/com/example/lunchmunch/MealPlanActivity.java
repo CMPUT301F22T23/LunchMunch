@@ -13,6 +13,7 @@ public class MealPlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.mealplan_activity);
 
         intiViews();
 
@@ -21,7 +22,7 @@ public class MealPlanActivity extends AppCompatActivity {
         });
 
         RecipesNav.setOnClickListener(view -> {
-            startActivity(new Intent(MealPlanActivity.this, IngredientsActivity.class));
+            startActivity(new Intent(MealPlanActivity.this, RecipeActivity.class));
         });
 
         ShoppingListNav.setOnClickListener(view -> {
