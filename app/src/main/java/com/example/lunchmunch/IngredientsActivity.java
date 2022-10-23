@@ -27,12 +27,36 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.example.lunchmunch.databinding.ActivityIngredientsBinding;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class IngredientsActivity extends AppCompatActivity {
 
     Button RecipesNav, MealPlanNav, ShoppingListNav;
     ArrayList<Food> ingredientsList;
     FirebaseFirestore db;
+
+
+    ListView ingredientsListView;
+    ConstraintLayout layout;
+    ArrayAdapter<String> ingredientAdapter;
+    ArrayList<String> dataList;
+
+    // Declare the variables so that you will be able to reference it later.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +132,22 @@ public class IngredientsActivity extends AppCompatActivity {
                 }
             }
         });*/
+
+        // Add ingredients to list
+
+        ingredientsListView = findViewById(R.id.ingredient_list);
+
+        String []cities ={"Edmonton", "Vancouver", "Moscow", "Sydney", "Berlin", "Vienna", "Tokyo", "Beijing", "Osaka", "New Delhi"};
+
+        dataList = new ArrayList<>();
+
+        dataList.addAll(Arrays.asList(cities));
+
+        ingredientAdapter = new ArrayAdapter<>(this, R.layout.ingredient_list_content, dataList);
+
+
+        ingredientsListView.setAdapter(ingredientAdapter);
+        
     }
 
     private void initViews() {

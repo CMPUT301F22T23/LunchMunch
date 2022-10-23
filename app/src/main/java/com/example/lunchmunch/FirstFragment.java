@@ -4,16 +4,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.lunchmunch.databinding.FragmentFirstBinding;
 
+import java.util.ArrayList;
+
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
+
+
 
     @Override
     public View onCreateView(
@@ -23,6 +30,8 @@ public class FirstFragment extends Fragment {
 
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         return binding.getRoot();
+
+
 
     }
 
@@ -36,6 +45,8 @@ public class FirstFragment extends Fragment {
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
         });
+
+
     }
 
     @Override
