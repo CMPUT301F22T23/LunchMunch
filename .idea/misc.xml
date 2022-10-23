@@ -3,14 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_ingredients.xml" value="0.18899230957031252" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.14375" />
-        <entry key="app/src/main/res/layout/content_ingredients.xml" value="0.14375" />
-        <entry key="app/src/main/res/layout/content_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_first2.xml" value="0.14375" />
-        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.14375" />
-        <entry key="app/src/main/res/layout/fragment_second2.xml" value="0.14375" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/activity_ingredients.xml" value="0.10989583333333333" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/activity_main.xml" value="0.144" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/content_main.xml" value="0.10989583333333333" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/content_recipe.xml" value="0.10989583333333333" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/ingredients_activity.xml" value="0.25" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/meal_plan_page.xml" value="0.264" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/meal_plan_page_content.xml" value="0.34442595673876875" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/mealplan_activity.xml" value="0.25" />
+        <entry key="..\:/LunchMunch/LunchMunch/app/src/main/res/layout/recipe_fragment.xml" value="0.10989583333333333" />
       </map>
     </option>
   </component>
