@@ -16,12 +16,19 @@ public class MainActivity extends AppCompatActivity {
     private Button mealButton;
     private Button shoppingButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.setContentView(R.layout.content_main);
         super.onCreate(savedInstanceState);
 
+
         initViews();
+
+        ingredientsButton = findViewById(R.id.ingredients);
+        recipesButton = findViewById(R.id.recipes);
+        mealButton = findViewById(R.id.meal_plan);
+        shoppingButton = findViewById(R.id.shopping_list);
 
         ingredientsButton.setOnClickListener(new View.OnClickListener() {
             @Override
