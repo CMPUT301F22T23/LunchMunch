@@ -13,7 +13,7 @@ public class MealPlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mealplan_activity);
+        setContentView(R.layout.meal_plan_page_content);
 
         intiViews();
 

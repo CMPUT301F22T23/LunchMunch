@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
     private Button mealButton;
     private Button shoppingButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.setContentView(R.layout.content_main);
