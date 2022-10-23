@@ -19,8 +19,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.setContentView(R.layout.content_main);
         super.onCreate(savedInstanceState);
 
+
+        initViews();
 
         ingredientsButton = findViewById(R.id.ingredients);
         recipesButton = findViewById(R.id.recipes);
@@ -34,15 +37,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         recipesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openRecipes();
             }
         });
-
-        /*
 
         mealButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 openShopping();
             }
         });
-        */
+
     }
 
     public void openIngredients() {
@@ -68,6 +68,24 @@ public class MainActivity extends AppCompatActivity {
     public void openRecipes() {
         Intent intent = new Intent(this, RecipeActivity.class);
         startActivity(intent);
+    }
+
+    public void openMeal() {
+        Intent intent = new Intent(this, MealPlanActivity.class);
+        startActivity(intent);
+    }
+
+    public void openShopping() {
+        Intent intent = new Intent(this, ShoppingListActivity.class);
+        startActivity(intent);
+    }
+
+    private void initViews() {
+        ingredientsButton = findViewById(R.id.ingredients);
+        recipesButton = findViewById(R.id.recipes);
+        mealButton = findViewById(R.id.meal_plan);
+        shoppingButton = findViewById(R.id.shopping_list);
+
     }
 
 }

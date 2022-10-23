@@ -13,15 +13,16 @@ public class ShoppingListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.shoppinglist_activity);
 
-        intiViews();
+        initViews();
 
         IngredientsNav.setOnClickListener(view -> {
             startActivity(new Intent(ShoppingListActivity.this, IngredientsActivity.class));
         });
 
         RecipesNav.setOnClickListener(view -> {
-            startActivity(new Intent(ShoppingListActivity.this, RecipesActivity.class));
+            startActivity(new Intent(ShoppingListActivity.this, RecipeActivity.class));
         });
 
         MealPlanNav.setOnClickListener(view -> {
@@ -31,7 +32,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     }
 
-    private void intiViews() {
+    private void initViews() {
         IngredientsNav = findViewById(R.id.ingredientsNav);
         RecipesNav = findViewById(R.id.recipesNav);
         MealPlanNav = findViewById(R.id.mealPlanNav);
