@@ -39,10 +39,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.lunchmunch.Location;
 import com.example.lunchmunch.databinding.ActivityIngredientsBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+
+import com.example.lunchmunch.FoodItemClass;
 
 public class IngredientsActivity extends AppCompatActivity {
 
@@ -52,9 +56,8 @@ public class IngredientsActivity extends AppCompatActivity {
 
 
     ListView ingredientsListView;
-    ConstraintLayout layout;
-    ArrayAdapter<String> ingredientAdapter;
-    ArrayList<String> dataList;
+    FoodItemAdapter ingredientAdapter;
+    ArrayList<FoodItemClass> dataList;
 
     // Declare the variables so that you will be able to reference it later.
 
@@ -65,6 +68,19 @@ public class IngredientsActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         final CollectionReference IngrCollec = db.collection("Ingredients");
+
+        ingredientsListView = (ListView) findViewById(R.id.ingredient_list);
+
+        FoodItemClass[] foods ={new FoodItemClass("banana", "your mom", new Date(), Location.FREEZER, 6, 6)};
+
+        dataList = new ArrayList<>();
+
+        dataList.addAll(Arrays.asList(foods));
+        System.out.println(dataList);
+        ingredientAdapter = new FoodItemAdapter(this, R.layout.content_ingredients, dataList);
+        System.out.println(ingredientsListView);
+        ingredientsListView.setAdapter(ingredientAdapter);
+
 
         initDBListener(IngrCollec);
         initViews();
@@ -132,21 +148,6 @@ public class IngredientsActivity extends AppCompatActivity {
                 }
             }
         });*/
-
-        // Add ingredients to list
-
-        ingredientsListView = findViewById(R.id.ingredient_list);
-
-        String []cities ={"Edmonton", "Vancouver", "Moscow", "Sydney", "Berlin", "Vienna", "Tokyo", "Beijing", "Osaka", "New Delhi"};
-
-        dataList = new ArrayList<>();
-
-        dataList.addAll(Arrays.asList(cities));
-
-        ingredientAdapter = new ArrayAdapter<>(this, R.layout.ingredient_list_content, dataList);
-
-
-        ingredientsListView.setAdapter(ingredientAdapter);
         
     }
 
