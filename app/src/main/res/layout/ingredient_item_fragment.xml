@@ -1,6 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="com.example.lunchmunch.IngredientItemFragment"
+        android:layout_width="352dp"
+        android:layout_height="492dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.513" />
+
+    <ImageButton
+        android:id="@+id/saveIngredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="10dp"
+        android:background="@null"
+        app:layout_constraintEnd_toStartOf="@+id/deleteIngredient"
+        app:layout_constraintTop_toTopOf="@+id/fragmentContainerView"
+        app:srcCompat="@drawable/ic_save" />
+
+    <ImageButton
+        android:id="@+id/deleteIngredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/saveIngredient"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toTopOf="@+id/fragmentContainerView"
+        app:srcCompat="@drawable/ic_delete" />
+
+    <ImageView
+        android:id="@+id/ingredientImage"
+        android:layout_width="112dp"
+        android:layout_height="106dp"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
+        app:layout_constraintStart_toStartOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/saveIngredient"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <EditText
+        android:id="@+id/ingredient_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:inputType="textPersonName"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
+        app:layout_constraintStart_toStartOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientImage" />
+
+    <EditText
+        android:id="@+id/ingredient_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:inputType="number"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
+        app:layout_constraintStart_toStartOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_name" />
+
+    <EditText
+        android:id="@+id/ingredient_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:inputType="numberDecimal"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
+        app:layout_constraintStart_toStartOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_amount" />
+
+    <EditText
+        android:id="@+id/ingredient_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:inputType="text"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/ingredient_description"
+        app:layout_constraintEnd_toStartOf="@+id/ingredient_price"
+        app:layout_constraintStart_toStartOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_price" />
+
+    <EditText
+        android:id="@+id/ingredient_expiry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:inputType="date"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/ingredient_description"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
+        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintStart_toEndOf="@+id/ingredient_price"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_price"
+        app:layout_constraintVertical_bias="0.462" />
+
+    <TextView
+        android:id="@+id/ingredient_description"
+        android:layout_width="328dp"
+        android:layout_height="57dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/fragmentContainerView"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
+        app:layout_constraintStart_toStartOf="@+id/fragmentContainerView"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_price" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
