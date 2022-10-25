@@ -7,13 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.lunchmunch.databinding.FragmentFirst2Binding;
 
-public class First2Fragment extends Fragment {
+public class Recipe2Fragment extends Fragment {
 
-    private FragmentFirst2Binding binding;
+
 
     @Override
     public View onCreateView(
@@ -21,9 +19,7 @@ public class First2Fragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentFirst2Binding.inflate(inflater, container, false);
-        return binding.getRoot();
-
+        return null;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -35,7 +31,7 @@ public class First2Fragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+
     }
 
 }

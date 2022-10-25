@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/First2Fragment"
-        android:name="com.example.lunchmunch.First2Fragment"
+        android:name="com.example.lunchmunch.RecipeFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/recipe_fragment">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/Second2Fragment"
-        android:name="com.example.lunchmunch.Second2Fragment"
+        android:name="com.example.lunchmunch.Recipe2Fragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/recipe_fragment_2">
 

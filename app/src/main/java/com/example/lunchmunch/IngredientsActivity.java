@@ -1,51 +1,120 @@
 package com.example.lunchmunch;
 
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
-import com.google.android.material.snackbar.Snackbar;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.lunchmunch.databinding.ActivityIngredientsBinding;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class IngredientsActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityIngredientsBinding binding;
+    Button RecipesNav, MealPlanNav, ShoppingListNav;
+    ArrayList<Food> ingredientsList;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.ingredients_activity);
 
-        binding = ActivityIngredientsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference IngrCollec = db.collection("Ingredients");
 
-        setSupportActionBar(binding.toolbar);
+        initDBListener(IngrCollec);
+        initViews();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_ingredients);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        RecipesNav.setOnClickListener(view -> {
+            startActivity(new Intent(IngredientsActivity.this, RecipeActivity.class));
+        });
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        MealPlanNav.setOnClickListener(view -> {
+            startActivity(new Intent(IngredientsActivity.this, MealPlanActivity.class));
+        });
+
+        ShoppingListNav.setOnClickListener(view -> {
+            startActivity(new Intent(IngredientsActivity.this, ShoppingListActivity.class));
+        });
+
+        //Add Food obj to Ingredients list in database
+        /*
+        Food newIngredient = new Food(get attr from user input modal);
+        // add the new food to our current ingr list
+        ingredientsList.add(newIngredient);
+        // update ingr list in db by overwriting it with the current ingredientsList
+        // by leaving document() blank we let firestore autogen an id
+        IngrCollec.add(ingredientsList) // .add equiv to .collec().set(..)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Log.w(TAG, "Error adding document", e);
+                    }
+                });
+        */
+
+        // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
+
+        // Edit Food obj (edit from ingriendsList then same as above ^^)
+
+    }
+
+    private void initDBListener(CollectionReference ingrCollec) {
+        ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // clear current list and re-add all the current ingredients
+                    ingredientsList.clear();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        ingredientsList.add(document.toObject(Food.class));
+                    }
+                    //IngredientsListAdapter.update() whatever this command is, too lazy to search up
+                }
             }
         });
+        /*
+        ingrCollec.get().addOnCompleteListener(task->{
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    List<Map<String, Object>> users = (List<Map<String, Object>>) document.get("users");
+                }
+            }
+        });*/
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_ingredients);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+    private void initViews() {
+        RecipesNav = findViewById(R.id.recipesNav);
+        MealPlanNav = findViewById(R.id.mealPlanNav);
+        ShoppingListNav = findViewById(R.id.shoppingListNav);
     }
+
 }
+
