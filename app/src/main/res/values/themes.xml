@@ -22,4 +22,11 @@
     <style name="Theme.LunchMunch.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.LunchMunch.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Themes for fragments -->
+
+    <!-- Style for alert dialog to add ingredient -->
+    <style name="AddIngredientCustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/popup_background</item>
+    </style>
 </resources>

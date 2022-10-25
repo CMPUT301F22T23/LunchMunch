@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.lunchmunch.databinding.ActivityRecipeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,7 +41,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.lunchmunch.Location;
-import com.example.lunchmunch.databinding.ActivityIngredientsBinding;
+import com.example.lunchmunch.databinding.IngredientsActivityBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,8 +49,7 @@ import java.util.Date;
 
 import com.example.lunchmunch.FoodItemClass;
 
-public class IngredientsActivity extends AppCompatActivity {
-
+public class IngredientsActivity extends AppCompatActivity implements IngredientItemFragment.OnFragmentInteractionListener {
     Button RecipesNav, MealPlanNav, ShoppingListNav;
     ArrayList<Food> ingredientsList;
     FirebaseFirestore db;
@@ -81,8 +81,12 @@ public class IngredientsActivity extends AppCompatActivity {
         System.out.println(ingredientsListView);
         ingredientsListView.setAdapter(ingredientAdapter);
 
+        // Adding/Editing a new item
+        final FloatingActionButton addFoodButton = findViewById(R.id.add_ingredient_button);
+        addFoodButton.setOnClickListener(view -> new IngredientItemFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT"));
 
-        initDBListener(IngrCollec);
+
+        //initDBListener(IngrCollec);
         initViews();
 
         RecipesNav.setOnClickListener(view -> {
@@ -124,6 +128,10 @@ public class IngredientsActivity extends AppCompatActivity {
         // Edit Food obj (edit from ingriendsList then same as above ^^)
 
     }
+    @Override
+    public void onOkPressed() {
+        ingredientAdapter.add(new FoodItemClass("banana", "your mom", new Date(), Location.FREEZER, 6, 6));
+    }
 
     private void initDBListener(CollectionReference ingrCollec) {
         ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -148,7 +156,7 @@ public class IngredientsActivity extends AppCompatActivity {
                 }
             }
         });*/
-        
+
     }
 
     private void initViews() {
