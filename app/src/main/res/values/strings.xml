@@ -16,6 +16,7 @@
     <!-- Strings used for Ingredients page. -->
     <string name="ingredients_title">Ingredients</string>
     <string name="ingredients_subtitle">My Ingredients</string>
+    <string name="add_edit_ingredient_title">Add/Edit Ingredient</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

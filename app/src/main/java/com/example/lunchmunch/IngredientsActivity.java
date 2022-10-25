@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.lunchmunch.databinding.ActivityRecipeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,12 +28,38 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
-public class IngredientsActivity extends AppCompatActivity {
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
+import com.example.lunchmunch.Location;
+import com.example.lunchmunch.databinding.IngredientsActivityBinding;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
+import com.example.lunchmunch.FoodItemClass;
+
+public class IngredientsActivity extends AppCompatActivity implements IngredientItemFragment.OnFragmentInteractionListener {
     Button RecipesNav, MealPlanNav, ShoppingListNav;
     ArrayList<Food> ingredientsList;
     FirebaseFirestore db;
+
+
+    ListView ingredientsListView;
+    FoodItemAdapter ingredientAdapter;
+    ArrayList<FoodItemClass> dataList;
+
+    // Declare the variables so that you will be able to reference it later.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +69,24 @@ public class IngredientsActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         final CollectionReference IngrCollec = db.collection("Ingredients");
 
-        initDBListener(IngrCollec);
+        ingredientsListView = (ListView) findViewById(R.id.ingredient_list);
+
+        FoodItemClass[] foods ={new FoodItemClass("banana", "your mom", new Date(), Location.FREEZER, 6, 6)};
+
+        dataList = new ArrayList<>();
+
+        dataList.addAll(Arrays.asList(foods));
+        System.out.println(dataList);
+        ingredientAdapter = new FoodItemAdapter(this, R.layout.content_ingredients, dataList);
+        System.out.println(ingredientsListView);
+        ingredientsListView.setAdapter(ingredientAdapter);
+
+        // Adding/Editing a new item
+        final FloatingActionButton addFoodButton = findViewById(R.id.add_ingredient_button);
+        addFoodButton.setOnClickListener(view -> new IngredientItemFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT"));
+
+
+        //initDBListener(IngrCollec);
         initViews();
 
         RecipesNav.setOnClickListener(view -> {
@@ -84,6 +128,10 @@ public class IngredientsActivity extends AppCompatActivity {
         // Edit Food obj (edit from ingriendsList then same as above ^^)
 
     }
+    @Override
+    public void onOkPressed() {
+        ingredientAdapter.add(new FoodItemClass("banana", "your mom", new Date(), Location.FREEZER, 6, 6));
+    }
 
     private void initDBListener(CollectionReference ingrCollec) {
         ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -108,6 +156,7 @@ public class IngredientsActivity extends AppCompatActivity {
                 }
             }
         });*/
+
     }
 
     private void initViews() {
