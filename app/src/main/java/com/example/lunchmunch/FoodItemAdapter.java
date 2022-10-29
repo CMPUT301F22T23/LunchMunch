@@ -12,13 +12,13 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-public class FoodItemAdapter extends ArrayAdapter<FoodItemClass> {
+public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
 
-    private ArrayList<FoodItemClass> dataList;
+    private ArrayList<Ingredient> dataList;
     Context context;
 
 
-    public void updateList(ArrayList<FoodItemClass> data) {
+    public void updateList(ArrayList<Ingredient> data) {
         dataList.clear();
         dataList.addAll(data);
         System.out.println(dataList.get(0).getName());
@@ -32,7 +32,7 @@ public class FoodItemAdapter extends ArrayAdapter<FoodItemClass> {
     }
 
 
-    public FoodItemAdapter(@NonNull Context context, int resource, @NonNull ArrayList<FoodItemClass> objects) {
+    public FoodItemAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Ingredient> objects) {
         super(context, resource, objects);
         this.dataList = objects;
         this.context = context;
@@ -42,7 +42,7 @@ public class FoodItemAdapter extends ArrayAdapter<FoodItemClass> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        FoodItemClass foodItem = getItem(position);
+        Ingredient foodItem = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 

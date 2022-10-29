@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -29,17 +30,44 @@
         app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
         app:layout_constraintVertical_bias="0.272" />
 
+    <TextView
+        android:id="@+id/ingredients_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/nunito_extrabold"
+        android:text="@string/ingredients_subtitle"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/ingredient_list"
+        app:layout_constraintStart_toStartOf="@id/ingredient_list" />
+
+    <TextView
+        android:id="@+id/ingredient_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/nunito_extrabold"
+        android:text="@string/sort"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/ingredient_list"
+        app:layout_constraintEnd_toEndOf="@id/ingredient_list" />
+
+
     <ListView
         android:id="@+id/ingredient_list"
         android:layout_width="0dp"
-        android:layout_height="100dp"
 
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="120dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/add_ingredient_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_first" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_first">
+
+    </ListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_ingredient_button"

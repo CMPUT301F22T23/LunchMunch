@@ -3,61 +3,46 @@ package com.example.lunchmunch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.lunchmunch.databinding.ActivityRecipeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.FirebaseApp;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+
 import android.widget.ListView;
+import android.widget.Spinner;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.lunchmunch.Location;
-import com.example.lunchmunch.databinding.IngredientsActivityBinding;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-
-import com.example.lunchmunch.FoodItemClass;
 
 public class IngredientsActivity extends AppCompatActivity implements IngredientItemFragment.OnFragmentInteractionListener {
     Button RecipesNav, MealPlanNav, ShoppingListNav;
-    ArrayList<Food> ingredientsList;
     FirebaseFirestore db;
+    CollectionReference IngrCollec;
 
 
     ListView ingredientsListView;
     FoodItemAdapter ingredientAdapter;
-    ArrayList<FoodItemClass> dataList;
+    ArrayList<Ingredient> dataList;
+    Map<String, Ingredient> foodMap;
+    IngredientItemFragment fragment;
+
 
     // Declare the variables so that you will be able to reference it later.
 
@@ -66,29 +51,32 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ingredients_activity);
 
+
+
+        // init firebase reference
         db = FirebaseFirestore.getInstance();
-        final CollectionReference IngrCollec = db.collection("Ingredients");
+        IngrCollec = db.collection("Ingredients");
 
-        ingredientsListView = (ListView) findViewById(R.id.ingredient_list);
-
-        FoodItemClass[] foods ={new FoodItemClass("banana", "your mom", new Date(), Location.FREEZER, 6, 6)};
-
-        dataList = new ArrayList<>();
-
-        dataList.addAll(Arrays.asList(foods));
-        System.out.println(dataList);
-        ingredientAdapter = new FoodItemAdapter(this, R.layout.content_ingredients, dataList);
-        System.out.println(ingredientsListView);
-        ingredientsListView.setAdapter(ingredientAdapter);
-
-        // Adding/Editing a new item
-        final FloatingActionButton addFoodButton = findViewById(R.id.add_ingredient_button);
-        addFoodButton.setOnClickListener(view -> new IngredientItemFragment().show(getSupportFragmentManager(), "ADD_INGREDIENT"));
-
-
-        //initDBListener(IngrCollec);
+        initDBListener(IngrCollec);
         initViews();
 
+        // ingredient item storage
+        dataList = new ArrayList<Ingredient>(); // used for displaying list
+        foodMap = new HashMap<String, Ingredient>(); // used for storing unique ingredients
+
+        // ingredient lists
+        ingredientsListView = (ListView) findViewById(R.id.ingredient_list);
+        ingredientAdapter = new FoodItemAdapter(this, R.layout.content_ingredients, dataList);
+        ingredientsListView.setAdapter(ingredientAdapter);
+
+        // adding or editing a new item button
+        final FloatingActionButton addFoodButton = findViewById(R.id.add_ingredient_button);
+        fragment = new IngredientItemFragment();
+        addFoodButton.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT"));
+
+
+
+        // navbar listeners
         RecipesNav.setOnClickListener(view -> {
             startActivity(new Intent(IngredientsActivity.this, RecipeActivity.class));
         });
@@ -101,61 +89,104 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             startActivity(new Intent(IngredientsActivity.this, ShoppingListActivity.class));
         });
 
-        //Add Food obj to Ingredients list in database
-        /*
-        Food newIngredient = new Food(get attr from user input modal);
-        // add the new food to our current ingr list
-        ingredientsList.add(newIngredient);
+    }
+    @Override
+    public void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category) {
+        System.out.println(bestBefore);
+
+        Ingredient newIngredient = new Ingredient(name, description, bestBefore, location, count, cost, category);
+
+        // add the new food to our current ingr list if new
+        if (!foodMap.containsKey(name)) {
+            dataList.add(newIngredient);
+            ingredientAdapter.notifyDataSetChanged();
+
+        }
+        foodMap.put(newIngredient.getName(), newIngredient);
         // update ingr list in db by overwriting it with the current ingredientsList
-        // by leaving document() blank we let firestore autogen an id
-        IngrCollec.add(ingredientsList) // .add equiv to .collec().set(..)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        // by leaving document() blank we let firestore autogen an id .document("xT7aCsl8iLNnZkwKWvr3")
+        IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap) // .add equiv to .collec().set(..)
+                .addOnSuccessListener(new OnSuccessListener() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Object o) {
+                        System.out.println("Success");
                         //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        System.out.println("Fail");
                         //Log.w(TAG, "Error adding document", e);
                     }
                 });
-        */
 
         // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
 
         // Edit Food obj (edit from ingriendsList then same as above ^^)
-
-    }
-    @Override
-    public void onOkPressed() {
-        ingredientAdapter.add(new FoodItemClass("banana", "your mom", new Date(), Location.FREEZER, 6, 6));
     }
 
     private void initDBListener(CollectionReference ingrCollec) {
+
+
         ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                // for deleting documents
+//                for (QueryDocumentSnapshot document : task.getResult()) {
+//                    ingrCollec.document(document.getId())
+//                            .delete()
+//                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void aVoid) {
+//                                    System.out.println("Success");
+//                                }
+//                            })
+//                            .addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    System.out.println("Failure");
+//                                }
+//                            });
+//                }
                 if (task.isSuccessful()) {
                     // clear current list and re-add all the current ingredients
-                    ingredientsList.clear();
+                    dataList.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        ingredientsList.add(document.toObject(Food.class));
+
+                        // convert document objects back into Ingredient class objects
+                        for (Object data : document.getData().values()) {
+                            HashMap<String, Object> foodData = (HashMap<String, Object>) data;
+
+                            String name = (String) foodData.get("name");
+                            String description = (String) foodData.get("description");
+                            Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
+                            Date bestBefore = (Date) timestamp.toDate();
+                            Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
+                            Integer count = (Integer) ((Long) foodData.get("count")).intValue();
+                            Integer cost = (Integer) ((Long) foodData.get("cost")).intValue();
+                            IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
+
+                            Ingredient food = new Ingredient(name, description, bestBefore, location, count, cost, category);
+
+                            // add to map for unique ingredient entries
+                            foodMap.put(name, food);
+
+                            // add to arraylist for adapter
+                            dataList.add(food);
+                        }
+
                     }
-                    //IngredientsListAdapter.update() whatever this command is, too lazy to search up
+                    ingredientAdapter.notifyDataSetChanged();
                 }
             }
         });
-        /*
-        ingrCollec.get().addOnCompleteListener(task->{
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    List<Map<String, Object>> users = (List<Map<String, Object>>) document.get("users");
-                }
-            }
-        });*/
+//        ingrCollec.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//
+//            }
+//        })
 
     }
 
@@ -164,6 +195,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         MealPlanNav = findViewById(R.id.mealPlanNav);
         ShoppingListNav = findViewById(R.id.shoppingListNav);
     }
+
 
 }
 
