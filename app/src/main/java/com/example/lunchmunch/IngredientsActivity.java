@@ -89,6 +89,14 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             startActivity(new Intent(IngredientsActivity.this, ShoppingListActivity.class));
         });
 
+        //Open fragment when ingredient_list item is clicked
+        ingredientsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                fragment.show(getSupportFragmentManager(), "EDIT_INGREDIENT");
+            }
+        });
+
     }
     @Override
     public void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category) {
@@ -110,6 +118,37 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                     @Override
                     public void onSuccess(Object o) {
                         System.out.println("Success");
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Fail");
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
+        // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
+
+        // Edit Food obj (edit from ingriendsList then same as above ^^)
+    }
+
+    @Override
+    public void deleteIngredient(Integer position) {
+        String name = dataList.get(position).getName();
+
+        if (foodMap.containsKey(name)) {
+            dataList.remove(position);
+            ingredientAdapter.notifyDataSetChanged();
+            foodMap.remove(name);
+        }
+
+        IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap) // .add equiv to .collec().set(..)
+                .addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        System.out.println("Success");
                         //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
@@ -121,13 +160,9 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                     }
                 });
 
-        // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
-
-        // Edit Food obj (edit from ingriendsList then same as above ^^)
     }
 
     private void initDBListener(CollectionReference ingrCollec) {
-
 
         ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -189,6 +224,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 //        })
 
     }
+
 
     private void initViews() {
         RecipesNav = findViewById(R.id.recipesNav);
