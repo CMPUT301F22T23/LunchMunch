@@ -17,6 +17,14 @@
     <string name="ingredients_title">Ingredients</string>
     <string name="ingredients_subtitle">My Ingredients</string>
     <string name="add_edit_ingredient_title">Add/Edit Ingredient</string>
+    <string name="ingredient_category_placeholder">Category</string>
+    <string name="ingredient_name_placeholder">Name</string>
+    <string name="ingredient_amount_placeholder">Amount</string>
+    <string name="ingredient_unit_placeholder">Unit</string>
+    <string name="ingredient_cost_placeholder">Cost</string>
+    <string name="ingredient_expiration_date_placeholder">Expiration Date</string>
+    <string name="ingredient_location_placeholder">Location</string>
+    <string name="ingredient_description_placeholder">Description</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

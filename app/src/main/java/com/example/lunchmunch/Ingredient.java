@@ -6,21 +6,23 @@ import com.example.lunchmunch.Location;
 import java.math.RoundingMode;
 import java.util.Date;
 
-public class FoodItemClass {
+public class Ingredient {
     private String name;
     private String description;
     private Date bestBefore;
     private Location location;
     private Integer count;
     private Integer cost;
+    private IngredientCategory category;
 
-    public FoodItemClass(String name, String description, Date bestBefore, Location location, Integer count, Integer cost) {
+    public Ingredient(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category) {
         this.name = name;
         this.description = description;
         this.bestBefore = bestBefore;
         this.location = location;
         this.count = count;
         this.cost = cost;
+        this.category = category;
     }
 
     public String getName() {
@@ -59,10 +61,10 @@ public class FoodItemClass {
         return this.cost;
     }
 
-    public void setCost(Float cost) {
-        this.cost = Math.round(cost);
-
-    }
+//    public void setCost(Float cost) {
+//        this.cost = Math.round(cost);
+//
+//    }
 
     public void setCost(Integer cost) {
         this.cost = cost;
@@ -75,6 +77,11 @@ public class FoodItemClass {
     public void setCount(Integer count) {
         this.count = count;
     }
+
+    public IngredientCategory getCategory() { return this.category; }
+
+    public void setCategory(IngredientCategory category) { this.category = category; }
+
 
     @Override
     public String toString(){

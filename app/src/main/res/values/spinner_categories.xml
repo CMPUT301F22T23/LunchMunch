@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ingredient_categories">
+        <item>Vegetable</item>
+        <item>Fruit</item>
+        <item>Dairy</item>
+        <item>Meat</item>
+        <item>Seafood</item>
+        <item>Grain</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="ingredient_locations">
+        <item>Pantry</item>
+        <item>Freezer</item>
+        <item>Fridge</item>
+    </string-array>
+</resources>
