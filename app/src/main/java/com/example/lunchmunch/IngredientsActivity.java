@@ -105,7 +105,9 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         foodMap.put(newIngredient.getName(), newIngredient);
         // update ingr list in db by overwriting it with the current ingredientsList
         // by leaving document() blank we let firestore autogen an id .document("xT7aCsl8iLNnZkwKWvr3")
-        IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap) // .add equiv to .collec().set(..)
+        //IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap)
+        // restructured db to have list of collections instead of one collection
+        IngrCollec.document(name).set(newIngredient) // .add equiv to .collec().set(..)
                 .addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
@@ -132,62 +134,39 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                // for deleting documents
-//                for (QueryDocumentSnapshot document : task.getResult()) {
-//                    ingrCollec.document(document.getId())
-//                            .delete()
-//                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                @Override
-//                                public void onSuccess(Void aVoid) {
-//                                    System.out.println("Success");
-//                                }
-//                            })
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    System.out.println("Failure");
-//                                }
-//                            });
-//                }
+
                 if (task.isSuccessful()) {
                     // clear current list and re-add all the current ingredients
                     dataList.clear();
+                    // each document in the Ingredients collection is an Ingredient class object
                     for (QueryDocumentSnapshot document : task.getResult()) {
 
-                        // convert document objects back into Ingredient class objects
-                        for (Object data : document.getData().values()) {
-                            HashMap<String, Object> foodData = (HashMap<String, Object>) data;
+                        Timestamp timestamp = (Timestamp) document.getData().get("bestBefore");
+                        Date bestBefore = timestamp.toDate();
 
-                            String name = (String) foodData.get("name");
-                            String description = (String) foodData.get("description");
-                            Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
-                            Date bestBefore = (Date) timestamp.toDate();
-                            Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
-                            Integer count = (Integer) ((Long) foodData.get("count")).intValue();
-                            Integer cost = (Integer) ((Long) foodData.get("cost")).intValue();
-                            IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
+                        Ingredient ingredient = new Ingredient(
+                                (String) document.getData().get("name"),
+                                (String) document.getData().get("description"),
+                                bestBefore,
+                                Location.valueOf(document.getData().get("location").toString().toUpperCase()),
+                                ((Long) document.getData().get("count")).intValue(),
+                                ((Long) document.getData().get("cost")).intValue(),
+                                IngredientCategory.valueOf(document.getData().get("category").toString().toUpperCase())
+                        );
 
-                            Ingredient food = new Ingredient(name, description, bestBefore, location, count, cost, category);
 
-                            // add to map for unique ingredient entries
-                            foodMap.put(name, food);
+                        //Ingredient ingredient = document.toObject(Ingredient.class);
 
-                            // add to arraylist for adapter
-                            dataList.add(food);
-                        }
+
+                        //TODO: (Maxym) Add ingredients to sharedPreferences
+                        foodMap.put(ingredient.getName(), ingredient);
+                        dataList.add(ingredient);
 
                     }
                     ingredientAdapter.notifyDataSetChanged();
                 }
             }
         });
-//        ingrCollec.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//
-//            }
-//        })
-
     }
 
     private void initViews() {
