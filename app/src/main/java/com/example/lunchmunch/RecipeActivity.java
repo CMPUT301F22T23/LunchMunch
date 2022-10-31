@@ -175,6 +175,7 @@ public class RecipeActivity extends AppCompatActivity {
 
     private List<Ingredient> getIngredients(List<String> ingredientNames, DBIngredients dbIngredients ) {
 
+        // delete this for sharedPreferences pull I think
         ArrayList<Ingredient> ingredientsList = new ArrayList<Ingredient>();
 
         //this should get List<Ingredient> without any errors
@@ -188,7 +189,7 @@ public class RecipeActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Ingredient ingredient = document.toObject(Ingredient.class);
+                        //Ingredient ingredient = document.toObject(Ingredient.class);
                         /*
                         // convert document objects back into Ingredient class objects
                         for (Object data : document.getData().values()) {
@@ -211,8 +212,8 @@ public class RecipeActivity extends AppCompatActivity {
                         }
 
                          */
-                        ingredientsList.add(ingredient);
-                        dbIngredients.onSuccess(ingredientsList);
+                        //ingredientsList.add(ingredient);
+                        //dbIngredients.onSuccess(ingredientsList);
                     }
                 } else {
                     System.out.println("get failed with " + task.getException());
