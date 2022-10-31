@@ -65,6 +65,26 @@ public class RecipeActivity extends AppCompatActivity {
             startActivity(new Intent(RecipeActivity.this, ShoppingListActivity.class));
         });
 
+        /*
+        Recipe newRecipe = new Recipe();
+        RecipeCollec.document(newRecipe.getName()).set(newRecipe) // .add equiv to .collec().set(..)
+                .addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        System.out.println("Success");
+                        //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Fail");
+                        //Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
+         */
+
     }
 
     private void initDBListener(CollectionReference recipeCollec) {
