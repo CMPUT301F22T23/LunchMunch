@@ -105,7 +105,9 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         foodMap.put(newIngredient.getName(), newIngredient);
         // update ingr list in db by overwriting it with the current ingredientsList
         // by leaving document() blank we let firestore autogen an id .document("xT7aCsl8iLNnZkwKWvr3")
-        IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap) // .add equiv to .collec().set(..)
+        //IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap)
+        // restructured db to have list of collections instead of one collection
+        IngrCollec.document(name).set(newIngredient) // .add equiv to .collec().set(..)
                 .addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
@@ -152,8 +154,11 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                 if (task.isSuccessful()) {
                     // clear current list and re-add all the current ingredients
                     dataList.clear();
+                    // each document in the Ingredients collection is an Ingredient class object
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        Ingredient ingredient = document.toObject(Ingredient.class);
 
+                        /*
                         // convert document objects back into Ingredient class objects
                         for (Object data : document.getData().values()) {
                             HashMap<String, Object> foodData = (HashMap<String, Object>) data;
@@ -174,7 +179,9 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
                             // add to arraylist for adapter
                             dataList.add(food);
-                        }
+                        }*/
+                        foodMap.put(ingredient.getName(), ingredient);
+                        dataList.add(ingredient);
 
                     }
                     ingredientAdapter.notifyDataSetChanged();
