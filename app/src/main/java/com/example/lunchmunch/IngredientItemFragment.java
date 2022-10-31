@@ -51,7 +51,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
         void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category);
-        void deleteIngredient(Integer position);
+        void deleteIngredient();
     };
 
     @Override
@@ -101,7 +101,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 .setNegativeButton("DEL", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.deleteIngredient(i);
+                        listener.deleteIngredient();
                     }
                 })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

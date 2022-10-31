@@ -3,6 +3,7 @@ package com.example.lunchmunch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,6 +43,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     ArrayList<Ingredient> dataList;
     Map<String, Ingredient> foodMap;
     IngredientItemFragment fragment;
+    Integer itemPosition;
 
 
     // Declare the variables so that you will be able to reference it later.
@@ -93,7 +95,9 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         ingredientsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                fragment.show(getSupportFragmentManager(), "EDIT_INGREDIENT");
+                itemPosition = i;
+                fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT");
+                view.refreshDrawableState();
             }
         });
 
@@ -118,14 +122,14 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                     @Override
                     public void onSuccess(Object o) {
                         System.out.println("Success");
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+//                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         System.out.println("Fail");
-                        Log.w(TAG, "Error adding document", e);
+//                        Log.w(TAG, "Error adding document", e);
                     }
                 });
 
@@ -135,13 +139,14 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     }
 
     @Override
-    public void deleteIngredient(Integer position) {
-        String name = dataList.get(position).getName();
-
+    public void deleteIngredient() {
+        String name = dataList.get(itemPosition).getName();
+        Log.d("ITEM POSITION", "Position is: " + String.valueOf(itemPosition));
         if (foodMap.containsKey(name)) {
-            dataList.remove(position);
-            ingredientAdapter.notifyDataSetChanged();
+            dataList.remove(itemPosition);
             foodMap.remove(name);
+            ingredientAdapter.notifyDataSetChanged();
+
         }
 
         IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap) // .add equiv to .collec().set(..)
