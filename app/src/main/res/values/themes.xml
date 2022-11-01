@@ -29,4 +29,9 @@
     <style name="AddIngredientCustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@drawable/popup_background</item>
     </style>
+
+    <!-- Style for alert dialog to add recipe -->
+    <style name="AddRecipeCustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/popup_background</item>
+    </style>
 </resources>

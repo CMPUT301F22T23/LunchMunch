@@ -67,7 +67,6 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     }
 
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
