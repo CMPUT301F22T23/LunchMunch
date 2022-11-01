@@ -1,5 +1,6 @@
 package com.example.lunchmunch;
 import android.app.DatePickerDialog;
+import android.os.Parcel;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,9 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class IngredientItemFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
     // New alert dialog opens to enter information about new/existing Ingredient
@@ -39,13 +42,13 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     EditText ingredientDescription;
 
     // TEMPORARY defaults
-    private String name = "default";
-    private String description = "default";
-    private IngredientCategory category = IngredientCategory.FRUIT;
-    private Location location = Location.FRIDGE;
-    private Integer price = 1;
-    private Integer amount = 1;
-    private Date expirationDate = new Date();
+    private String name;
+    private String description;
+    private IngredientCategory category;
+    private Location location;
+    private Integer price;
+    private Integer amount;
+    private Date expirationDate;
 
     private OnFragmentInteractionListener listener;
     // Interaction with fragment
@@ -94,6 +97,18 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         ingredientExpiryButton = view.findViewById(R.id.ingredient_expiry);
         ingredientExpiryButton.setOnClickListener(e -> { datePickerDialog.show(); });
 
+        // user inputted name
+        ingredientName = view.findViewById(R.id.ingredient_name);
+
+        // user inputted description
+        ingredientDescription = view.findViewById(R.id.ingredient_description);
+
+        // user inputted price
+        ingredientPrice = view.findViewById(R.id.ingredient_price);
+
+        // user inputted amount
+        ingredientAmount = view.findViewById(R.id.ingredient_amount);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddIngredientCustomAlertDialog);
         AlertDialog alert = builder
                 .setView(view)
@@ -118,17 +133,27 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 negative.setBackgroundResource(R.drawable.ic_delete);
         });
         alert.show();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Ingredient currentIngredient = bundle.getParcelable("currentIngredient");
+            setCurrentIngredient(currentIngredient);
+        }
+
         return alert;
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        int id = view.getId();
+        int id = adapterView.getId();
 
-        String string = adapterView.getItemAtPosition(i).toString();
-
+        String string = adapterView.getItemAtPosition(i).toString().toUpperCase();
         // get user inputted category from spinner
-        if (id == R.id.ingredient_category) { category = IngredientCategory.valueOf(string); }
+        if (id == R.id.ingredient_category) {
+            category = IngredientCategory.valueOf(string);
+            System.out.println(string);
+            System.out.println(category);
+        }
 
         // get user inputted location from spinner
         else if (id == R.id.ingredient_location) { location = Location.valueOf(string); }
@@ -137,6 +162,47 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+
+    private void setCurrentIngredient(Ingredient currentIngredient) {
+        // ingredient category spinner
+        String[] categoryValues = getResources().getStringArray(R.array.ingredient_categories);
+        String currentCategory = currentIngredient.getCategory().toString().toLowerCase();
+        for (int i = 0; i < categoryValues.length; i++) {
+            if(currentCategory.equalsIgnoreCase(categoryValues[i])) {
+                ingredientSpinner.setSelection(i);
+
+            }
+        }
+        // ingredient location spinner
+        //locationSpinner.set
+        String[] locationValues = getResources().getStringArray(R.array.ingredient_locations);
+        String currentLocation = currentIngredient.getLocation().toString().toLowerCase();
+        for (int i = 0; i < locationValues.length; i++) {
+            if(currentLocation.equalsIgnoreCase(locationValues[i])) {
+                locationSpinner.setSelection(i);
+
+            }
+        }
+
+        // date picker dialog
+        expirationDate = currentIngredient.getBestBefore();
+
+        // user inputted name
+        ingredientName = view.findViewById(R.id.ingredient_name);
+        ingredientName.setText(currentIngredient.getName());
+
+        // user inputted description
+        ingredientDescription = view.findViewById(R.id.ingredient_description);
+        ingredientDescription.setText(currentIngredient.getDescription());
+
+        // user inputted price
+        ingredientPrice = view.findViewById(R.id.ingredient_price);
+        ingredientPrice.setText(String.valueOf(currentIngredient.getCost()));
+
+        // user inputted amount
+        ingredientAmount = view.findViewById(R.id.ingredient_amount);
+        ingredientAmount.setText(String.valueOf(currentIngredient.getCount()));
 
     }
 
@@ -154,6 +220,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         };
 
         Calendar cal = Calendar.getInstance();
+        if (expirationDate != null) { cal.setTime(expirationDate); }
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
@@ -166,23 +233,19 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
     private void getUserInput() {
         // get user inputted name
-        ingredientName = view.findViewById(R.id.ingredient_name);
         name = ingredientName.getText().toString();
         ingredientName.getText().clear();
 
         // get user inputted description
-        ingredientDescription = view.findViewById(R.id.ingredient_description);
         description = ingredientDescription.getText().toString();
         ingredientDescription.getText().clear();
 
         // get user inputted price
-        ingredientPrice = view.findViewById(R.id.ingredient_price);
         String priceInput = ingredientPrice.getText().toString();
         price  = Integer.parseInt(priceInput);
         ingredientPrice.getText().clear();
 
         // get user inputted amount
-        ingredientAmount = view.findViewById(R.id.ingredient_amount);
         String amountInput = ingredientAmount.getText().toString();
         amount = Integer.parseInt(amountInput);
         ingredientAmount.getText().clear();
