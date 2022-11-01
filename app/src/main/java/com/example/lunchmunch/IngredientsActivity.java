@@ -96,6 +96,10 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 itemPosition = i;
+                Bundle args = new Bundle();
+                args.putParcelable("currentIngredient", dataList.get(itemPosition));
+                args.putInt("currentIngredientPosition", itemPosition);
+                fragment.setArguments(args);
                 fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT");
                 view.refreshDrawableState();
             }
@@ -116,8 +120,6 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         }
         foodMap.put(newIngredient.getName(), newIngredient);
         // update ingr list in db by overwriting it with the current ingredientsList
-        // by leaving document() blank we let firestore autogen an id .document("xT7aCsl8iLNnZkwKWvr3")
-        //IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap)
         // restructured db to have list of collections instead of one collection
         IngrCollec.document(name).set(newIngredient) // .add equiv to .collec().set(..)
                 .addOnSuccessListener(new OnSuccessListener() {
@@ -145,13 +147,14 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         String name = dataList.get(itemPosition).getName();
         Log.d("ITEM POSITION", "Position is: " + String.valueOf(itemPosition));
         if (foodMap.containsKey(name)) {
-            dataList.remove(itemPosition);
             foodMap.remove(name);
+            dataList.clear();
+            dataList.addAll(foodMap.values());
             ingredientAdapter.notifyDataSetChanged();
 
         }
-
-        IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap) // .add equiv to .collec().set(..)
+        else { return; }
+        IngrCollec.document(name).delete()// .add equiv to .collec().set(..)
                 .addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {

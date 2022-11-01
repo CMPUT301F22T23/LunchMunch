@@ -1,5 +1,7 @@
 package com.example.lunchmunch;
 
+import java.util.ArrayList;
+
 public enum IngredientCategory {
     VEGETABLE("vegetable"),
     FRUIT("fruit"),
