@@ -3,6 +3,7 @@ package com.example.lunchmunch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,6 +43,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     ArrayList<Ingredient> dataList;
     Map<String, Ingredient> foodMap;
     IngredientItemFragment fragment;
+    Integer itemPosition;
 
 
     // Declare the variables so that you will be able to reference it later.
@@ -89,6 +91,16 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             startActivity(new Intent(IngredientsActivity.this, ShoppingListActivity.class));
         });
 
+        //Open fragment when ingredient_list item is clicked
+        ingredientsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                itemPosition = i;
+                fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT");
+                view.refreshDrawableState();
+            }
+        });
+
     }
     @Override
     public void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category) {
@@ -112,6 +124,38 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                     @Override
                     public void onSuccess(Object o) {
                         System.out.println("Success");
+//                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Fail");
+//                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
+        // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
+
+        // Edit Food obj (edit from ingriendsList then same as above ^^)
+    }
+
+    @Override
+    public void deleteIngredient() {
+        String name = dataList.get(itemPosition).getName();
+        Log.d("ITEM POSITION", "Position is: " + String.valueOf(itemPosition));
+        if (foodMap.containsKey(name)) {
+            dataList.remove(itemPosition);
+            foodMap.remove(name);
+            ingredientAdapter.notifyDataSetChanged();
+
+        }
+
+        IngrCollec.document("trp7wjjPuEizVaN62hjA").set(foodMap) // .add equiv to .collec().set(..)
+                .addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        System.out.println("Success");
                         //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
@@ -123,13 +167,9 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                     }
                 });
 
-        // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
-
-        // Edit Food obj (edit from ingriendsList then same as above ^^)
     }
 
     private void initDBListener(CollectionReference ingrCollec) {
-
 
         ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -168,6 +208,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             }
         });
     }
+
 
     private void initViews() {
         RecipesNav = findViewById(R.id.recipesNav);
