@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -24,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -79,6 +82,15 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             recipeFragment.show(getSupportFragmentManager(), "Add Recipe");
         });
 
+        recipesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Recipe recipe = recipesList.get(i);
+                RecipeModalFragment recipeModalFragment = new RecipeModalFragment(recipe);
+                recipeModalFragment.show(getSupportFragmentManager(), "Show Recipe");
+                view.refreshDrawableState();
+            }
+        });
 
 
     }
