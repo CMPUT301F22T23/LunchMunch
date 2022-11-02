@@ -43,12 +43,12 @@
         android:fontFamily="@font/nunito_extrabold"
         android:text="My Recipes"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/ingredient_sort"
+        app:layout_constraintEnd_toStartOf="@+id/recipeSortText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipes_title" />
 
     <TextView
-        android:id="@+id/ingredient_sort"
+        android:id="@+id/recipeSortText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"

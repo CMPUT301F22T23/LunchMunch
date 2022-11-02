@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.lunchmunch.databinding.ActivityRecipeBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,6 +29,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +43,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     FloatingActionButton AddRecipeButton;
     ArrayList<Recipe> recipesList;
     ListView recipesView;
+    TextView sortText;
     Map<String, Recipe> recipesMap;
     RecipeItemAdapter RecipeAdapter;
     FirebaseFirestore db;
@@ -86,33 +90,67 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Recipe recipe = recipesList.get(i);
+                Bundle bundle = new Bundle();
+                bundle.putInt("position", i);
                 RecipeModalFragment recipeModalFragment = new RecipeModalFragment(recipe);
+                recipeModalFragment.setArguments(bundle);
                 recipeModalFragment.show(getSupportFragmentManager(), "Show Recipe");
                 view.refreshDrawableState();
             }
         });
 
+        sortText.setOnClickListener(view -> {
+            RecipeSortFragment recipeSortFragment = new RecipeSortFragment();
+            recipeSortFragment.show(getSupportFragmentManager(), "Sort Recipes");
+
+        });
+
+
 
     }
 
+
+
     @Override
-    public void onOkPressed(Recipe recipe) {
-        RecipeCollec.document().set(recipe) // .add equiv to .collec().set(..)
-                .addOnSuccessListener(new OnSuccessListener() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        recipesList.add(recipe);
-                        RecipeAdapter.notifyDataSetChanged();
-                        Log.d("", "DocumentSnapshot written with ID: " + recipe.getName());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println("Fail");
-                        //Log.w(TAG, "Error adding document", e);
-                    }
-                });
+    public void onOkPressed(Recipe recipe, Boolean isNew, int position) {
+        if (isNew) {
+            RecipeCollec.document().set(recipe) // .add equiv to .collec().set(..)
+                    .addOnSuccessListener(new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            recipe.setId(RecipeCollec.document().getId());
+                            recipesList.add(recipe);
+                            RecipeAdapter.notifyDataSetChanged();
+                            Log.d("", "DocumentSnapshot written with ID: " + recipe.getName());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            System.out.println("Fail");
+                            //Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+
+        } else {
+
+            RecipeCollec.document(recipe.getId()).set(recipe)
+                    .addOnSuccessListener(new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            recipesList.set(position, recipe);
+                            RecipeAdapter.notifyDataSetChanged();
+                            Log.d("", "DocumentSnapshot written with ID: " + recipe.getName());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            System.out.println("Fail");
+                            //Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+        }
     }
 
     private void initDBListener(CollectionReference recipeCollec) {
@@ -125,8 +163,9 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                     // clear current list and re-add all the current ingredients
                     recipesList.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Make sure we add our ID to the recipe class for later use
                         Recipe recipe = document.toObject(Recipe.class);
-
+                        recipe.setId(document.getId());
                         List<String> ingredientNames = recipe.getIngredientNames();
                         try {
                             // Try to add our ingredient class if possible
@@ -137,6 +176,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                                 }
                             });
                             Recipe updatedRecipe = new Recipe(
+                                    recipe.getId(),
                                     recipe.getName(),
                                     ingredients, //update Recipe with the list of Ingredients as Ingredients class instances
                                     recipe.getIngredientNames(),
@@ -179,9 +219,61 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                 });
     }
 
-    @Override
-    public void deleteRecipe() {
+    public void sortRecipes(String sortType, String sortDirection) {
+        if (sortType.equals("Title")) {
+            Collections.sort(recipesList, new Comparator<Recipe>() {
+                @Override
+                public int compare(Recipe recipe, Recipe t1) {
+                    return recipe.getName().compareTo(t1.getName());
+                }
+            });
+        } else if (sortType.equals("Recipe Category")) {
+            Collections.sort(recipesList, new Comparator<Recipe>() {
+                @Override
+                public int compare(Recipe recipe, Recipe t1) {
+                    return recipe.getMealType().compareTo(t1.getMealType());
+                }
+            });
+        } else if (sortType.equals("Preparation Time")) {
+            Collections.sort(recipesList, new Comparator<Recipe>() {
+                @Override
+                public int compare(Recipe recipe, Recipe t1) {
+                    return recipe.getPrepTime().compareTo(t1.getPrepTime());
+                }
+            });
+        } else if (sortType.equals("Number of Servings")) {
+            Collections.sort(recipesList, new Comparator<Recipe>() {
+                @Override
+                public int compare(Recipe recipe, Recipe t1) {
+                    return recipe.getServings().compareTo(t1.getServings());
+                }
+            });
+        }
+        if (sortDirection.equals("Descending")) {
+            Collections.reverse(recipesList);
+        }
+        RecipeAdapter.notifyDataSetChanged();
+    }
 
+    @Override
+    public void deleteRecipe(int position) {
+        // delete recipe from database
+        Recipe recipe = recipesList.get(position);
+        RecipeCollec.document(recipe.getId()).delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            System.out.println("Success");
+                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        } else {
+                            System.out.println("Fail");
+                            //Log.w(TAG, "Error adding document", e);
+                        }
+                    }
+                });
+        recipesList.remove(position);
+        RecipeAdapter.notifyDataSetChanged();
     }
 
     private interface DBIngredients {
@@ -249,6 +341,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         ShoppingListNav = findViewById(R.id.shoppingListNav);
         AddRecipeButton = findViewById(R.id.addRecipeButton);
         recipesView = findViewById(R.id.recipeListView);
+        sortText = findViewById(R.id.recipeSortText);
 
     }
 

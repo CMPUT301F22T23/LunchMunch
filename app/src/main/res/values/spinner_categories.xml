@@ -14,4 +14,14 @@
         <item>Freezer</item>
         <item>Fridge</item>
     </string-array>
+    <string-array name="recipes_sort">
+        <item>Title</item>
+        <item>Preparation Time</item>
+        <item>Number of Servings</item>
+        <item>Recipe Category</item>
+    </string-array>
+    <string-array name="recipes_sort_direction">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
 </resources>
