@@ -43,7 +43,6 @@ public class Recipe {
         this.comments = comments;
     }
 
-
     public String getName() {
         return name;
     }
@@ -59,7 +58,6 @@ public class Recipe {
     public void setIngredientsClass(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
-
 
     public List<String> getIngredientNames() {
         return ingredientNames;

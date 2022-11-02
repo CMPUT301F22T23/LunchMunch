@@ -61,7 +61,6 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
         initDBListener(RecipeCollec);
 
-
         IngredientsNav.setOnClickListener(view -> {
             startActivity(new Intent(RecipeActivity.this, IngredientsActivity.class));
         });
@@ -86,12 +85,13 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
     @Override
     public void onOkPressed(Recipe recipe) {
-        RecipeCollec.document(recipe.getName()).set(recipe) // .add equiv to .collec().set(..)
+        RecipeCollec.document().set(recipe) // .add equiv to .collec().set(..)
                 .addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
-                        System.out.println("Success");
-                        //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        recipesList.add(recipe);
+                        RecipeAdapter.notifyDataSetChanged();
+                        Log.d("", "DocumentSnapshot written with ID: " + recipe.getName());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -115,77 +115,32 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Recipe recipe = document.toObject(Recipe.class);
 
-
-                        // convert document objects back into Ingredient class objects
-                        for (Object data : document.getData().values()) {
-
-                            HashMap<String, Object> recipeData = (HashMap<String, Object>) data;
-
-                            String name = (String) recipeData.get("name");
-
-                            // only stores ingredients food name then fetch from ingredients collection for object
-
-                            List<String> ingredientNames = (List<String>) recipeData.get("ingredients");
-
-
-                            // no idea if this will work properly
+                        List<String> ingredientNames = recipe.getIngredientNames();
+                        try {
+                            // Try to add our ingredient class if possible
                             List<Ingredient> ingredients = getIngredients(ingredientNames, new DBIngredients() {
                                 @Override
                                 public List<Ingredient> onSuccess(List<Ingredient> ingredientList) {
                                     return ingredientList;
                                 }
                             });
+                            Recipe updatedRecipe = new Recipe(
+                                    recipe.getName(),
+                                    ingredients, //update Recipe with the list of Ingredients as Ingredients class instances
+                                    recipe.getIngredientNames(),
+                                    recipe.getInstructions(),
+                                    recipe.getMealType(),
+                                    recipe.getImage(),
+                                    recipe.getServings(),
+                                    recipe.getPrepTime(),
+                                    recipe.getComments()
+                            );
 
+                            recipesList.add(updatedRecipe);
 
-                            String instructions = (String) recipeData.get("instructions");
-                            String comments = (String) recipeData.get("comments");
-                            String mealType = (String) recipeData.get("mealType");
-                            String image = (String) recipeData.get("image");
-                            Integer servings = (Integer) recipeData.get("servings");
-                            Integer prepTime = (Integer) recipeData.get("prepTime");
-
-
-                            recipe = new Recipe(
-                                    name,
-                                    ingredients,
-                                    ingredientNames,
-                                    instructions,
-                                    mealType,
-                                    image,
-                                    servings,
-                                    prepTime,
-                                    comments);
-
-                            // add to map for unique ingredient entries
-                            recipesMap.put(name, recipe);
-                            // add to arraylist for adapter
+                        } catch (Exception e) {
                             recipesList.add(recipe);
                         }
-
-
-                        // no idea if this will work properly
-                        List<String> ingredientNames = recipe.getIngredientNames();
-                        List<Ingredient> ingredients = getIngredients(ingredientNames, new DBIngredients() {
-                            @Override
-                            public List<Ingredient> onSuccess(List<Ingredient> ingredientList) {
-                                return ingredientList;
-                            }
-                        });
-
-                        Recipe updatedRecipe = new Recipe(
-                                recipe.getName(),
-                                ingredients, //update Recipe with the list of Ingredients as Ingredients class instances
-                                recipe.getIngredientNames(),
-                                recipe.getInstructions(),
-                                recipe.getMealType(),
-                                recipe.getImage(),
-                                recipe.getServings(),
-                                recipe.getPrepTime(),
-                                recipe.getComments()
-                        );
-
-                        recipesList.add(updatedRecipe);
-
 
                     }
                     RecipeAdapter.notifyDataSetChanged();
@@ -242,6 +197,12 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                         // convert document objects back into Ingredient class objects
                         Ingredient ingredient = null;
                         for (Object data : document.getData().values()) {
+                            // Check if data is not an instance of map if so then continue
+
+                            if (!(data instanceof Map)) {
+                                continue;
+                            }
+
                             HashMap<String, Object> foodData = (HashMap<String, Object>) data;
 
                             String name = (String) foodData.get("name");

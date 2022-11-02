@@ -2,13 +2,16 @@ package com.example.lunchmunch;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -23,14 +26,15 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     private View view;
     private RecipeFragmentBinding binding;
     private OnFragmentInteractionListener listener;
-    EditText ingredientList;
-    EditText recipeName;
-    EditText recipeInstructions;
-    EditText recipeImage;
-    EditText servings;
-    EditText prepTime;
-    EditText comments;
-
+    private String mealType = "";
+    private EditText ingredientList;
+    private EditText recipeName;
+    private EditText recipeInstructions;
+    private EditText recipeImage;
+    private EditText servings;
+    private EditText prepTime;
+    private EditText comments;
+    private Spinner spinner;
 
 
     // Interaction with fragment
@@ -69,15 +73,33 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         servings = view.findViewById(R.id.servings);
         prepTime = view.findViewById(R.id.prepTime);
         comments = view.findViewById(R.id.comments);
+        spinner = (Spinner) view.findViewById(R.id.mealType);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.meal_type, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddRecipeCustomAlertDialog);
         builder.setView(view)
+                .setTitle("Add Recipe")
                 .setPositiveButton("OK", (dialog, id) -> {
+
                     if (listener != null) {
                         List<String> ingredients = new ArrayList<>(Arrays.asList(ingredientList.getText().toString().split(",")));
-                        Integer servs = Integer.parseInt(servings.getText().toString());
-                        Integer prep = Integer.parseInt(prepTime.getText().toString());
-                        listener.onOkPressed(new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(),"", recipeImage.getText().toString(), servs, prep, comments.getText().toString()));
+                        Integer servs = 0;
+                        Integer prep = 0;
+                        try {
+                            servs = Integer.parseInt(servings.getText().toString());
+                            prep = Integer.parseInt(prepTime.getText().toString());
+                        } catch (Exception e) {
+
+                        }
+
+                        listener.onOkPressed(new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString()));
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {
@@ -99,8 +121,19 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof RecipeFragment.OnFragmentInteractionListener) {
+            listener = (OnFragmentInteractionListener) context;
+        }
+        else {
+            throw new RuntimeException(context.toString() + "must implement listener");
+        }
+    }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        mealType = adapterView.getItemAtPosition(i).toString();
     }
 
     @Override

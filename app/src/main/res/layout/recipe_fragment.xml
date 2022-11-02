@@ -27,10 +27,10 @@
         android:layout_height="323dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.428"
+        android:paddingBottom="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipes_title"
-        app:layout_constraintVertical_bias="0.711" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.23000002" />
 
     <TextView
         android:id="@+id/textView2"

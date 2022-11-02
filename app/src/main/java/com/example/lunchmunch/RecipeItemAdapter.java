@@ -1,6 +1,7 @@
 package com.example.lunchmunch;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.net.URI;
 import java.util.ArrayList;
 
 public class RecipeItemAdapter extends ArrayAdapter<Recipe> {
@@ -63,10 +68,9 @@ public class RecipeItemAdapter extends ArrayAdapter<Recipe> {
 
         if (foodItem.getName() != null) {
             viewHolder.tvName.setText(foodItem.getName());
-            int imageId = context.getResources().getIdentifier(foodItem.getImage(), "drawable", context.getPackageName());
-            viewHolder.tvImage.setImageResource(imageId);
-            viewHolder.tvServings.setText(foodItem.getServings());
-            viewHolder.tvPrepTime.setText(foodItem.getPrepTime());
+            Glide.with(getContext()).load(foodItem.getImage()).apply(RequestOptions.circleCropTransform()).into(viewHolder.tvImage);
+            viewHolder.tvServings.setText(Integer.toString(foodItem.getServings()) + " servings");
+            viewHolder.tvPrepTime.setText(Integer.toString(foodItem.getPrepTime()) + " minutes");
             viewHolder.tvType.setText(foodItem.getMealType());
         }
         // Return the completed view to render on screen
