@@ -37,6 +37,14 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
 
     }
 
+    public void remove(Integer position) {
+        if (position < dataList.size()) {
+            dataList.remove(position);
+            notifyDataSetChanged();
+        }
+
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position

@@ -1,12 +1,15 @@
 package com.example.lunchmunch;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.lunchmunch.Location;
 
 import java.math.RoundingMode;
 import java.util.Date;
 
-public class Ingredient {
+public class Ingredient implements Parcelable {
     private String name;
     private String description;
     private Date bestBefore;
@@ -15,7 +18,7 @@ public class Ingredient {
     private Integer cost;
     private IngredientCategory category;
 
-    public Ingredient(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category) {
+    public Ingredient(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category){
         this.name = name;
         this.description = description;
         this.bestBefore = bestBefore;
@@ -24,6 +27,33 @@ public class Ingredient {
         this.cost = cost;
         this.category = category;
     }
+
+    protected Ingredient(Parcel in) {
+        name = in.readString();
+        description = in.readString();
+        if (in.readByte() == 0) {
+            count = null;
+        } else {
+            count = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            cost = null;
+        } else {
+            cost = in.readInt();
+        }
+    }
+
+    public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
+        @Override
+        public Ingredient createFromParcel(Parcel in) {
+            return new Ingredient(in);
+        }
+
+        @Override
+        public Ingredient[] newArray(int size) {
+            return new Ingredient[size];
+        }
+    };
 
     public String getName() {
         return this.name;
@@ -88,4 +118,26 @@ public class Ingredient {
         return this.getName(); //Just an example ;)
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(description);
+        if (count == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(count);
+        }
+        if (cost == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(cost);
+        }
+    }
 }

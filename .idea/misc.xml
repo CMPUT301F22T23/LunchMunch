@@ -24,6 +24,7 @@
         <entry key="app/src/main/res/layout/fragment_first2.xml" value="0.14375" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.14375" />
         <entry key="app/src/main/res/layout/fragment_second2.xml" value="0.14375" />
+        <entry key="app/src/main/res/layout/ingredient_item_fragment.xml" value="0.1" />
       </map>
     </option>
   </component>
