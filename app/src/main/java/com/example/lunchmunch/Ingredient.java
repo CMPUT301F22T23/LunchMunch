@@ -28,6 +28,10 @@ public class Ingredient implements Parcelable {
         this.category = category;
     }
 
+    // For database
+    public Ingredient(){
+    }
+
     protected Ingredient(Parcel in) {
         name = in.readString();
         description = in.readString();

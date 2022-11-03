@@ -1,37 +1,33 @@
 package com.example.lunchmunch;
+
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.os.Parcel;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import androidx.fragment.app.Fragment;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import java.util.Arrays;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-public class IngredientItemFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
-    // New alert dialog opens to enter information about new/existing Ingredient
-    View view;
+public class RecipeIngredientFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
+
+    private View view;
     DatePickerDialog datePickerDialog;
-
+    private RecipeFragment.OnFragmentInteractionListener listener;
     ArrayAdapter<CharSequence> adapter;
     Spinner ingredientSpinner;
     Spinner locationSpinner;
@@ -41,7 +37,6 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     EditText ingredientPrice;
     EditText ingredientDescription;
 
-    // TEMPORARY defaults
     private String name;
     private String description;
     private IngredientCategory category;
@@ -49,31 +44,21 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     private Integer price;
     private Integer amount;
     private Date expirationDate;
+    private Recipe recipe;
+    private FoodItemAdapter foodItemAdapter;
 
-    private OnFragmentInteractionListener listener;
-    // Interaction with fragment
-    public interface OnFragmentInteractionListener {
-        void onOkPressed(Ingredient ingredient, int position);
-        void deleteIngredient();
-    };
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString() + "must implement listener");
-        }
+    public RecipeIngredientFragment(Recipe recipe, FoodItemAdapter recipeIngredientsAdapter) {
+        this.recipe = recipe;
+        this.foodItemAdapter = recipeIngredientsAdapter;
     }
 
 
-    @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.ingredient_item_fragment, null);
+        super.onCreate(savedInstanceState);
+        view = getLayoutInflater().inflate(R.layout.ingredient_item_fragment, null);
 
         // ingredient category spinner
         ingredientSpinner = (Spinner) view.findViewById(R.id.ingredient_category);
@@ -112,77 +97,97 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         AlertDialog alert = builder
                 .setView(view)
                 .setTitle(getContext().getResources().getString(R.string.add_edit_ingredient_title))
-                .setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
+
+                .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        assert getArguments() != null;
+                        Integer position = getArguments().getInt("position");
+                        Integer ingPosition = getArguments().getInt("currentIngredientPosition", -1);
+                        if (ingPosition != -1) {
+                            recipe.getIngredients().remove(ingPosition.intValue());
+                            System.out.println(recipe.getIngredients().size());
+                            System.out.println(ingPosition);
+                            listener.onOkPressed(recipe, false, position);
+                            foodItemAdapter.notifyDataSetChanged();
+
+
+                        }
+
+                    }
+
+
+
+                })
+
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getUserInput();
+                        Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
+                        assert getArguments() != null;
+                        Integer ingPosition = getArguments().getInt("currentIngredientPosition", -1);
+
+                        if (ingPosition == -1) {
+                            recipe.getIngredients().add(ingredient);
+                        } else {
+                            recipe.getIngredients().set(ingPosition, ingredient);
+                        }
+                        int position = getArguments().getInt("position");
+                        listener.onOkPressed(recipe, false, position);
+                        foodItemAdapter.notifyDataSetChanged();
+                    }
+                }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 })
-                .setNegativeButton("DEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.deleteIngredient();
-                    }
-                })
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        getUserInput();
-                        Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
-                        // Check if ingredient is new
-                        if (getArguments() != null) {
-                            Integer position = getArguments().getInt("currentIngredientPosition");
-                            if (position != null) {
-                                listener.onOkPressed(ingredient, position);
-                            }
-                            else {
-                                listener.onOkPressed(ingredient, -1);
-                            }
-
-                        }
-                        else {
-                            listener.onOkPressed(ingredient, -1);
-                        }
-                    }
-                }).create();
+                .create();
         alert.setOnShowListener(a -> {
-                Button positive = alert.getButton(AlertDialog.BUTTON_POSITIVE);
-                positive.setBackgroundResource(R.drawable.ic_save);
-                Button negative = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
-                negative.setBackgroundResource(R.drawable.ic_delete);
-                Button neutral = alert.getButton(AlertDialog.BUTTON_NEUTRAL);
-                neutral.setBackgroundResource(R.drawable.cancel);
+            Button positive = alert.getButton(AlertDialog.BUTTON_POSITIVE);
+            positive.setBackgroundResource(R.drawable.ic_save);
+            Button negative = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
+            negative.setBackgroundResource(R.drawable.ic_delete);
+            Button neutral = alert.getButton(AlertDialog.BUTTON_NEUTRAL);
+            neutral.setBackgroundResource(R.drawable.cancel);
         });
+
         alert.show();
 
         Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            Ingredient currentIngredient = bundle.getParcelable("currentIngredient");
+        if (bundle.getInt("currentIngredientPosition", -1) != -1) {
+            Ingredient currentIngredient = recipe.getIngredients().get(bundle.getInt("currentIngredientPosition"));
             setCurrentIngredient(currentIngredient);
         }
 
         return alert;
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        int id = adapterView.getId();
 
-        String string = adapterView.getItemAtPosition(i).toString().toUpperCase();
-        // get user inputted category from spinner
-        if (id == R.id.ingredient_category) {
-            category = IngredientCategory.valueOf(string);
-            System.out.println(string);
-            System.out.println(category);
-        }
+    private void initDatePicker()
+    {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day)
+            {
+                // get use inputted date
+                expirationDate = new GregorianCalendar(year, month, day).getTime();
+            }
+        };
 
-        // get user inputted location from spinner
-        else if (id == R.id.ingredient_location) { location = Location.valueOf(string); }
+        Calendar cal = Calendar.getInstance();
 
-    }
+        if (expirationDate != null) { cal.setTime(expirationDate); }
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+
+        datePickerDialog = new DatePickerDialog(getContext(), style, dateSetListener, year, month, day);
+
     }
 
     private void setCurrentIngredient(Ingredient currentIngredient) {
@@ -228,29 +233,27 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     }
 
 
-    private void initDatePicker()
-    {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
-        {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day)
-            {
-                // get use inputted date
-                expirationDate = new GregorianCalendar(year, month, day).getTime();
-            }
-        };
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        int id = adapterView.getId();
 
-        Calendar cal = Calendar.getInstance();
-        if (expirationDate != null) { cal.setTime(expirationDate); }
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+        String string = adapterView.getItemAtPosition(i).toString().toUpperCase();
+        // get user inputted category from spinner
+        if (id == R.id.ingredient_category) {
+            category = IngredientCategory.valueOf(string);
+            System.out.println(string);
+            System.out.println(category);
+        }
 
-        int style = AlertDialog.THEME_HOLO_LIGHT;
-
-        datePickerDialog = new DatePickerDialog(getContext(), style, dateSetListener, year, month, day);
+        // get user inputted location from spinner
+        else if (id == R.id.ingredient_location) { location = Location.valueOf(string); }
 
     }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+
 
     private void getUserInput() {
         // get user inputted name
@@ -262,13 +265,29 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         ingredientDescription.getText().clear();
 
         // get user inputted price
-        String priceInput = ingredientPrice.getText().toString();
-        price  = Integer.parseInt(priceInput);
+        try {
+            String priceInput = ingredientPrice.getText().toString();
+            price = Integer.parseInt(priceInput);
+        } catch (NumberFormatException e) {
+            price = 0;
+        }
         ingredientPrice.getText().clear();
 
         // get user inputted amount
-        String amountInput = ingredientAmount.getText().toString();
-        amount = Integer.parseInt(amountInput);
+        try {
+            String amountInput = ingredientAmount.getText().toString();
+            amount = Integer.parseInt(amountInput);
+        } catch (NumberFormatException e) {
+            amount = 0;
+        }
         ingredientAmount.getText().clear();
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        listener = (RecipeFragment.OnFragmentInteractionListener) context;
+        System.out.println(context);
+    }
 }
+
