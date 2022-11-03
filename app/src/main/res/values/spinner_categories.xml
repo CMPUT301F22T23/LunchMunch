@@ -9,6 +9,7 @@
         <item>Grain</item>
         <item>Other</item>
     </string-array>
+
     <string-array name="ingredient_locations">
         <item>Pantry</item>
         <item>Freezer</item>
@@ -24,4 +25,13 @@
         <item>Ascending</item>
         <item>Descending</item>
     </string-array>
+
+    <string-array name="sortOptions">
+        <item>Sort By</item>
+        <item>Description</item>
+        <item>Best Before</item>
+        <item>Location</item>
+        <item>Category</item>
+    </string-array>
+
 </resources>
