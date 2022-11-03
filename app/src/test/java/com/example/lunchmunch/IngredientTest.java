@@ -1,6 +1,7 @@
 package com.example.lunchmunch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import android.widget.ListView;
@@ -22,7 +23,7 @@ import java.util.Map;
 
 public class IngredientTest {
     ArrayList<Ingredient> ingredientList;
-    HashMap<String, Ingredient> foodMap;
+    HashMap<String, Ingredient> foodMap = new HashMap<>();
     /**
      * In order to start each test with a clean map and array, we use this teardown method to clear
      * any previous data after each unit test
@@ -36,15 +37,10 @@ public class IngredientTest {
     private ArrayList<Ingredient> mockIngredientList() {
         // create an ingredient list
         ingredientList = new ArrayList<>();
-        ingredientList.add(mockIngredient("Brioche", "Sweetened bread, made from encriched dough"));
-        foodMap.put();
+        Ingredient mockIngredient = mockIngredient("Brioche", "Sweetened bread, made from enriched dough");
+        ingredientList.add(mockIngredient);
+        foodMap.put(mockIngredient.getName(), mockIngredient);
         return ingredientList;
-    }
-
-    private HashMap<String, Ingredient> mockIngredientMap() {
-        // create a hash map for storing unique ingredients
-        foodMap = new HashMap<>();
-        foodMap.put();
     }
 
     private Ingredient mockIngredient(String name, String description) {
@@ -86,6 +82,28 @@ public class IngredientTest {
         foodMap.put(newIngredient.getName(), newIngredient);
         assertEquals(2, ingredientList.size());
         assertTrue(ingredientList.contains(newIngredient));
+        assertTrue(foodMap.containsKey(newIngredient.getName()));
+    }
+
+    @Test
+    void testDeleteIngredient() {
+        ArrayList<Ingredient> ingredientList = mockIngredientList();
+        assertEquals(1, ingredientList.size());
+
+        Ingredient newIngredient = mockIngredient("Croissant", "Flaky, layered french bread");
+
+        ingredientList.add(newIngredient);
+        foodMap.put(newIngredient.getName(), newIngredient);
+        assertEquals(2,ingredientList.size());
+        assertTrue(ingredientList.contains(newIngredient));
+        // Testing deletion
+
+        ingredientList.remove(newIngredient);
+        foodMap.remove(newIngredient.getName());
+        assertEquals(1, ingredientList.size());
+        assertFalse(ingredientList.contains(newIngredient));
+        assertFalse(foodMap.containsKey(newIngredient));
+
     }
 
 
