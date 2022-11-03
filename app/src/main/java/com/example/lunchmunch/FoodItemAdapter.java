@@ -9,14 +9,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-
 import java.util.ArrayList;
 
 public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
 
     private ArrayList<Ingredient> dataList;
     Context context;
-
 
     public void updateList(ArrayList<Ingredient> data) {
         dataList.clear();

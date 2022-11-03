@@ -13,6 +13,10 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="SpinnerTheme">
+        <item name="android:textColor">#333333</item>
+        <item name="android:fontFamily">@font/nunito</item>
+    </style>
 
     <style name="Theme.LunchMunch.NoActionBar">
         <item name="windowActionBar">true</item>
@@ -27,6 +31,11 @@
 
     <!-- Style for alert dialog to add ingredient -->
     <style name="AddIngredientCustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/popup_background</item>
+    </style>
+
+    <!-- Style for alert dialog to add recipe -->
+    <style name="AddRecipeCustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@drawable/popup_background</item>
     </style>
 </resources>

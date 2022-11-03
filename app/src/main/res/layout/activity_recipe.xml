@@ -17,15 +17,12 @@
     <include
         android:id="@+id/include"
         layout="@layout/content_recipe"
-        android:layout_width="412dp"
-        android:layout_height="695dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="414dp"
+        android:layout_height="810dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
