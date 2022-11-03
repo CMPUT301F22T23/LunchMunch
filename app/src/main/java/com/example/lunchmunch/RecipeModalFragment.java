@@ -6,13 +6,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.util.ArrayList;
 
 public class RecipeModalFragment extends BottomSheetDialogFragment {
     Recipe recipe;
@@ -27,8 +31,9 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
     ImageView deleteRecipe;
     TextView recipeInstructionHeader;
     TextView recipeCommentsHeader;
-
-
+    ImageView recipeAddIngredient;
+    ListView recipeIngredients;
+    FoodItemAdapter recipeIngredientsAdapter;
 
     public RecipeModalFragment() {
         // Required empty public constructor
@@ -59,17 +64,33 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
         editRecipe = view.findViewById(R.id.editRecipe);
         deleteRecipe = view.findViewById(R.id.deleteRecipe);
         recipeComments = view.findViewById(R.id.recipeComments);
-
+        recipeAddIngredient = view.findViewById(R.id.recipeAddIngredient);
         recipeCommentsHeader = view.findViewById(R.id.recipeCommentHeader);
         recipeInstructionHeader = view.findViewById(R.id.recipeInstructionHeader);
+        recipeIngredients = view.findViewById(R.id.recipeIngredients);
+        // Add our ingredients to our list view
+        recipeIngredientsAdapter = new FoodItemAdapter(getContext(), R.layout.recipe_modal_bottom, (ArrayList<Ingredient>) recipe.getIngredients());
+        recipeIngredients.setAdapter(recipeIngredientsAdapter);
 
 
+
+        recipeAddIngredient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecipeIngredientFragment recipeIngredientFragment = new RecipeIngredientFragment(recipe, recipeIngredientsAdapter);
+                Bundle bundle = new Bundle();
+                assert getArguments() != null;
+                bundle.putInt("position", getArguments().getInt("position"));
+                recipeIngredientFragment.setArguments(bundle);
+                recipeIngredientFragment.show(getChildFragmentManager(), "RecipeIngredientFragment");
+            }
+        });
 
         if (recipe != null) {
             recipeName.setText(recipe.getName());
             recipeInstructions.setText(recipe.getInstructions());
-            recipeTime.setText(Integer.toString(recipe.getPrepTime()) + " minutes");
-            servings.setText(Integer.toString(recipe.getServings()) + " servings");
+            recipeTime.setText(String.format("%s minutes", Integer.toString(recipe.getPrepTime())));
+            servings.setText(String.format("%s servings", Integer.toString(recipe.getServings())));
             mealType.setText(recipe.getMealType());
             recipeComments.setText(recipe.getComments());
 
@@ -89,10 +110,9 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
             }
 
             if (recipe.getImage() != null) {
-                Glide.with(getContext()).load(recipe.getImage()).into((ImageView) recipeImage.findViewById(R.id.recipeImageItem));
+                Glide.with(requireContext()).load(recipe.getImage()).into((ImageView) recipeImage.findViewById(R.id.recipeImageItem));
             }
             }
-
 
         deleteRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +120,8 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
                 // Get the current activity
                 Context context = getContext();
                 RecipeActivity activity = (RecipeActivity) context;
+                assert getArguments() != null;
+                assert activity != null;
                 activity.deleteRecipe(getArguments().getInt("position"));
                 dismiss();
             }
@@ -114,6 +136,20 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
                 recipeFrag.setArguments(getArguments());
 
                 recipeFrag.show(getParentFragmentManager(), "RecipeFragment");
+            }
+        });
+
+        recipeIngredients.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RecipeIngredientFragment recipeIngredientFragment = new RecipeIngredientFragment(recipe, recipeIngredientsAdapter);
+                Bundle bundle = new Bundle();
+                assert getArguments() != null;
+                bundle.putInt("position", getArguments().getInt("position"));
+                bundle.putInt("currentIngredientPosition", position);
+                // Add the array adapter
+                recipeIngredientFragment.setArguments(bundle);
+                recipeIngredientFragment.show(getChildFragmentManager(), "RecipeIngredientFragment");
             }
         });
 
@@ -147,9 +183,10 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
         }
 
         if (recipe.getImage() != null) {
-            Glide.with(getContext()).load(recipe.getImage()).into((ImageView) recipeImage.findViewById(R.id.recipeImageItem));
+            Glide.with(requireContext()).load(recipe.getImage()).into((ImageView) recipeImage.findViewById(R.id.recipeImageItem));
         }
 
 
     }
+
 }

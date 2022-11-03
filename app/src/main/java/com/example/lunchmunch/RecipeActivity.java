@@ -48,7 +48,6 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     RecipeItemAdapter RecipeAdapter;
     FirebaseFirestore db;
     CollectionReference RecipeCollec;
-    RecipeFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,14 +166,11 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                         Recipe recipe = document.toObject(Recipe.class);
                         recipe.setId(document.getId());
                         List<String> ingredientNames = recipe.getIngredientNames();
-                        try {
-                            // Try to add our ingredient class if possible
-                            List<Ingredient> ingredients = getIngredients(ingredientNames, new DBIngredients() {
-                                @Override
-                                public List<Ingredient> onSuccess(List<Ingredient> ingredientList) {
-                                    return ingredientList;
-                                }
-                            });
+                        List<Ingredient> ingredients;
+                        ingredients = recipe.getIngredients();
+                        if (ingredients == null) {
+                            ingredients = new ArrayList<>();
+                        }
                             Recipe updatedRecipe = new Recipe(
                                     recipe.getId(),
                                     recipe.getName(),
@@ -190,9 +186,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
                             recipesList.add(updatedRecipe);
 
-                        } catch (Exception e) {
-                            recipesList.add(recipe);
-                        }
+
 
                     }
                     RecipeAdapter.notifyDataSetChanged();
@@ -202,22 +196,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     }
 
 
-    public void onFragmentInteraction(Recipe recipe) {
-        // add recipe to database
-        RecipeCollec.document(recipe.getName()).set(recipe) // .add equiv to .collec().set(..)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            System.out.println("Success");
-                            //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                        } else {
-                            System.out.println("Fail");
-                            //Log.w(TAG, "Error adding document", e);
-                        }
-                    }
-                });
-    }
+
 
     public void sortRecipes(String sortType, String sortDirection) {
         if (sortType.equals("Title")) {
@@ -255,6 +234,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         RecipeAdapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void deleteRecipe(int position) {
         // delete recipe from database
@@ -275,6 +255,9 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         recipesList.remove(position);
         RecipeAdapter.notifyDataSetChanged();
     }
+
+
+
 
     private interface DBIngredients {
         List<Ingredient> onSuccess(List<Ingredient> ingredientList);

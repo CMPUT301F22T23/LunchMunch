@@ -159,7 +159,8 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
             Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             positive.setBackgroundResource(R.drawable.ic_save);
             Button negative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-            negative.setBackgroundResource(R.drawable.ic_delete);
+            negative.setBackgroundResource(R.drawable.cancel);
+
         });
         return dialog;
     }

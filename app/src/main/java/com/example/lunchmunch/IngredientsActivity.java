@@ -41,7 +41,6 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     FirebaseFirestore db;
     CollectionReference IngrCollec;
 
-
     ListView ingredientsListView;
     FoodItemAdapter ingredientAdapter;
     ArrayList<Ingredient> dataList;
@@ -58,7 +57,6 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ingredients_activity);
-
 
 
         // init firebase reference
@@ -179,22 +177,36 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     }
 
     @Override
-    public void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category) {
-        System.out.println(bestBefore);
+    public void onOkPressed(Ingredient ingredient, int position) {
+      
+        sortSpinner.setSelection(0);
+        if (position != -1){
+            //Our ingredient is not new, so we need to update it
+            dataList.set(position, ingredient);
+            foodMap.put(ingredient.getName(), ingredient);
+            ingredientAdapter.notifyDataSetChanged();
 
-        Ingredient newIngredient = new Ingredient(name, description, bestBefore, location, count, cost, category);
+            //Update the ingredient in the database
+            IngrCollec.document(ingredient.getName()).set(ingredient);
+            return;
+        }
 
         // add the new food to our current ingr list if new
+
         if (!foodMap.containsKey(name)) {
             dataList.add(newIngredient);
-            sortSpinner.setSelection(0);
+            
+
+        if (!foodMap.containsKey(ingredient.getName())) {
+            dataList.add(ingredient);
+
             ingredientAdapter.notifyDataSetChanged();
 
         }
-        foodMap.put(newIngredient.getName(), newIngredient);
+        foodMap.put(ingredient.getName(), ingredient);
         // update ingr list in db by overwriting it with the current ingredientsList
         // restructured db to have list of collections instead of one collection
-        IngrCollec.document(name).set(newIngredient) // .add equiv to .collec().set(..)
+        IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
                 .addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
