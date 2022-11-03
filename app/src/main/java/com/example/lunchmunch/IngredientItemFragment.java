@@ -53,7 +53,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     private OnFragmentInteractionListener listener;
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
-        void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category);
+        void onOkPressed(Ingredient ingredient, int position);
         void deleteIngredient();
     };
 
@@ -112,6 +112,12 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         AlertDialog alert = builder
                 .setView(view)
                 .setTitle(getContext().getResources().getString(R.string.add_edit_ingredient_title))
+                .setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
                 .setNegativeButton("DEL", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -122,7 +128,21 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getUserInput();
-                        listener.onOkPressed(name, description, expirationDate, location, amount, price, category);
+                        Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
+                        // Check if ingredient is new
+                        if (getArguments() != null) {
+                            Integer position = getArguments().getInt("currentIngredientPosition");
+                            if (position != null) {
+                                listener.onOkPressed(ingredient, position);
+                            }
+                            else {
+                                listener.onOkPressed(ingredient, -1);
+                            }
+
+                        }
+                        else {
+                            listener.onOkPressed(ingredient, -1);
+                        }
                     }
                 }).create();
         alert.setOnShowListener(a -> {
