@@ -178,9 +178,9 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
     @Override
     public void onOkPressed(Ingredient ingredient, int position) {
-      
+
         sortSpinner.setSelection(0);
-        if (position != -1){
+        if (position != -1) {
             //Our ingredient is not new, so we need to update it
             dataList.set(position, ingredient);
             foodMap.put(ingredient.getName(), ingredient);
@@ -193,39 +193,35 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
         // add the new food to our current ingr list if new
 
-        if (!foodMap.containsKey(name)) {
-            dataList.add(newIngredient);
-            
+            if (!foodMap.containsKey(ingredient.getName())) {
+                dataList.add(ingredient);
 
-        if (!foodMap.containsKey(ingredient.getName())) {
-            dataList.add(ingredient);
+                ingredientAdapter.notifyDataSetChanged();
 
-            ingredientAdapter.notifyDataSetChanged();
-
-        }
-        foodMap.put(ingredient.getName(), ingredient);
-        // update ingr list in db by overwriting it with the current ingredientsList
-        // restructured db to have list of collections instead of one collection
-        IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
-                .addOnSuccessListener(new OnSuccessListener() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        System.out.println("Success");
+            }
+            foodMap.put(ingredient.getName(), ingredient);
+            // update ingr list in db by overwriting it with the current ingredientsList
+            // restructured db to have list of collections instead of one collection
+            IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
+                    .addOnSuccessListener(new OnSuccessListener() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            System.out.println("Success");
 //                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println("Fail");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            System.out.println("Fail");
 //                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+                        }
+                    });
 
-        // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
+            // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
 
-        // Edit Food obj (edit from ingriendsList then same as above ^^)
-    }
+            // Edit Food obj (edit from ingriendsList then same as above ^^)
+        }
 
     @Override
     public void deleteIngredient() {
