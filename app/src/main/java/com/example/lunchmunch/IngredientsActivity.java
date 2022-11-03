@@ -144,7 +144,11 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
     @Override
     public void deleteIngredient() {
+        if (itemPosition == null) {
+            return;
+        }
         String name = dataList.get(itemPosition).getName();
+
         Log.d("ITEM POSITION", "Position is: " + String.valueOf(itemPosition));
         if (foodMap.containsKey(name)) {
             foodMap.remove(name);
@@ -185,7 +189,12 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                     for (QueryDocumentSnapshot document : task.getResult()) {
 
                         Timestamp timestamp = (Timestamp) document.getData().get("bestBefore");
-                        Date bestBefore = timestamp.toDate();
+                        Date bestBefore;
+                        if (timestamp == null) {
+                            bestBefore = null;
+                        }else{
+                            bestBefore = timestamp.toDate();
+                        }
 
                         Ingredient ingredient = new Ingredient(
                                 (String) document.getData().get("name"),
