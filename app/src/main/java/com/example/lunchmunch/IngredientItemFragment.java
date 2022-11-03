@@ -27,6 +27,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * Fragment for adding/editing ingredient functionality
+ */
 public class IngredientItemFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
     // New alert dialog opens to enter information about new/existing Ingredient
     View view;
@@ -185,6 +188,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
+    /**
+     * Sets information on existing ingredient for editing
+     */
     private void setCurrentIngredient(Ingredient currentIngredient) {
         // ingredient category spinner
         String[] categoryValues = getResources().getStringArray(R.array.ingredient_categories);
@@ -252,6 +258,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
     }
 
+    /**
+     * Takes user input (excluding spinners)
+     */
     private void getUserInput() {
         // get user inputted name
         name = ingredientName.getText().toString();

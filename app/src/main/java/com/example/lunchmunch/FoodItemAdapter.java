@@ -11,17 +11,15 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * This class is for Adapter for displaying a list of ingredients
+ */
 public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
 
     private ArrayList<Ingredient> dataList;
     Context context;
 
-    public void updateList(ArrayList<Ingredient> data) {
-        dataList.clear();
-        dataList.addAll(data);
-        System.out.println(dataList.get(0).getName());
-        notifyDataSetChanged();
-    }
+ 
 
     private static class ViewHolder {
         TextView tvName;
@@ -37,6 +35,11 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
 
     }
 
+    /**
+     * Removes data from Ingredient list and updates adapter
+     * @param position
+     *      Remove an item from list at position and update
+     */
     public void remove(Integer position) {
         if (position < dataList.size()) {
             dataList.remove(position);
@@ -45,6 +48,17 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
 
     }
 
+    /**
+     * Adds data to Ingredient list and updates adapter
+     * @param data
+     *      List of ingredients to add to list and update adapter
+     */
+    public void updateList(ArrayList<Ingredient> data) {
+        dataList.clear();
+        dataList.addAll(data);
+        System.out.println(dataList.get(0).getName());
+        notifyDataSetChanged();
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position

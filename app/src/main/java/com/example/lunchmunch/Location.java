@@ -1,5 +1,9 @@
 package com.example.lunchmunch;
 
+/*
+This enum defines Locations where Ingredients can be
+ see {@link com.example.lunchmunch.Ingredient}
+* */
 public enum Location {
     PANTRY("pantry"),
     FREEZER("freezer"),

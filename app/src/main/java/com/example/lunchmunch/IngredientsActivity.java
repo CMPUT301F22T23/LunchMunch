@@ -36,6 +36,9 @@ import android.widget.Toast;
 
 import java.util.Date;
 
+/**
+ * Main activity for all Ingredients functionality
+ */
 public class IngredientsActivity extends AppCompatActivity implements IngredientItemFragment.OnFragmentInteractionListener {
     Button RecipesNav, MealPlanNav, ShoppingListNav;
     FirebaseFirestore db;
@@ -43,8 +46,18 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
     ListView ingredientsListView;
     FoodItemAdapter ingredientAdapter;
+    /**
+     * Array list of Ingredient instances for use in array adapter
+     */
     ArrayList<Ingredient> dataList;
+    /**
+     * Map of Ingredient instances for uniqueness
+     */
     Map<String, Ingredient> foodMap;
+
+    /**
+     * Please see the {@link com.example.lunchmunch.IngredientItemFragment} class for true identity
+     */
     IngredientItemFragment fragment;
     Integer itemPosition;
     Spinner sortSpinner;
@@ -175,7 +188,13 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         });
 
     }
-
+    /**
+    * Inserts an Ingredient into database or edits existing ingredient
+    *   @param ingredient
+     *      ingredient to edit or add
+     * @param position
+     *      position of existing ingredient
+    */
     @Override
     public void onOkPressed(Ingredient ingredient, int position) {
       
@@ -192,11 +211,6 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         }
 
         // add the new food to our current ingr list if new
-
-        if (!foodMap.containsKey(name)) {
-            dataList.add(newIngredient);
-            
-
         if (!foodMap.containsKey(ingredient.getName())) {
             dataList.add(ingredient);
 
@@ -226,7 +240,9 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
         // Edit Food obj (edit from ingriendsList then same as above ^^)
     }
-
+    /**
+     * Deletes an Ingredient from database
+     */
     @Override
     public void deleteIngredient() {
         if (itemPosition == null) {
