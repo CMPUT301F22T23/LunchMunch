@@ -3,12 +3,11 @@ package com.example.lunchmunch;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.example.lunchmunch.Location;
-
-import java.math.RoundingMode;
 import java.util.Date;
 
+/*
+This class defines an Ingredient
+* */
 public class Ingredient implements Parcelable {
     private String name;
     private String description;
@@ -31,6 +30,7 @@ public class Ingredient implements Parcelable {
     // For database
     public Ingredient(){
     }
+
 
     protected Ingredient(Parcel in) {
         name = in.readString();
@@ -58,6 +58,7 @@ public class Ingredient implements Parcelable {
             return new Ingredient[size];
         }
     };
+
 
     public String getName() {
         return this.name;
@@ -127,6 +128,13 @@ public class Ingredient implements Parcelable {
         return 0;
     }
 
+    /**
+     * Make Ingredient parcel readable to pass through fragments
+     * @param parcel
+     *     parcel to read
+     * @param i
+     *     position
+     */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
