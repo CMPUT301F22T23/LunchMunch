@@ -41,18 +41,6 @@
         app:layout_constraintBottom_toTopOf="@id/ingredient_list"
         app:layout_constraintStart_toStartOf="@id/ingredient_list" />
 
-    <TextView
-        android:id="@+id/recipeSortText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="@font/nunito_extrabold"
-        android:text="@string/sort"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/ingredient_list"
-        app:layout_constraintEnd_toEndOf="@id/ingredient_list" />
-
-
     <ListView
         android:id="@+id/ingredient_list"
         android:layout_width="371dp"
@@ -83,4 +71,11 @@
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+    <Spinner
+        android:id="@+id/SortOptions"
+        android:layout_width="163dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/ingredient_list"
+        app:layout_constraintEnd_toEndOf="@+id/ingredient_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,11 +24,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -43,7 +47,9 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     Map<String, Ingredient> foodMap;
     IngredientItemFragment fragment;
     Integer itemPosition;
+    Spinner sortSpinner;
 
+    ArrayAdapter<String> sortAdapter;
 
     // Declare the variables so that you will be able to reference it later.
 
@@ -74,6 +80,12 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         fragment = new IngredientItemFragment();
         addFoodButton.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT"));
 
+        // Sorting Spinner
+        sortSpinner = (Spinner) findViewById(R.id.SortOptions);
+        sortAdapter = new ArrayAdapter<String>(IngredientsActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sortOptions));
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(sortAdapter);
 
 
         // navbar listeners
@@ -103,10 +115,71 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             }
         });
 
+
+        // Spinner Sorting Functionality
+        // sets spinner to default
+        sortSpinner.setSelection(0);
+
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String choice = sortSpinner.getSelectedItem().toString();
+                if (choice.equals("Description")){
+                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
+                    Collections.sort(dataList, new Comparator<Ingredient>() {
+                        @Override
+                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
+                            return ingredient.getDescription().compareTo(ingredient2.getDescription());
+                        }
+                    });
+
+                } else if (choice.equals("Best Before")){
+                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
+                    Collections.sort(dataList, new Comparator<Ingredient>() {
+                        @Override
+                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
+                            return ingredient.getBestBefore().compareTo(ingredient2.getBestBefore());
+                        }
+                    });
+
+                } else if (choice.equals("Location")){
+                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
+                    Collections.sort(dataList, new Comparator<Ingredient>() {
+                        @Override
+                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
+                            return ingredient.getLocation().compareTo(ingredient2.getLocation());
+                        }
+                    });
+                    Collections.reverse(dataList);
+                    ingredientAdapter.notifyDataSetChanged();
+
+
+                } else if (choice.equals("Category")){
+                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
+                    Collections.sort(dataList, new Comparator<Ingredient>() {
+                        @Override
+                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
+                            return ingredient.getCategory().compareTo(ingredient2.getCategory());
+                        }
+                    });
+                }
+                ingredientAdapter.notifyDataSetChanged();
+                ingredientsListView.refreshDrawableState();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
     }
+
     @Override
     public void onOkPressed(Ingredient ingredient, int position) {
-
+      
+        sortSpinner.setSelection(0);
         if (position != -1){
             //Our ingredient is not new, so we need to update it
             dataList.set(position, ingredient);
@@ -119,8 +192,14 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         }
 
         // add the new food to our current ingr list if new
+
+        if (!foodMap.containsKey(name)) {
+            dataList.add(newIngredient);
+            
+
         if (!foodMap.containsKey(ingredient.getName())) {
             dataList.add(ingredient);
+
             ingredientAdapter.notifyDataSetChanged();
 
         }
@@ -181,6 +260,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                 });
 
     }
+
 
     private void initDBListener(CollectionReference ingrCollec) {
 
