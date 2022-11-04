@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +59,8 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     private OnFragmentInteractionListener listener;
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
+        void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category);
+
         void onOkPressed(Ingredient ingredient, int position);
         void deleteIngredient();
     }
