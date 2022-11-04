@@ -37,7 +37,8 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
 
     /**
      * Removes data from Ingredient list and updates adapter
-     * @param position Remove an item from list at position and update
+     * @param position
+     *      Remove an item from list at position and update
      */
     public void remove(Integer position) {
         if (position < dataList.size()) {
@@ -49,7 +50,8 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
 
     /**
      * Adds data to Ingredient list and updates adapter
-     * @param data List of ingredients to add to list and update adapter
+     * @param data
+     *      List of ingredients to add to list and update adapter
      */
     public void updateList(ArrayList<Ingredient> data) {
         dataList.clear();
@@ -57,14 +59,6 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
         System.out.println(dataList.get(0).getName());
         notifyDataSetChanged();
     }
-
-    /**
-     * Finds a view given the position of the food item
-     * @param position    We will get the food item at this position
-     * @param convertView What we are returning
-     * @param parent      The parent of the current view
-     * @return convertView
-     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position

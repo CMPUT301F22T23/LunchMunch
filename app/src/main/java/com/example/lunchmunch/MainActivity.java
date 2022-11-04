@@ -2,10 +2,12 @@ package com.example.lunchmunch;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,30 +59,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Go to the ingredients page
-     */
     public void openIngredients() {
         Intent intent = new Intent(this, IngredientsActivity.class);
         startActivity(intent);
     }
-    /**
-     * Go to the recipes page
-     */
+
     public void openRecipes() {
         Intent intent = new Intent(this, RecipeActivity.class);
         startActivity(intent);
     }
-    /**
-     * Go to the meal plan page
-     */
+
     public void openMeal() {
         Intent intent = new Intent(this, MealPlanActivity.class);
         startActivity(intent);
     }
-    /**
-     * Go to the shopping list page
-     */
+
     public void openShopping() {
         Intent intent = new Intent(this, ShoppingListActivity.class);
         startActivity(intent);

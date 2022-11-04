@@ -1,18 +1,18 @@
 package com.example.lunchmunch;
-
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -59,16 +59,10 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     private OnFragmentInteractionListener listener;
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
-        void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category);
-
         void onOkPressed(Ingredient ingredient, int position);
         void deleteIngredient();
     }
-    /**
-     * implement OnFragmentInteractionListener
-     * @param context context
-     * @throws RuntimeException If we couldn't implement
-     */
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -80,11 +74,8 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
             throw new RuntimeException(context + "must implement listener");
         }
     }
-    /**
-     * Returns an alert object that will is used to take user input about an ingredient
-     * @param savedInstanceState In case we need to restore ourselves to a previous state, can be NULL
-     * @return                   alert dialog
-     */
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -205,13 +196,6 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         return alert;
     }
-    /**
-     * When item is selected, set category or set location
-     * @param adapterView  The viewgroup we have our items stored in
-     * @param view         Not currently being used
-     * @param i            Used to get item at position i
-     * @param l            Not currently being used
-     */
 
     private String validateIngrInputs(String nameInput, Date expirationDate, String priceInput, String amountInput) {
         // the only 3 inputs that actually have any constraints
@@ -278,7 +262,6 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
     /**
      * Sets information on existing ingredient for editing
-     * @param currentIngredient The ingredient we are setting information on
      */
     private void setCurrentIngredient(Ingredient currentIngredient) {
         // ingredient category spinner
@@ -353,7 +336,6 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     private void getUserInput() {
         // get user inputted name
         name = ingredientName.getText().toString();
-        ingredientName.getText().clear();
 
         // get user inputted description
         description = ingredientDescription.getText().toString();
@@ -375,10 +357,6 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         ingredientName.getText().clear();
         ingredientDescription.getText().clear();
         ingredientPrice.getText().clear();
-
-        // get user inputted amount
-        String amountInput = ingredientAmount.getText().toString();
-        amount = Integer.parseInt(amountInput);
         ingredientAmount.getText().clear();
         errMsgTxt.setText("");
     }

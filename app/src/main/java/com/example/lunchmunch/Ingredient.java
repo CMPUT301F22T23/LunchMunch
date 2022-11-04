@@ -5,9 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.Date;
 
-/**
- * This class defines an Ingredient
- */
+/*
+This class defines an Ingredient
+* */
 public class Ingredient implements Parcelable {
     private String name;
     private String description;
@@ -130,8 +130,10 @@ public class Ingredient implements Parcelable {
 
     /**
      * Make Ingredient parcel readable to pass through fragments
-     * @param parcel parcel to read
-     * @param i position
+     * @param parcel
+     *     parcel to read
+     * @param i
+     *     position
      */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
