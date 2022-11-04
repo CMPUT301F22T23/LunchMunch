@@ -76,7 +76,12 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         fragment = new IngredientItemFragment();
         addFoodButton.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT"));
 
-
+        // Sorting Spinner
+        sortSpinner = (Spinner) findViewById(R.id.SortOptions);
+        sortAdapter = new ArrayAdapter<String>(IngredientsActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sortOptions));
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(sortAdapter);
 
         // navbar listeners
         RecipesNav.setOnClickListener(view -> {
