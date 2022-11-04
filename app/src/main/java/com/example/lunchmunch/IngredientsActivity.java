@@ -175,6 +175,8 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                     @Override
                     public void onSuccess(Object o) {
                         System.out.println("Success");
+                        // this line should be ran in initDB when db updates from noticing change but add here incase
+                        ingredientAdapter.notifyDataSetChanged();
                         //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })

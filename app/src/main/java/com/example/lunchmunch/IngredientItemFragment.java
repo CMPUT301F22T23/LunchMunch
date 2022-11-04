@@ -40,11 +40,17 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     EditText ingredientPrice;
     EditText ingredientDescription;
 
+    TextView errMsgTxt;
+
+
     // TEMPORARY defaults
     private String name;
     private String description;
+    // not using Input for cat and loc as you cant leave blank
     private IngredientCategory category;
     private Location location;
+    private String priceInput;
+    private String amountInput;
     private Integer price;
     private Integer amount;
     private Date expirationDate;
@@ -52,11 +58,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     private OnFragmentInteractionListener listener;
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
-        void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category);
-
         void onOkPressed(Ingredient ingredient, int position);
         void deleteIngredient();
-    };
+    }
     /**
      * implement OnFragmentInteractionListener
      * @param context context
@@ -70,7 +74,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
             listener = (OnFragmentInteractionListener) context;
         }
         else {
-            throw new RuntimeException(context.toString() + "must implement listener");
+            throw new RuntimeException(context + "must implement listener");
         }
     }
     /**
@@ -84,16 +88,16 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         view = LayoutInflater.from(getActivity()).inflate(R.layout.ingredient_item_fragment, null);
 
         // ingredient category spinner
-        ingredientSpinner = (Spinner) view.findViewById(R.id.ingredient_category);
-        adapter = (ArrayAdapter<CharSequence>) ArrayAdapter.createFromResource(getContext(),
+        ingredientSpinner = view.findViewById(R.id.ingredient_category);
+        adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.ingredient_categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ingredientSpinner.setAdapter(adapter);
         ingredientSpinner.setOnItemSelectedListener(this);
 
         // ingredient location spinner
-        locationSpinner = (Spinner) view.findViewById(R.id.ingredient_location);
-        adapter = (ArrayAdapter<CharSequence>) ArrayAdapter.createFromResource(getContext(),
+        locationSpinner = view.findViewById(R.id.ingredient_location);
+        adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.ingredient_locations, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(adapter);
@@ -116,43 +120,67 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         // user inputted amount
         ingredientAmount = view.findViewById(R.id.ingredient_amount);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddIngredientCustomAlertDialog);
-        AlertDialog alert = builder
+        //textview for any possible error msgs
+        errMsgTxt = view.findViewById(R.id.errMsgTxt);
+
+        final AlertDialog alert = new AlertDialog.Builder(getContext())
                 .setView(view)
-                .setTitle(getContext().getResources().getString(R.string.add_edit_ingredient_title))
-                .setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton("DEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.deleteIngredient();
-                    }
-                })
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        getUserInput();
+                .setTitle("Add/Edit Ingredient")
+                .setNegativeButton("Delete", null)
+                .setPositiveButton("Save", null)
+                .create();
+
+        alert.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button delBtn = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
+                //saveBtn.setBackgroundResource(R.drawable.ic_save);
+                delBtn.setOnClickListener(view -> {
+                    System.out.println("DELETEE");
+                    //can clear inputs now
+                    clearUserInput();
+                    // close/dismiss popup
+                    alert.dismiss();
+                    // delete ingr from app and db
+                    listener.deleteIngredient();
+                });
+
+                // using inside onShow allows us to close the dialog when we want (even if user pressed positive button (in this case would have invalid inputs))
+                Button saveBtn = alert.getButton(AlertDialog.BUTTON_POSITIVE);
+                //saveBtn.setBackgroundResource(R.drawable.ic_save);
+                saveBtn.setOnClickListener(view -> {
+                    getUserInput();
+                    // only send inputs that are neccecary and could be left blank or have an invalid input (desc can leave blank, loc & cat cant be left blank)
+                    String errMsg = validateIngrInputs(name, expirationDate, priceInput, amountInput);
+                    if (errMsg.equals("")) {
                         Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
                         // Check if ingredient is new
                         if (getArguments() != null) {
                             Integer position = getArguments().getInt("currentIngredientPosition");
                             if (position != null) {
                                 listener.onOkPressed(ingredient, position);
-                            }
-                            else {
+                            } else {
                                 listener.onOkPressed(ingredient, -1);
                             }
 
-                        }
-                        else {
+                        } else {
                             listener.onOkPressed(ingredient, -1);
                         }
+                        //can clear inputs now
+                        clearUserInput();
+                        // close/dismiss popup only when valid inputs
+                        alert.dismiss();
+                    } else { // errMsg was not empty meaning one of the inputs were invalid
+                        errMsgTxt.setText(errMsg);
                     }
-                }).create();
+                });
+
+            }
+        });
+
+
+        /*
         alert.setOnShowListener(a -> {
                 Button positive = alert.getButton(AlertDialog.BUTTON_POSITIVE);
                 positive.setBackgroundResource(R.drawable.ic_save);
@@ -161,6 +189,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 Button neutral = alert.getButton(AlertDialog.BUTTON_NEUTRAL);
                 neutral.setBackgroundResource(R.drawable.cancel);
         });
+
+         */
+
         alert.show();
 
         Bundle bundle = this.getArguments();
@@ -178,6 +209,49 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
      * @param i            Used to get item at position i
      * @param l            Not currently being used
      */
+
+    private String validateIngrInputs(String nameInput, Date expirationDate, String priceInput, String amountInput) {
+        // the only 3 inputs that actually have any constraints
+        String errMsg = "";
+
+        // not sure if Date fully constraints to valid dates (ex Feb 30th)
+        //TODO: test if possible to select Feb 30th in date input (if possible then add constraint here)
+
+        if (nameInput.equals("")) {
+            errMsg += "Enter a name, ";
+        }
+
+        if (priceInput.equals("")) {
+            errMsg += "Enter a number for price, ";
+        } else { // otherwise we have a valid int and we can parse
+            price = Integer.parseInt(priceInput);
+            //xml restricts entering neg number
+            if (price == 0) {
+                errMsg += "Enter a positive number for price, ";
+            }
+            // otherwise we have converted price to valid pos Integer and can proceed
+        }
+
+        if (amountInput.equals("")) {
+            errMsg += "Enter a number for amount, ";
+        } else { // otherwise we have a valid int and we can parse
+            amount = Integer.parseInt(amountInput);
+            //xml restricts entering neg number
+            if (amount == 0) {
+                errMsg += "Enter a positive number for amount, ";
+            }
+            // otherwise we have converted price to valid pos Integer and can proceed
+        }
+
+        // if errMsg exists remove last 2 char from total err msg (last 2 will be ", ")
+        if (!errMsg.equals("")) {
+            errMsg = errMsg.substring(0, errMsg.length() - 2);
+        }
+
+        // could add future constraints here
+        return errMsg;
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         int id = adapterView.getId();
@@ -280,16 +354,29 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         // get user inputted description
         description = ingredientDescription.getText().toString();
-        ingredientDescription.getText().clear();
+
 
         // get user inputted price
-        String priceInput = ingredientPrice.getText().toString();
-        price  = Integer.parseInt(priceInput);
+        priceInput = ingredientPrice.getText().toString();
+        // will cause error if user doesnt enter int (possible if they dont enter anything)
+        //price  = Integer.parseInt(priceInput);
+
+
+        // get user inputted amount
+        amountInput = ingredientAmount.getText().toString();
+        //amount = Integer.parseInt(amountInput);
+
+    }
+
+    private void clearUserInput() {
+        ingredientName.getText().clear();
+        ingredientDescription.getText().clear();
         ingredientPrice.getText().clear();
 
         // get user inputted amount
         String amountInput = ingredientAmount.getText().toString();
         amount = Integer.parseInt(amountInput);
         ingredientAmount.getText().clear();
+        errMsgTxt.setText("");
     }
 }
