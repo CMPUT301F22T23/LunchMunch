@@ -1,6 +1,7 @@
 package com.example.lunchmunch;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,29 +14,16 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.net.URI;
 import java.util.ArrayList;
 
-
-/**
- * This class is for Adapter for displaying a list of recipes
- */
 public class RecipeItemAdapter extends ArrayAdapter<Recipe> {
 
     private ArrayList<Recipe> dataList;
     Context context;
 
-    /**
-     * update the datalist with everything in data
-     * @param data The recipes that we are to fill datalist with
-     */
-    public void updateList(ArrayList<Recipe> data) {
-        dataList.clear();
-        dataList.addAll(data);
-        System.out.println(dataList.get(0).getName());
-        notifyDataSetChanged();
-    }
 
-    private static class ViewHolder {
+    static class ViewHolder {
         TextView tvName;
         ImageView tvImage;
         TextView tvServings;
@@ -50,13 +38,6 @@ public class RecipeItemAdapter extends ArrayAdapter<Recipe> {
         this.context = context;
     }
 
-    /**
-     * Change view
-     * @param position    Is the position of the recipe
-     * @param convertView what we are returning
-     * @param parent      the parent viewgroup
-     * @return            covertview
-     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position

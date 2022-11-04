@@ -25,24 +25,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * This class defines the RecipeFragment
- */
-
 public class RecipeFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
     private View view;
     private RecipeFragmentBinding binding;
     private OnFragmentInteractionListener listener;
-    private String mealType = "";
-    private EditText recipeName;
-    private EditText recipeInstructions;
+    String mealType = "";
+    EditText recipeName;
+    EditText recipeInstructions;
     private EditText recipeImage;
-    private EditText servings;
-    private EditText prepTime;
+    EditText servings;
+    EditText prepTime;
     private EditText comments;
     private Spinner spinner;
     private Recipe recipe;
-
 
 
     public RecipeFragment() {
@@ -54,21 +49,16 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     }
 
 
-
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
         void onOkPressed(Recipe recipe, Boolean isNew, int position);
+
         void deleteRecipe(int position);
 
-    };
+    }
 
-    /**
-     * returns the bindings root
-     * @param inflater           Used to determine the binding
-     * @param container          Used to determine the binding
-     * @param savedInstanceState In case we want to return to a previous state
-     * @return                   binding's root
-     */
+    ;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -78,27 +68,15 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         return binding.getRoot();
     }
 
-    /**
-     * Ensure the fragments root view is non-null
-     */
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    /**
-     * When view is destroyed
-     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
-    /**
-     * Returns a dialog that will be used for user inputted recipe
-     * @param savedInstanceState In case we need to return to a previous state
-     * @return dialog
-     */
 
     @NonNull
     @Override
@@ -131,13 +109,13 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        Boolean isNew = recipe == null;
+        boolean isNew = recipe == null;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddRecipeCustomAlertDialog);
         builder.setView(view)
                 .setTitle("Add Recipe")
                 .setPositiveButton("OK", (dialog, id) -> {
-                    Integer servs = 0;
-                    Integer prep = 0;
+                    int servs = 0;
+                    int prep = 0;
 
                     try {
                         servs = Integer.parseInt(servings.getText().toString());
@@ -153,8 +131,9 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
                     if (recipe == null) {
                         List<String> ingredients = new ArrayList<String>();
-                        recipe = new Recipe(recipeName.getText().toString(), ingredients,  recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString());
-                    }  {
+                        recipe = new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString());
+                    }
+                    {
                         recipe.setName(recipeName.getText().toString());
                         recipe.setInstructions(recipeInstructions.getText().toString());
                         recipe.setImage(recipeImage.getText().toString());
@@ -187,24 +166,17 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         return dialog;
     }
 
-    private int getMealTypeIndex(String mealType) {
+    int getMealTypeIndex(String mealType) {
         List<String> mealTypes = Arrays.asList(getResources().getStringArray(R.array.meal_type));
         return mealTypes.indexOf(mealType);
     }
-
-    /**
-     * implement OnFragmentInteractionListener
-     * @param context context
-     * @throws RuntimeException If we couldn't implement
-     */
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof RecipeFragment.OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
-        }
-        else {
+        } else {
             throw new RuntimeException(context.toString() + "must implement listener");
         }
     }
@@ -213,6 +185,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     public void onDismiss(DialogInterface dialog) {
         FragmentActivity activity = getActivity();
         //Find the recipe modal fragment
+        assert activity != null;
         Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag("Show Recipe");
         // Remove the fragment and start a new one with the changed recipe
 
@@ -224,13 +197,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
     }
 
-    /**
-     * When an item is selected change meal type
-     * @param adapterView  The viewgroup we have our items stored in
-     * @param view         Not currently being used
-     * @param i            Used to get item at position i
-     * @param l            Not currently being used
-     */
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         mealType = adapterView.getItemAtPosition(i).toString();
