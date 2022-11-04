@@ -29,12 +29,12 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     private View view;
     private RecipeFragmentBinding binding;
     private OnFragmentInteractionListener listener;
-    private String mealType = "";
-    private EditText recipeName;
-    private EditText recipeInstructions;
+    String mealType = "";
+    EditText recipeName;
+    EditText recipeInstructions;
     private EditText recipeImage;
-    private EditText servings;
-    private EditText prepTime;
+    EditText servings;
+    EditText prepTime;
     private EditText comments;
     private Spinner spinner;
     private Recipe recipe;
@@ -109,13 +109,13 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        Boolean isNew = recipe == null;
+        boolean isNew = recipe == null;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddRecipeCustomAlertDialog);
         builder.setView(view)
                 .setTitle("Add Recipe")
                 .setPositiveButton("OK", (dialog, id) -> {
-                    Integer servs = 0;
-                    Integer prep = 0;
+                    int servs = 0;
+                    int prep = 0;
 
                     try {
                         servs = Integer.parseInt(servings.getText().toString());
@@ -166,7 +166,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         return dialog;
     }
 
-    private int getMealTypeIndex(String mealType) {
+    int getMealTypeIndex(String mealType) {
         List<String> mealTypes = Arrays.asList(getResources().getStringArray(R.array.meal_type));
         return mealTypes.indexOf(mealType);
     }
@@ -185,6 +185,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     public void onDismiss(DialogInterface dialog) {
         FragmentActivity activity = getActivity();
         //Find the recipe modal fragment
+        assert activity != null;
         Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag("Show Recipe");
         // Remove the fragment and start a new one with the changed recipe
 

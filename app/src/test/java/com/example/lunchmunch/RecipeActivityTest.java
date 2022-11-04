@@ -3,17 +3,31 @@ package com.example.lunchmunch;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import android.app.Activity;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import androidx.test.core.app.ActivityScenario;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.stubbing.OngoingStubbing;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
 public class RecipeActivityTest {
@@ -24,6 +38,8 @@ public class RecipeActivityTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        // setup firebase
+        FirebaseApp.initializeApp(Robolectric.buildActivity(RecipeActivity.class).get());
     }
 
     /**
@@ -31,15 +47,18 @@ public class RecipeActivityTest {
      */
     @Test
     public void deleteRecipeWhenRecipeIsNotFoundThenThrowException() {
-        RecipeActivity recipeActivity = Robolectric.setupActivity(RecipeActivity.class);
-        ListView recipesView = recipeActivity.findViewById(R.id.recipeListView);
-        RecipeItemAdapter recipeAdapter = (RecipeItemAdapter) recipesView.getAdapter();
-        assertEquals(0, recipeAdapter.getCount());
-        assertThrows(
-                IndexOutOfBoundsException.class,
-                () -> {
-                    recipeActivity.deleteRecipe(0);
-                });
+        ActivityScenario<RecipeActivity> recipeActivity = ActivityScenario.launch(RecipeActivity.class);
+        recipeActivity.onActivity(activity -> {
+            ListView recipesView = activity.findViewById(R.id.recipeListView);
+            RecipeItemAdapter recipeAdapter = (RecipeItemAdapter) recipesView.getAdapter();
+            assertEquals(0, recipeAdapter.getCount());
+            assertThrows(
+                    IndexOutOfBoundsException.class,
+                    () -> {
+                        activity.deleteRecipe(0);
+                    });
+        });
+
     }
 
     /**
@@ -87,9 +106,10 @@ public class RecipeActivityTest {
      */
     @Test
     public void onCreateShouldInitializeDatabaseListener() {
-        Activity activity = Robolectric.buildActivity(RecipeActivity.class).create().get();
-        RecipeActivity recipeActivity = (RecipeActivity) activity;
-        recipeActivity.initDBListener(recipeCollec);
+        RecipeActivity activity = Robolectric.buildActivity(RecipeActivity.class).create().get();
+        recipeCollec = mock(CollectionReference.class);
+        when(recipeCollec.get()).thenReturn(mock(Task.class));
+        activity.initDBListener(recipeCollec);
         verify(recipeCollec).get();
     }
 
@@ -130,8 +150,7 @@ public class RecipeActivityTest {
         assertNotNull(sortText);
         assertNotNull(recipesView);
 
-        RecipeActivity recipeActivity = new RecipeActivity();
-        recipeActivity.sortRecipes("Title", "Ascending");
+       ((RecipeActivity) activity).sortRecipes("Title", "Ascending");
     }
 
     /**
@@ -152,7 +171,6 @@ public class RecipeActivityTest {
         assertNotNull(sortText);
         assertNotNull(recipesView);
 
-        RecipeActivity recipeActivity = new RecipeActivity();
-        recipeActivity.sortRecipes("Title", "Descending");
+        ((RecipeActivity) activity).sortRecipes("Title", "Descending");
     }
 }

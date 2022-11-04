@@ -152,7 +152,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         }
     }
 
-    private void initDBListener(CollectionReference recipeCollec) {
+    void initDBListener(CollectionReference recipeCollec) {
 
         recipeCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

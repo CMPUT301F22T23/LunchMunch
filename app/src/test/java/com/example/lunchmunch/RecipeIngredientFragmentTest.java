@@ -2,7 +2,13 @@ package com.example.lunchmunch;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
@@ -32,62 +38,8 @@ public class RecipeIngredientFragmentTest {
         recipeIngredientFragment.setArguments(bundle);
         recipeIngredientFragment.initDatePicker();
     }
-
-    /**
-     * Should add the ingredient to the recipe when the currentingredientposition is -1
-     */
-    @Test
-    public void
-    onCreateDialogWhenCurrentIngredientPositionIsMinusOneThenAddTheIngredientToTheRecipe() {
-        Recipe recipe = mock(Recipe.class);
-        FoodItemAdapter foodItemAdapter = mock(FoodItemAdapter.class);
-        RecipeIngredientFragment recipeIngredientFragment =
-                new RecipeIngredientFragment(recipe, foodItemAdapter);
-        Bundle bundle = new Bundle();
-        bundle.putInt("currentIngredientPosition", -1);
-        recipeIngredientFragment.setArguments(bundle);
-        recipeIngredientFragment.onCreateDialog(null);
-        verify(recipe, times(1)).getIngredients();
-    }
-
-    /**
-     * Should set the current ingredient when the currentingredientposition is not -1
-     */
-    @Test
-    public void onCreateDialogWhenCurrentIngredientPositionIsNotMinusOneThenSetCurrentIngredient() {
-        Recipe recipe = mock(Recipe.class);
-        FoodItemAdapter foodItemAdapter = mock(FoodItemAdapter.class);
-        RecipeIngredientFragment recipeIngredientFragment =
-                new RecipeIngredientFragment(recipe, foodItemAdapter);
-        Bundle bundle = mock(Bundle.class);
-        when(bundle.getInt("currentIngredientPosition", -1)).thenReturn(0);
-        recipeIngredientFragment.setArguments(bundle);
-        recipeIngredientFragment.onCreateDialog(null);
-        verify(recipe, times(1)).getIngredients();
-    }
-
-    @Test
-    public void getUserInputWhenUserEntersInputThenReturnIngredient() {
-        Recipe recipe = mock(Recipe.class);
-        FoodItemAdapter foodItemAdapter = mock(FoodItemAdapter.class);
-        RecipeIngredientFragment recipeIngredientFragment =
-                new RecipeIngredientFragment(recipe, foodItemAdapter);
-        Bundle bundle = mock(Bundle.class);
-        when(bundle.getInt("currentIngredientPosition", -1)).thenReturn(0);
-        recipeIngredientFragment.setArguments(bundle);
-        recipeIngredientFragment.onCreateDialog(null);
-        recipeIngredientFragment.getUserInput();
-    }
-
-    @Test
-    public void getListeneronAttachWhenContextIsNotAnInstanceOfOnFragmentInteractionListenerThenThrowException() {
-        RecipeIngredientFragment recipeIngredientFragment = new RecipeIngredientFragment(
-                new Recipe(), new FoodItemAdapter(null, 0, null));
-        try {
-            recipeIngredientFragment.onAttach(new View(null));
-            fail("Expected RuntimeException");
-        } catch (RuntimeException e) {
-            assertEquals("android.view.View@null must implement listener", e.getMessage());
-        }
-    }
 }
+
+
+
+
