@@ -3,10 +3,12 @@ package com.example.lunchmunch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Main activity for all MealPlan functionality
+ */
 public class MealPlanActivity extends AppCompatActivity {
 
     Button IngredientsNav, RecipesNav, ShoppingListNav;

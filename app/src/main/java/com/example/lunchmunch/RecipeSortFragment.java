@@ -11,6 +11,9 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * This fragment is used for sorting the recipes the way the user has specified
+ */
 public class RecipeSortFragment extends DialogFragment {
     private Spinner spinner;
     private Spinner spinnerDirection;

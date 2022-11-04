@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+/**
+ * Main activity for all ShoppingList functionality
+ */
 public class ShoppingListActivity extends AppCompatActivity {
 
     Button IngredientsNav, RecipesNav, MealPlanNav;

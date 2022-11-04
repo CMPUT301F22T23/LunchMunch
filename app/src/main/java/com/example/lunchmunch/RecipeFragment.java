@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Fragment for adding/editing Recipe functionality
+ */
 public class RecipeFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
     private View view;
     private RecipeFragmentBinding binding;

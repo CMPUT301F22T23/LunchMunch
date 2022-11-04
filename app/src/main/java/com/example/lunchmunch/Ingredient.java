@@ -5,9 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.Date;
 
-/*
-This class defines an Ingredient
-* */
+/**
+ * This class defines an Ingredient
+ */
 public class Ingredient implements Parcelable {
     private String name;
     private String description;

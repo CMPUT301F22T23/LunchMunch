@@ -1,7 +1,6 @@
 package com.example.lunchmunch;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,10 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.net.URI;
 import java.util.ArrayList;
-
+/**
+ * This class is for Adapter for displaying a list of recipes
+ */
 public class RecipeItemAdapter extends ArrayAdapter<Recipe> {
 
     private ArrayList<Recipe> dataList;

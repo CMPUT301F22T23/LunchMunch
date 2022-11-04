@@ -1,7 +1,9 @@
 package com.example.lunchmunch;
 
 import java.util.List;
-
+/**
+ * This class defines a Recipe
+ */
 public class Recipe {
     private String name;
     private List<Ingredient> ingredients;
