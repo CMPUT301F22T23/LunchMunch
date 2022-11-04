@@ -6,6 +6,11 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * This is the shopping list page
+ *
+ */
+
 public class ShoppingListActivity extends AppCompatActivity {
 
     Button IngredientsNav, RecipesNav, MealPlanNav;

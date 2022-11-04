@@ -1,31 +1,27 @@
 package com.example.lunchmunch;
-import android.app.DatePickerDialog;
-import android.os.Parcel;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import androidx.fragment.app.Fragment;
+
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 /**
  * Fragment for adding/editing ingredient functionality
@@ -56,10 +52,16 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     private OnFragmentInteractionListener listener;
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
+        void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category);
+
         void onOkPressed(Ingredient ingredient, int position);
         void deleteIngredient();
     };
-
+    /**
+     * implement OnFragmentInteractionListener
+     * @param context context
+     * @throws RuntimeException If we couldn't implement
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -71,8 +73,11 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
             throw new RuntimeException(context.toString() + "must implement listener");
         }
     }
-
-
+    /**
+     * Returns an alert object that will is used to take user input about an ingredient
+     * @param savedInstanceState In case we need to restore ourselves to a previous state, can be NULL
+     * @return                   alert dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -166,7 +171,13 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         return alert;
     }
-
+    /**
+     * When item is selected, set category or set location
+     * @param adapterView  The viewgroup we have our items stored in
+     * @param view         Not currently being used
+     * @param i            Used to get item at position i
+     * @param l            Not currently being used
+     */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         int id = adapterView.getId();
@@ -190,6 +201,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
     /**
      * Sets information on existing ingredient for editing
+     * @param currentIngredient The ingredient we are setting information on
      */
     private void setCurrentIngredient(Ingredient currentIngredient) {
         // ingredient category spinner

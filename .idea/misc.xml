@@ -3,32 +3,35 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/drawable-anydpi/ic_save .xml" value="0.124" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/drawable/ic_launcher_background.xml" value="0.246" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/content_ingredients.xml" value="0.18802083333333333" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/content_main.xml" value="0.18802083333333333" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/content_recipe.xml" value="0.18802083333333333" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/fragment_second.xml" value="0.18802083333333333" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/ingredient_item_fragment.xml" value="0.4" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/ingredient_list_content.xml" value="0.33" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/ingredients_activity.xml" value="0.18802083333333333" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/navbar_view.xml" value="0.18802083333333333" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/recipe_fragment.xml" value="0.18802083333333333" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/recipe_fragment_2.xml" value="0.25" />
-        <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/recipes_activity.xml" value="0.18802083333333333" />
-        <entry key="app/src/main/res/layout/activity_ingredients.xml" value="0.18899230957031252" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.14375" />
-        <entry key="app/src/main/res/layout/content_ingredients.xml" value="0.14375" />
+        <entry key="../../../Library/Android/sdk/platforms/android-32/data/res/layout/simple_spinner_item.xml" value="0.1" />
+        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/shoppinglist_activity.xml" value="0.33" />
+        <entry key="app/src/main/res/drawable-anydpi/ic_save.xml" value="0.28" />
+        <entry key="app/src/main/res/drawable/popup_background.xml" value="0.1545" />
+        <entry key="app/src/main/res/drawable/rounded_square.xml" value="0.1565" />
+        <entry key="app/src/main/res/layout/activity_ingredients.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_recipe.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/content_ingredients.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/content_recipe.xml" value="0.3151041666666667" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.2892303466796875" />
         <entry key="app/src/main/res/layout/fragment_first2.xml" value="0.14375" />
-        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.14375" />
+        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_second2.xml" value="0.14375" />
-        <entry key="app/src/main/res/layout/ingredient_item_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/ingredient_item_fragment.xml" value="0.32874145507812497" />
+        <entry key="app/src/main/res/layout/ingredient_list_content.xml" value="0.1402061855670103" />
+        <entry key="app/src/main/res/layout/ingredients_activity.xml" value="0.18702087402343748" />
+        <entry key="app/src/main/res/layout/navbar_view.xml" value="0.14375" />
+        <entry key="app/src/main/res/layout/recipe_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/recipe_fragment_2.xml" value="0.3151041666666667" />
+        <entry key="app/src/main/res/layout/recipes_activity.xml" value="0.14375" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

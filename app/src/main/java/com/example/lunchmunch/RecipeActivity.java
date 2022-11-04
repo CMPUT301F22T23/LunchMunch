@@ -2,16 +2,6 @@ package com.example.lunchmunch;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +9,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.lunchmunch.databinding.ActivityRecipeBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,7 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,6 +31,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * The Recipe page
+ */
 
 public class RecipeActivity extends AppCompatActivity implements RecipeFragment.OnFragmentInteractionListener {
 
@@ -108,8 +108,12 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
     }
 
-
-
+    /**
+     * Add recipe to the database
+     * @param recipe   recipe to add
+     * @param isNew    is the recipe in db already?
+     * @param position the position the recipe is to be added in recipelist
+     */
     @Override
     public void onOkPressed(Recipe recipe, Boolean isNew, int position) {
         if (isNew) {
@@ -195,9 +199,11 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         });
     }
 
-
-
-
+    /**
+     * Sort the recipes
+     * @param sortType      What to sort the recipes by
+     * @param sortDirection Ascending or descending order
+     */
     public void sortRecipes(String sortType, String sortDirection) {
         if (sortType.equals("Title")) {
             Collections.sort(recipesList, new Comparator<Recipe>() {
@@ -234,7 +240,10 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         RecipeAdapter.notifyDataSetChanged();
     }
 
-
+    /**
+     * Delete a recipe from recipeslist
+     * @param position position of the recipe to be deleted
+     */
     @Override
     public void deleteRecipe(int position) {
         // delete recipe from database

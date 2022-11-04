@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,45 +24,27 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
-
-import java.util.Date;
-
 /**
- * Main activity for all Ingredients functionality
+ * The ingredients page
  */
+
 public class IngredientsActivity extends AppCompatActivity implements IngredientItemFragment.OnFragmentInteractionListener {
     Button RecipesNav, MealPlanNav, ShoppingListNav;
     FirebaseFirestore db;
     CollectionReference IngrCollec;
 
+
     ListView ingredientsListView;
     FoodItemAdapter ingredientAdapter;
-    /**
-     * Array list of Ingredient instances for use in array adapter
-     */
     ArrayList<Ingredient> dataList;
-    /**
-     * Map of Ingredient instances for uniqueness
-     */
     Map<String, Ingredient> foodMap;
-
-    /**
-     * Please see the {@link com.example.lunchmunch.IngredientItemFragment} class for true identity
-     */
     IngredientItemFragment fragment;
     Integer itemPosition;
-    Spinner sortSpinner;
 
-    ArrayAdapter<String> sortAdapter;
 
     // Declare the variables so that you will be able to reference it later.
 
@@ -70,6 +52,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ingredients_activity);
+
 
 
         // init firebase reference
@@ -93,12 +76,6 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         fragment = new IngredientItemFragment();
         addFoodButton.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT"));
 
-        // Sorting Spinner
-        sortSpinner = (Spinner) findViewById(R.id.SortOptions);
-        sortAdapter = new ArrayAdapter<String>(IngredientsActivity.this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sortOptions));
-        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sortSpinner.setAdapter(sortAdapter);
 
 
         // navbar listeners
@@ -128,130 +105,62 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             }
         });
 
-
-        // Spinner Sorting Functionality
-        // sets spinner to default
-        sortSpinner.setSelection(0);
-
-        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                String choice = sortSpinner.getSelectedItem().toString();
-                if (choice.equals("Description")){
-                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
-                    Collections.sort(dataList, new Comparator<Ingredient>() {
-                        @Override
-                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
-                            return ingredient.getDescription().compareTo(ingredient2.getDescription());
-                        }
-                    });
-
-                } else if (choice.equals("Best Before")){
-                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
-                    Collections.sort(dataList, new Comparator<Ingredient>() {
-                        @Override
-                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
-                            return ingredient.getBestBefore().compareTo(ingredient2.getBestBefore());
-                        }
-                    });
-
-                } else if (choice.equals("Location")){
-                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
-                    Collections.sort(dataList, new Comparator<Ingredient>() {
-                        @Override
-                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
-                            return ingredient.getLocation().compareTo(ingredient2.getLocation());
-                        }
-                    });
-                    Collections.reverse(dataList);
-                    ingredientAdapter.notifyDataSetChanged();
-
-
-                } else if (choice.equals("Category")){
-                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
-                    Collections.sort(dataList, new Comparator<Ingredient>() {
-                        @Override
-                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
-                            return ingredient.getCategory().compareTo(ingredient2.getCategory());
-                        }
-                    });
-                }
-                ingredientAdapter.notifyDataSetChanged();
-                ingredientsListView.refreshDrawableState();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
     }
+
     /**
-    * Inserts an Ingredient into database or edits existing ingredient
-    *   @param ingredient
-     *      ingredient to edit or add
-     * @param position
-     *      position of existing ingredient
-    */
+     * Add ingredient to the database
+     * @param name         name of ingredient
+     * @param description  description of ingredient
+     * @param bestBefore   ingredients best before date
+     * @param location     where the ingredient is located
+     * @param count        the quantity of ingredient in location
+     * @param cost         the cost of the ingredient
+     * @param category     the category of ingredient
+     */
+    @Override
+    public void onOkPressed(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category) {
+        System.out.println(bestBefore);
+
+        Ingredient newIngredient = new Ingredient(name, description, bestBefore, location, count, cost, category);
+
+        // add the new food to our current ingr list if new
+        if (!foodMap.containsKey(name)) {
+            dataList.add(newIngredient);
+            ingredientAdapter.notifyDataSetChanged();
+
+        }
+        foodMap.put(newIngredient.getName(), newIngredient);
+        // update ingr list in db by overwriting it with the current ingredientsList
+        // restructured db to have list of collections instead of one collection
+        IngrCollec.document(name).set(newIngredient) // .add equiv to .collec().set(..)
+                .addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        System.out.println("Success");
+//                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Fail");
+//                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
+        // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
+
+        // Edit Food obj (edit from ingriendsList then same as above ^^)
+    }
+
     @Override
     public void onOkPressed(Ingredient ingredient, int position) {
 
-        sortSpinner.setSelection(0);
-        if (position != -1) {
-            //Our ingredient is not new, so we need to update it
-            dataList.set(position, ingredient);
-            foodMap.put(ingredient.getName(), ingredient);
-            ingredientAdapter.notifyDataSetChanged();
+    }
 
-            //Update the ingredient in the database
-            IngrCollec.document(ingredient.getName()).set(ingredient);
-            return;
-        }
-
-        // add the new food to our current ingr list if new
-
-            if (!foodMap.containsKey(ingredient.getName())) {
-                dataList.add(ingredient);
-
-                ingredientAdapter.notifyDataSetChanged();
-
-            }
-            foodMap.put(ingredient.getName(), ingredient);
-            // update ingr list in db by overwriting it with the current ingredientsList
-            // restructured db to have list of collections instead of one collection
-            IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
-                    .addOnSuccessListener(new OnSuccessListener() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            System.out.println("Success");
-//                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            System.out.println("Fail");
-//                        Log.w(TAG, "Error adding document", e);
-                        }
-                    });
-
-            // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
-
-            // Edit Food obj (edit from ingriendsList then same as above ^^)
-        }
-
-     /**
-     * Deletes an Ingredient from database
-     */
     @Override
     public void deleteIngredient() {
-        if (itemPosition == null) {
-            return;
-        }
         String name = dataList.get(itemPosition).getName();
-
         Log.d("ITEM POSITION", "Position is: " + String.valueOf(itemPosition));
         if (foodMap.containsKey(name)) {
             foodMap.remove(name);
@@ -279,7 +188,6 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
     }
 
-
     private void initDBListener(CollectionReference ingrCollec) {
 
         ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -293,12 +201,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                     for (QueryDocumentSnapshot document : task.getResult()) {
 
                         Timestamp timestamp = (Timestamp) document.getData().get("bestBefore");
-                        Date bestBefore;
-                        if (timestamp == null) {
-                            bestBefore = null;
-                        }else{
-                            bestBefore = timestamp.toDate();
-                        }
+                        Date bestBefore = timestamp.toDate();
 
                         Ingredient ingredient = new Ingredient(
                                 (String) document.getData().get("name"),

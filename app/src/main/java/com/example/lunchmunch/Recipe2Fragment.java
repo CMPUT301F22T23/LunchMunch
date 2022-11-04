@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-
+/**
+ * Make a recipe fragment
+ */
 public class Recipe2Fragment extends Fragment {
 
 

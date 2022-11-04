@@ -18,13 +18,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.lunchmunch.databinding.RecipeFragmentBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+/**
+ * This class defines the RecipeFragment
+ */
 
 public class RecipeFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
     private View view;
@@ -59,6 +62,13 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
     };
 
+    /**
+     * returns the bindings root
+     * @param inflater           Used to determine the binding
+     * @param container          Used to determine the binding
+     * @param savedInstanceState In case we want to return to a previous state
+     * @return                   binding's root
+     */
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -68,15 +78,27 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         return binding.getRoot();
     }
 
+    /**
+     * Ensure the fragments root view is non-null
+     */
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    /**
+     * When view is destroyed
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
+    /**
+     * Returns a dialog that will be used for user inputted recipe
+     * @param savedInstanceState In case we need to return to a previous state
+     * @return dialog
+     */
 
     @NonNull
     @Override
@@ -170,6 +192,12 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         return mealTypes.indexOf(mealType);
     }
 
+    /**
+     * implement OnFragmentInteractionListener
+     * @param context context
+     * @throws RuntimeException If we couldn't implement
+     */
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -196,8 +224,13 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
     }
 
-
-
+    /**
+     * When an item is selected change meal type
+     * @param adapterView  The viewgroup we have our items stored in
+     * @param view         Not currently being used
+     * @param i            Used to get item at position i
+     * @param l            Not currently being used
+     */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         mealType = adapterView.getItemAtPosition(i).toString();

@@ -18,6 +18,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 
+/**
+ * This is the fragment where the user inputs recipe information
+ */
+
 public class RecipeModalFragment extends BottomSheetDialogFragment {
     Recipe recipe;
     TextView recipeName;
