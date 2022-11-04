@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.lunchmunch.databinding.RecipeFragmentBinding;
 
@@ -41,7 +40,6 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     private Recipe recipe;
 
 
-
     public RecipeFragment() {
     }
 
@@ -51,13 +49,15 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     }
 
 
-
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
         void onOkPressed(Recipe recipe, Boolean isNew, int position);
+
         void deleteRecipe(int position);
 
-    };
+    }
+
+    ;
 
     @Override
     public View onCreateView(
@@ -131,8 +131,9 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
                     if (recipe == null) {
                         List<String> ingredients = new ArrayList<String>();
-                        recipe = new Recipe(recipeName.getText().toString(), ingredients,  recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString());
-                    }  {
+                        recipe = new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString());
+                    }
+                    {
                         recipe.setName(recipeName.getText().toString());
                         recipe.setInstructions(recipeInstructions.getText().toString());
                         recipe.setImage(recipeImage.getText().toString());
@@ -175,8 +176,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         super.onAttach(context);
         if (context instanceof RecipeFragment.OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
-        }
-        else {
+        } else {
             throw new RuntimeException(context.toString() + "must implement listener");
         }
     }
@@ -195,7 +195,6 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         }
 
     }
-
 
 
     @Override

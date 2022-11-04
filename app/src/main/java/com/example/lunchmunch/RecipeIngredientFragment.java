@@ -165,7 +165,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     }
 
 
-    private void initDatePicker()
+    public void initDatePicker()
     {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
         {
@@ -255,7 +255,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     }
 
 
-    private void getUserInput() {
+    public void getUserInput() {
         // get user inputted name
         name = ingredientName.getText().toString();
         ingredientName.getText().clear();
