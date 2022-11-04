@@ -43,7 +43,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     private Location location;
     private Integer price;
     private Integer amount;
-    private Date expirationDate;
+    Date expirationDate;
     private Recipe recipe;
     private FoodItemAdapter foodItemAdapter;
 
@@ -156,6 +156,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
         alert.show();
 
         Bundle bundle = this.getArguments();
+        System.out.println("bundle: " + bundle);
         if (bundle.getInt("currentIngredientPosition", -1) != -1) {
             Ingredient currentIngredient = recipe.getIngredients().get(bundle.getInt("currentIngredientPosition"));
             setCurrentIngredient(currentIngredient);
@@ -165,7 +166,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     }
 
 
-    private void initDatePicker()
+    public void initDatePicker()
     {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
         {
@@ -255,7 +256,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     }
 
 
-    private void getUserInput() {
+    public void getUserInput() {
         // get user inputted name
         name = ingredientName.getText().toString();
         ingredientName.getText().clear();
@@ -286,8 +287,9 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        listener = (RecipeFragment.OnFragmentInteractionListener) context;
         System.out.println(context);
+        listener = (RecipeFragment.OnFragmentInteractionListener) context;
+
     }
 }
 

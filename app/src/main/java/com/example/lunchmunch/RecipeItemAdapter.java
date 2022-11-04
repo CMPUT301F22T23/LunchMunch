@@ -22,14 +22,8 @@ public class RecipeItemAdapter extends ArrayAdapter<Recipe> {
     private ArrayList<Recipe> dataList;
     Context context;
 
-    public void updateList(ArrayList<Recipe> data) {
-        dataList.clear();
-        dataList.addAll(data);
-        System.out.println(dataList.get(0).getName());
-        notifyDataSetChanged();
-    }
 
-    private static class ViewHolder {
+    static class ViewHolder {
         TextView tvName;
         ImageView tvImage;
         TextView tvServings;
