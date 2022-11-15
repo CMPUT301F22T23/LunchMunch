@@ -8,4 +8,4 @@ A meal plan app for CMPUT 301
 
 ## Project UML
 
-[Link to UML Diagram](https://drive.google.com/file/d/120bk1rLtSvyzmv15B-VbGc80-bn-_BOW/view?usp=sharing)
+[Link to UML Diagram (zoom in to see clearly)](https://drive.google.com/file/d/1vcfz5boj_dtu_KTiFz1BNAAyM8OKz52T/view?usp=sharing)
