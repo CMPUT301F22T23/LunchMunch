@@ -22,7 +22,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
+/**
+ * Fragment for adding/editing RecipeIngredient functionality
+ */
 public class RecipeIngredientFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
     private View view;
@@ -53,7 +55,10 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
         this.recipe = recipe;
         this.foodItemAdapter = recipeIngredientsAdapter;
     }
-
+    /**
+     * Sets information on existing recipe for editing
+     * @param savedInstanceState The ingredient we are setting information on
+     */
 
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

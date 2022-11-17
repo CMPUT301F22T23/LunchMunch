@@ -17,7 +17,9 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
-
+/**
+ * Fragment for adding/editing RecipeModal functionality
+ */
 public class RecipeModalFragment extends BottomSheetDialogFragment {
     Recipe recipe;
     TextView recipeName;

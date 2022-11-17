@@ -1,7 +1,8 @@
 package com.example.lunchmunch;
 
-import java.util.ArrayList;
-
+/**
+ * This class defines a Meal
+ */
 public class Meal {
 /*
 
