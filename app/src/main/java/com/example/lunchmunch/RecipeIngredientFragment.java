@@ -149,6 +149,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
                     }
                 })
                 .create();
+
         alert.setOnShowListener(a -> {
             Button positive = alert.getButton(AlertDialog.BUTTON_POSITIVE);
             positive.setBackgroundResource(R.drawable.ic_save);

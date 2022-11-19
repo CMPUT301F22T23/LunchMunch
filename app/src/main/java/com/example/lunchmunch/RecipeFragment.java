@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -161,9 +162,11 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         AlertDialog dialog = builder.create();
         dialog.setOnShowListener(a -> {
             Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            positive.setBackgroundResource(R.drawable.ic_save);
+            //positive.setBackgroundResource(R.drawable.ic_save);
+            positive.setTextColor(Color.BLACK);
             Button negative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-            negative.setBackgroundResource(R.drawable.cancel);
+            //negative.setBackgroundResource(R.drawable.ic_delete);
+            negative.setTextColor(Color.BLACK);
 
         });
         return dialog;
