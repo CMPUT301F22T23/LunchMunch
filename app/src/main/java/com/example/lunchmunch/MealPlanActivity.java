@@ -3,15 +3,25 @@ package com.example.lunchmunch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Main activity for all MealPlan functionality
  */
-public class MealPlanActivity extends AppCompatActivity {
+public class MealPlanActivity extends AppCompatActivity implements MealPlanDateFragment.OnFragmentInteractionListener {
 
     Button IngredientsNav, RecipesNav, ShoppingListNav;
+    MealPlanItemAdapter adapter;
+    ArrayList<MealPlanItem> dataList = new ArrayList<>();
+    MealPlanDateFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +42,24 @@ public class MealPlanActivity extends AppCompatActivity {
             startActivity(new Intent(MealPlanActivity.this, ShoppingListActivity.class));
         });
 
+        RecyclerView recyclerView = findViewById(R.id.monday_meal_plan_items_list);
+        ArrayList<String> ingredients = new ArrayList<String>();
+        Recipe recipe = new Recipe("name", ingredients, "instructions", "mealType", "image", 0, 0, "comments");
+        dataList.add(new MealPlanItem(recipe));
+        Ingredient banana =  new Ingredient("banana", "yellow fruit", new Date(), Location.FREEZER, 1,2,IngredientCategory.MEAT);
+        dataList.add(new MealPlanItem(banana));
+        adapter = new MealPlanItemAdapter(dataList);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+
+        // adding or editing a new item button
+        final ImageView editMealPlanButton = findViewById(R.id.monday_meal_plan_edit_pencil);
+        fragment = new MealPlanDateFragment();
+        editMealPlanButton.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "Edit Meal Plan"));
+        fragment.setDataList(dataList);
 
 
     }
