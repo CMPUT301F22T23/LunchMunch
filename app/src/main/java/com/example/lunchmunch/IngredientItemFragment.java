@@ -36,7 +36,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     ArrayAdapter<CharSequence> adapter;
     Spinner ingredientSpinner;
     Spinner locationSpinner;
-    Button ingredientExpiryButton;
+    EditText ingredientExpiry;
     EditText ingredientName;
     EditText ingredientAmount;
     EditText ingredientPrice;
@@ -108,8 +108,8 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         // date picker dialog
         initDatePicker();
-        ingredientExpiryButton = view.findViewById(R.id.ingredient_expiry);
-        ingredientExpiryButton.setOnClickListener(e -> { datePickerDialog.show(); });
+        ingredientExpiry = view.findViewById(R.id.ingredient_expiry);
+        ingredientExpiry.setOnClickListener(e -> { datePickerDialog.show(); });
 
         // user inputted name
         ingredientName = view.findViewById(R.id.ingredient_name);
@@ -122,6 +122,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         // user inputted amount
         ingredientAmount = view.findViewById(R.id.ingredient_amount);
+
 
         //textview for any possible error msgs
         errMsgTxt = view.findViewById(R.id.errMsgTxt);
@@ -331,8 +332,12 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day)
             {
-                // get use inputted date
+                // get user inputted date and set the textview to display selected expiry date
                 expirationDate = new GregorianCalendar(year, month, day).getTime();
+                String fullDate = expirationDate.toString();
+                String [] displayDate = fullDate.split(" ");
+
+                ingredientExpiry.setText(displayDate[1] + " " +displayDate[2] + " " +  displayDate[5]);
             }
         };
 
