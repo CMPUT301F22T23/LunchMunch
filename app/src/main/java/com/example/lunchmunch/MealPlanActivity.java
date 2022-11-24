@@ -20,7 +20,7 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
     Button IngredientsNav, RecipesNav, ShoppingListNav;
     MealPlanItemAdapter adapter;
-    ArrayList<MealPlanItem> dataList = new ArrayList<>();
+    static ArrayList<MealPlanItem> mealPlanList = new ArrayList<>();
     MealPlanDateFragment fragment;
 
     @Override
@@ -45,10 +45,10 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         RecyclerView recyclerView = findViewById(R.id.monday_meal_plan_items_list);
         ArrayList<String> ingredients = new ArrayList<String>();
         Recipe recipe = new Recipe("name", ingredients, "instructions", "mealType", "image", 0, 0, "comments");
-        dataList.add(new MealPlanItem(recipe));
+        mealPlanList.add(new MealPlanItem(recipe));
         Ingredient banana =  new Ingredient("banana", "yellow fruit", new Date(), Location.FREEZER, 1,2,IngredientCategory.MEAT);
-        dataList.add(new MealPlanItem(banana));
-        adapter = new MealPlanItemAdapter(dataList);
+        mealPlanList.add(new MealPlanItem(banana));
+        adapter = new MealPlanItemAdapter(mealPlanList);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -59,7 +59,7 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         final ImageView editMealPlanButton = findViewById(R.id.monday_meal_plan_edit_pencil);
         fragment = new MealPlanDateFragment();
         editMealPlanButton.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "Edit Meal Plan"));
-        fragment.setDataList(dataList);
+        fragment.setDataList(mealPlanList);
 
 
     }
