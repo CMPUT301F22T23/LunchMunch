@@ -95,7 +95,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         }
 
         //now the remaining values in the ingrMap are the ingredients we need in the shopping list
-        System.out.println(ingrMap);
+        System.out.println("dif"+ingrMap);
 
     }
 
