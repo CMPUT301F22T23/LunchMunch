@@ -26,11 +26,19 @@
         <item>Descending</item>
     </string-array>
 
-    <string-array name="sortOptions">
+    <string-array name="sortOptionsI">
         <item>Sort By</item>
         <item>Description</item>
         <item>Best Before</item>
         <item>Location</item>
+        <item>Category</item>
+    </string-array>
+
+    <string-array name="sortOptionsR">
+        <item>Sort By</item>
+        <item>Title</item>
+        <item>Prep Time</item>
+        <item># of Servings</item>
         <item>Category</item>
     </string-array>
 

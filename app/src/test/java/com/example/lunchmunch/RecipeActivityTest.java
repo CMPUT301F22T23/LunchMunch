@@ -68,14 +68,12 @@ public class RecipeActivityTest {
     public void deleteRecipeWhenRecipeIsFound() {
         Activity activity = Robolectric.setupActivity(RecipeActivity.class);
         ListView recipesView = activity.findViewById(R.id.recipeListView);
-        TextView sortText = activity.findViewById(R.id.recipeSortText);
         Button IngredientsNav = activity.findViewById(R.id.ingredientsNav);
         Button MealPlanNav = activity.findViewById(R.id.mealPlanNav);
         Button ShoppingListNav = activity.findViewById(R.id.shoppingListNav);
         FloatingActionButton AddRecipeButton = activity.findViewById(R.id.addRecipeButton);
 
         assertNotNull(recipesView);
-        assertNotNull(sortText);
         assertNotNull(IngredientsNav);
         assertNotNull(MealPlanNav);
         assertNotNull(ShoppingListNav);
@@ -92,13 +90,11 @@ public class RecipeActivityTest {
         Button MealPlanNav = activity.findViewById(R.id.mealPlanNav);
         Button ShoppingListNav = activity.findViewById(R.id.shoppingListNav);
         ListView recipesView = activity.findViewById(R.id.recipeListView);
-        TextView sortText = activity.findViewById(R.id.recipeSortText);
 
         assertNotNull(IngredientsNav);
         assertNotNull(MealPlanNav);
         assertNotNull(ShoppingListNav);
         assertNotNull(recipesView);
-        assertNotNull(sortText);
     }
 
     /**
@@ -123,13 +119,10 @@ public class RecipeActivityTest {
         Button mealPlanNav = activity.findViewById(R.id.mealPlanNav);
         Button shoppingListNav = activity.findViewById(R.id.shoppingListNav);
         ListView recipeListView = activity.findViewById(R.id.recipeListView);
-        TextView recipeSortText = activity.findViewById(R.id.recipeSortText);
-
         assertNotNull(ingredientsNav);
         assertNotNull(mealPlanNav);
         assertNotNull(shoppingListNav);
         assertNotNull(recipeListView);
-        assertNotNull(recipeSortText);
     }
 
     /**
@@ -141,16 +134,12 @@ public class RecipeActivityTest {
         Button IngredientsNav = activity.findViewById(R.id.ingredientsNav);
         Button MealPlanNav = activity.findViewById(R.id.mealPlanNav);
         Button ShoppingListNav = activity.findViewById(R.id.shoppingListNav);
-        TextView sortText = activity.findViewById(R.id.recipeSortText);
         ListView recipesView = activity.findViewById(R.id.recipeListView);
 
         assertNotNull(IngredientsNav);
         assertNotNull(MealPlanNav);
         assertNotNull(ShoppingListNav);
-        assertNotNull(sortText);
         assertNotNull(recipesView);
-
-       ((RecipeActivity) activity).sortRecipes("Title", "Ascending");
     }
 
     /**
@@ -162,15 +151,12 @@ public class RecipeActivityTest {
         Button IngredientsNav = activity.findViewById(R.id.ingredientsNav);
         Button MealPlanNav = activity.findViewById(R.id.mealPlanNav);
         Button ShoppingListNav = activity.findViewById(R.id.shoppingListNav);
-        TextView sortText = activity.findViewById(R.id.recipeSortText);
         ListView recipesView = activity.findViewById(R.id.recipeListView);
 
         assertNotNull(IngredientsNav);
         assertNotNull(MealPlanNav);
         assertNotNull(ShoppingListNav);
-        assertNotNull(sortText);
         assertNotNull(recipesView);
 
-        ((RecipeActivity) activity).sortRecipes("Title", "Descending");
     }
 }

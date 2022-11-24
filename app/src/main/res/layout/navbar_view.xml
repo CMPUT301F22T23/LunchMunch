@@ -24,25 +24,9 @@
         app:layout_constraintVertical_bias="0.069" />
 
     <Button
-        android:id="@+id/mealPlanNav"
+        android:id="@+id/recipesNav"
         android:layout_width="106dp"
         android:layout_height="45dp"
-        android:backgroundTint="@color/background_white"
-        android:inputType="textCapSentences"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="Meal Plan"
-        android:textColor="@color/black_header"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ingredientsNav"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.069" />
-
-    <Button
-        android:id="@+id/recipesNav"
-        android:layout_width="90dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="4dp"
         android:backgroundTint="@color/background_white"
         android:inputType="textCapSentences"
         android:paddingLeft="8dp"
@@ -50,9 +34,25 @@
         android:text="Recipes"
         android:textColor="@color/black_header"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ingredientsNav"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.069" />
+
+    <Button
+        android:id="@+id/mealPlanNav"
+        android:layout_width="90dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="@color/background_white"
+        android:inputType="textCapSentences"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Meal Plan"
+        android:textColor="@color/black_header"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.97"
-        app:layout_constraintStart_toEndOf="@+id/mealPlanNav"
+        app:layout_constraintStart_toEndOf="@+id/recipesNav"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.069" />
 
@@ -67,8 +67,8 @@
         android:text="Shopping"
         android:textColor="@color/black_header"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/recipesNav"
-        app:layout_constraintStart_toEndOf="@+id/mealPlanNav"
+        app:layout_constraintEnd_toStartOf="@+id/mealPlanNav"
+        app:layout_constraintStart_toEndOf="@+id/recipesNav"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.069" />
 

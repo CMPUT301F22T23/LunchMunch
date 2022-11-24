@@ -34,7 +34,7 @@
         android:id="@+id/ingredients_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:fontFamily="@font/nunito_extrabold"
         android:text="@string/ingredients_subtitle"
         android:textSize="20sp"
