@@ -46,7 +46,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     /**
      * Array list of Ingredient instances for use in array adapter
      */
-    ArrayList<Ingredient> dataList;
+    static ArrayList<Ingredient> ingredientsList;
     /**
      * Map of Ingredient instances for uniqueness
      */
@@ -77,12 +77,12 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         initViews();
 
         // ingredient item storage
-        dataList = new ArrayList<Ingredient>(); // used for displaying list
+        ingredientsList = new ArrayList<Ingredient>(); // used for displaying list
         foodMap = new HashMap<String, Ingredient>(); // used for storing unique ingredients
 
         // ingredient lists
         ingredientsListView = (ListView) findViewById(R.id.ingredient_list);
-        ingredientAdapter = new FoodItemAdapter(this, R.layout.content_ingredients, dataList);
+        ingredientAdapter = new FoodItemAdapter(this, R.layout.content_ingredients, ingredientsList);
         ingredientsListView.setAdapter(ingredientAdapter);
 
         // adding or editing a new item button
@@ -117,7 +117,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 itemPosition = i;
                 Bundle args = new Bundle();
-                args.putParcelable("currentIngredient", dataList.get(itemPosition));
+                args.putParcelable("currentIngredient", ingredientsList.get(itemPosition));
                 args.putInt("currentIngredientPosition", itemPosition);
                 fragment.setArguments(args);
                 fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT");
@@ -135,7 +135,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 String choice = sortSpinner.getSelectedItem().toString();
-                Sort.ingredientSort(dataList, choice);
+                Sort.ingredientSort(ingredientsList, choice);
                 ingredientAdapter.notifyDataSetChanged();
                 ingredientsListView.refreshDrawableState();
 
@@ -165,7 +165,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         sortSpinner.setSelection(0);
         if (position != -1) {
             //Our ingredient is not new, so we need to update it
-            dataList.set(position, ingredient);
+            ingredientsList.set(position, ingredient);
             foodMap.put(ingredient.getName(), ingredient);
             ingredientAdapter.notifyDataSetChanged();
 
@@ -177,7 +177,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         // add the new food to our current ingr list if new
 
             if (!foodMap.containsKey(ingredient.getName())) {
-                dataList.add(ingredient);
+                ingredientsList.add(ingredient);
 
                 ingredientAdapter.notifyDataSetChanged();
 
@@ -214,13 +214,13 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         if (itemPosition == null) {
             return;
         }
-        String name = dataList.get(itemPosition).getName();
+        String name = ingredientsList.get(itemPosition).getName();
 
         Log.d("ITEM POSITION", "Position is: " + String.valueOf(itemPosition));
         if (foodMap.containsKey(name)) {
             foodMap.remove(name);
-            dataList.clear();
-            dataList.addAll(foodMap.values());
+            ingredientsList.clear();
+            ingredientsList.addAll(foodMap.values());
             ingredientAdapter.notifyDataSetChanged();
 
         }
@@ -254,7 +254,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
                 if (task.isSuccessful()) {
                     // clear current list and re-add all the current ingredients
-                    dataList.clear();
+                    ingredientsList.clear();
                     // each document in the Ingredients collection is an Ingredient class object
                     for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -282,7 +282,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
                         //TODO: (Maxym) Add ingredients to sharedPreferences
                         foodMap.put(ingredient.getName(), ingredient);
-                        dataList.add(ingredient);
+                        ingredientsList.add(ingredient);
 
                     }
                     ingredientAdapter.notifyDataSetChanged();
