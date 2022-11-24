@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,11 +45,13 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     FloatingActionButton AddRecipeButton;
     ArrayList<Recipe> recipesList;
     ListView recipesView;
-    TextView sortText;
     Map<String, Recipe> recipesMap;
     RecipeItemAdapter RecipeAdapter;
     FirebaseFirestore db;
     CollectionReference RecipeCollec;
+
+    Spinner sortSpinner;
+    ArrayAdapter<String> sortAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,8 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
         initDBListener(RecipeCollec);
 
+        // nav bar listeners
+
         IngredientsNav.setOnClickListener(view -> {
             startActivity(new Intent(RecipeActivity.this, IngredientsActivity.class));
         });
@@ -77,6 +84,15 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         ShoppingListNav.setOnClickListener(view -> {
             startActivity(new Intent(RecipeActivity.this, ShoppingListActivity.class));
         });
+
+
+        // Sort Spinner
+        sortSpinner = (Spinner) findViewById(R.id.SortOptions);
+        sortAdapter = new ArrayAdapter<String>(RecipeActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sortOptionsR));
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(sortAdapter);
+
 
         // Add Recipe button set on click listener to add fragment
         AddRecipeButton.setOnClickListener(view -> {
@@ -97,13 +113,29 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             }
         });
 
-        sortText.setOnClickListener(view -> {
-            RecipeSortFragment recipeSortFragment = new RecipeSortFragment();
-            recipeSortFragment.show(getSupportFragmentManager(), "Sort Recipes");
+        // sorting
+        // set spinner to default value
+        sortSpinner.setSelection(0);
 
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String choice = sortSpinner.getSelectedItem().toString();
+                Sort.recipeSort(recipesList, choice);
+                RecipeAdapter.notifyDataSetChanged();
+                recipesView.refreshDrawableState();
+                if(!choice.equals("Sort By")) {
+                    Toast toast = Toast.makeText(RecipeActivity.this, "Now sorting by " + choice, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
-
-
 
     }
 
@@ -200,47 +232,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     }
 
 
-    /**
-     * Sort the recipes
-     * @param sortType      What to sort the recipes by
-     * @param sortDirection Ascending or descending order
-     */
 
-    public void sortRecipes(String sortType, String sortDirection) {
-        if (sortType.equals("Title")) {
-            Collections.sort(recipesList, new Comparator<Recipe>() {
-                @Override
-                public int compare(Recipe recipe, Recipe t1) {
-                    return recipe.getName().compareTo(t1.getName());
-                }
-            });
-        } else if (sortType.equals("Recipe Category")) {
-            Collections.sort(recipesList, new Comparator<Recipe>() {
-                @Override
-                public int compare(Recipe recipe, Recipe t1) {
-                    return recipe.getMealType().compareTo(t1.getMealType());
-                }
-            });
-        } else if (sortType.equals("Preparation Time")) {
-            Collections.sort(recipesList, new Comparator<Recipe>() {
-                @Override
-                public int compare(Recipe recipe, Recipe t1) {
-                    return recipe.getPrepTime().compareTo(t1.getPrepTime());
-                }
-            });
-        } else if (sortType.equals("Number of Servings")) {
-            Collections.sort(recipesList, new Comparator<Recipe>() {
-                @Override
-                public int compare(Recipe recipe, Recipe t1) {
-                    return recipe.getServings().compareTo(t1.getServings());
-                }
-            });
-        }
-        if (sortDirection.equals("Descending")) {
-            Collections.reverse(recipesList);
-        }
-        RecipeAdapter.notifyDataSetChanged();
-    }
     /**
      * Delete a recipe from recipeslist
      * @param position position of the recipe to be deleted
@@ -266,8 +258,6 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         recipesList.remove(position);
         RecipeAdapter.notifyDataSetChanged();
     }
-
-
 
 
     private interface DBIngredients {
@@ -335,8 +325,6 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         ShoppingListNav = findViewById(R.id.shoppingListNav);
         AddRecipeButton = findViewById(R.id.addRecipeButton);
         recipesView = findViewById(R.id.recipeListView);
-        sortText = findViewById(R.id.recipeSortText);
-
     }
 
 }

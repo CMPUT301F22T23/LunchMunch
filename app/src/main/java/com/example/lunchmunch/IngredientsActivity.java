@@ -93,7 +93,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         // Sorting Spinner
         sortSpinner = (Spinner) findViewById(R.id.SortOptions);
         sortAdapter = new ArrayAdapter<String>(IngredientsActivity.this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sortOptions));
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sortOptionsI));
         sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortSpinner.setAdapter(sortAdapter);
 
@@ -135,47 +135,14 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 String choice = sortSpinner.getSelectedItem().toString();
-                if (choice.equals("Description")){
-                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
-                    Collections.sort(dataList, new Comparator<Ingredient>() {
-                        @Override
-                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
-                            return ingredient.getDescription().compareTo(ingredient2.getDescription());
-                        }
-                    });
-
-                } else if (choice.equals("Best Before")){
-                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
-                    Collections.sort(dataList, new Comparator<Ingredient>() {
-                        @Override
-                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
-                            return ingredient.getBestBefore().compareTo(ingredient2.getBestBefore());
-                        }
-                    });
-
-                } else if (choice.equals("Location")){
-                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
-                    Collections.sort(dataList, new Comparator<Ingredient>() {
-                        @Override
-                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
-                            return ingredient.getLocation().compareTo(ingredient2.getLocation());
-                        }
-                    });
-                    Collections.reverse(dataList);
-                    ingredientAdapter.notifyDataSetChanged();
-
-
-                } else if (choice.equals("Category")){
-                    Toast.makeText(IngredientsActivity.this, "Selected " + choice, Toast.LENGTH_SHORT).show();
-                    Collections.sort(dataList, new Comparator<Ingredient>() {
-                        @Override
-                        public int compare(Ingredient ingredient, Ingredient ingredient2) {
-                            return ingredient.getCategory().compareTo(ingredient2.getCategory());
-                        }
-                    });
-                }
+                Sort.ingredientSort(dataList, choice);
                 ingredientAdapter.notifyDataSetChanged();
                 ingredientsListView.refreshDrawableState();
+
+                if(!choice.equals("Sort By")) {
+                    Toast toast = Toast.makeText(IngredientsActivity.this, "Now sorting by " + choice, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
 
             @Override
