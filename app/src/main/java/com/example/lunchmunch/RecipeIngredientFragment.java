@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,7 +34,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     ArrayAdapter<CharSequence> adapter;
     Spinner ingredientSpinner;
     Spinner locationSpinner;
-    Button ingredientExpiryButton;
+    EditText ingredientExpiry;
     EditText ingredientName;
     EditText ingredientAmount;
     EditText ingredientPrice;
@@ -83,8 +84,8 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
 
         // date picker dialog
         initDatePicker();
-        ingredientExpiryButton = view.findViewById(R.id.ingredient_expiry);
-        ingredientExpiryButton.setOnClickListener(e -> { datePickerDialog.show(); });
+        ingredientExpiry = view.findViewById(R.id.ingredient_expiry);
+        ingredientExpiry.setOnClickListener(e -> { datePickerDialog.show(); });
 
         // user inputted name
         ingredientName = view.findViewById(R.id.ingredient_name);
@@ -125,7 +126,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
 
                 })
 
-                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getUserInput();
@@ -152,11 +153,11 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
 
         alert.setOnShowListener(a -> {
             Button positive = alert.getButton(AlertDialog.BUTTON_POSITIVE);
-            positive.setBackgroundResource(R.drawable.ic_save);
+            positive.setTextColor(Color.BLACK);
             Button negative = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
-            negative.setBackgroundResource(R.drawable.ic_delete);
+            negative.setTextColor(Color.BLACK);
             Button neutral = alert.getButton(AlertDialog.BUTTON_NEUTRAL);
-            neutral.setBackgroundResource(R.drawable.cancel);
+            neutral.setTextColor(Color.BLACK);
         });
 
         alert.show();
@@ -181,6 +182,11 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
             {
                 // get use inputted date
                 expirationDate = new GregorianCalendar(year, month, day).getTime();
+                String fullDate = expirationDate.toString();
+                String [] displayDate = fullDate.split(" ");
+
+                ingredientExpiry.setText(displayDate[1] + " " +displayDate[2] + " " +  displayDate[5]);
+
             }
         };
 

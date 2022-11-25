@@ -142,7 +142,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 delBtn.setTextColor(Color.BLACK);
                 //saveBtn.setBackgroundResource(R.drawable.ic_save);
                 delBtn.setOnClickListener(view -> {
-                    System.out.println("DELETEE");
+                    System.out.println("DELETE");
                     //can clear inputs now
                     clearUserInput();
                     // close/dismiss popup
@@ -157,7 +157,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 //saveBtn.setBackgroundResource(R.drawable.ic_save);
                 saveBtn.setOnClickListener(view -> {
                     getUserInput();
-                    // only send inputs that are neccecary and could be left blank or have an invalid input (desc can leave blank, loc & cat cant be left blank)
+                    // only send inputs that are necessary and could be left blank or have an invalid input (desc can leave blank, loc & cat cant be left blank)
                     String errMsg = validateIngrInputs(name, expirationDate, priceInput, amountInput);
                     if (errMsg.equals("")) {
                         Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
