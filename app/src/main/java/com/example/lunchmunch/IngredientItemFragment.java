@@ -36,7 +36,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     ArrayAdapter<CharSequence> adapter;
     Spinner ingredientSpinner;
     Spinner locationSpinner;
-    Button ingredientExpiryButton;
+    EditText ingredientExpiry;
     EditText ingredientName;
     EditText ingredientAmount;
     EditText ingredientPrice;
@@ -108,8 +108,8 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         // date picker dialog
         initDatePicker();
-        ingredientExpiryButton = view.findViewById(R.id.ingredient_expiry);
-        ingredientExpiryButton.setOnClickListener(e -> { datePickerDialog.show(); });
+        ingredientExpiry = view.findViewById(R.id.ingredient_expiry);
+        ingredientExpiry.setOnClickListener(e -> { datePickerDialog.show(); });
 
         // user inputted name
         ingredientName = view.findViewById(R.id.ingredient_name);
@@ -123,6 +123,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         // user inputted amount
         ingredientAmount = view.findViewById(R.id.ingredient_amount);
 
+
         //textview for any possible error msgs
         errMsgTxt = view.findViewById(R.id.errMsgTxt);
 
@@ -131,6 +132,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 .setTitle("Add/Edit Ingredient")
                 .setNegativeButton("Delete", null)
                 .setPositiveButton("Save", null)
+                .setNeutralButton("Cancel", null)
                 .create();
 
         alert.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -141,7 +143,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 delBtn.setTextColor(Color.BLACK);
                 //saveBtn.setBackgroundResource(R.drawable.ic_save);
                 delBtn.setOnClickListener(view -> {
-                    System.out.println("DELETEE");
+                    System.out.println("DELETE");
                     //can clear inputs now
                     clearUserInput();
                     // close/dismiss popup
@@ -156,7 +158,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 //saveBtn.setBackgroundResource(R.drawable.ic_save);
                 saveBtn.setOnClickListener(view -> {
                     getUserInput();
-                    // only send inputs that are neccecary and could be left blank or have an invalid input (desc can leave blank, loc & cat cant be left blank)
+                    // only send inputs that are necessary and could be left blank or have an invalid input (desc can leave blank, loc & cat cant be left blank)
                     String errMsg = validateIngrInputs(name, expirationDate, priceInput, amountInput);
                     if (errMsg.equals("")) {
                         Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
@@ -179,6 +181,12 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                     } else { // errMsg was not empty meaning one of the inputs were invalid
                         errMsgTxt.setText(errMsg);
                     }
+                });
+
+                Button cancelBtn = alert.getButton(AlertDialog.BUTTON_NEUTRAL);
+                cancelBtn.setTextColor(Color.BLACK);
+                cancelBtn.setOnClickListener(view1 -> {
+                    alert.dismiss();
                 });
 
             }
@@ -304,6 +312,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         // date picker dialog
         expirationDate = currentIngredient.getBestBefore();
+        String fullDate = expirationDate.toString();
+        String [] displayDate = fullDate.split(" ");
+        ingredientExpiry.setText(displayDate[1] + " " + displayDate[2] + " " + displayDate[5]);
 
         // user inputted name
         ingredientName = view.findViewById(R.id.ingredient_name);
@@ -331,8 +342,12 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day)
             {
-                // get use inputted date
+                // get user inputted date and set the textview to display selected expiry date
                 expirationDate = new GregorianCalendar(year, month, day).getTime();
+                String fullDate = expirationDate.toString();
+                String [] displayDate = fullDate.split(" ");
+
+                ingredientExpiry.setText(displayDate[1] + " " +displayDate[2] + " " +  displayDate[5]);
             }
         };
 
@@ -369,6 +384,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         // get user inputted amount
         amountInput = ingredientAmount.getText().toString();
         //amount = Integer.parseInt(amountInput);
+
 
     }
 
