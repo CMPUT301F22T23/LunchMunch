@@ -80,7 +80,7 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
             convertView = inflater.inflate(R.layout.ingredient_list_content, parent, false);
             viewHolder.tvName = (TextView) convertView.findViewById(R.id.name_label);
             viewHolder.tvCount = (TextView) convertView.findViewById(R.id.count_label);
-            viewHolder.tvCost = (TextView) convertView.findViewById(R.id.cost_label);
+            viewHolder.tvCost = (TextView) convertView.findViewById(R.id.sl_cost_label);
 
             result = convertView;
 

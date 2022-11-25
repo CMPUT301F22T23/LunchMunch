@@ -11,7 +11,7 @@
     android:paddingBottom="16dp">
 
     <TextView
-        android:id="@+id/cost_label"
+        android:id="@+id/sl_cost_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -20,7 +20,7 @@
         android:text="TextView"
         android:textColor="#808080"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/category_image"
+        app:layout_constraintStart_toEndOf="@+id/sl_category_image"
         app:layout_constraintTop_toBottomOf="@+id/name_label" />
 
     <TextView
@@ -33,9 +33,9 @@
         android:text="TextView"
         android:textColor="#161616"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/category_image"
-        app:layout_constraintStart_toEndOf="@+id/category_image"
-        app:layout_constraintTop_toBottomOf="@+id/cost_label" />
+        app:layout_constraintBottom_toBottomOf="@+id/sl_category_image"
+        app:layout_constraintStart_toEndOf="@+id/sl_category_image"
+        app:layout_constraintTop_toBottomOf="@+id/sl_cost_label" />
 
     <TextView
         android:id="@+id/name_label"
@@ -45,12 +45,12 @@
         android:fontFamily="@font/nunito_extrabold"
         android:text="TextView"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/category_image"
-        app:layout_constraintTop_toTopOf="@+id/category_image"
+        app:layout_constraintStart_toEndOf="@+id/sl_category_image"
+        app:layout_constraintTop_toTopOf="@+id/sl_category_image"
         tools:text="@string/app_name" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/category_image"
+        android:id="@+id/sl_category_image"
         android:layout_width="74dp"
         android:layout_height="71dp"
         android:layout_marginStart="16dp"
