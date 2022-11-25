@@ -151,5 +151,10 @@ public class Ingredient implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeInt(cost);
         }
+        if(bestBefore != null){
+            parcel.writeSerializable(bestBefore);
+        } else {
+            parcel.writeSerializable((byte)0);
+        }
     }
 }

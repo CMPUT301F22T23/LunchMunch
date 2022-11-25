@@ -132,6 +132,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 .setTitle("Add/Edit Ingredient")
                 .setNegativeButton("Delete", null)
                 .setPositiveButton("Save", null)
+                .setNeutralButton("Cancel", null)
                 .create();
 
         alert.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -180,6 +181,12 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                     } else { // errMsg was not empty meaning one of the inputs were invalid
                         errMsgTxt.setText(errMsg);
                     }
+                });
+
+                Button cancelBtn = alert.getButton(AlertDialog.BUTTON_NEUTRAL);
+                cancelBtn.setTextColor(Color.BLACK);
+                cancelBtn.setOnClickListener(view1 -> {
+                    alert.dismiss();
                 });
 
             }
@@ -305,6 +312,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         // date picker dialog
         expirationDate = currentIngredient.getBestBefore();
+        String fullDate = expirationDate.toString();
+        String [] displayDate = fullDate.split(" ");
+        ingredientExpiry.setText(displayDate[1] + " " + displayDate[2] + " " + displayDate[5]);
 
         // user inputted name
         ingredientName = view.findViewById(R.id.ingredient_name);
@@ -374,6 +384,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         // get user inputted amount
         amountInput = ingredientAmount.getText().toString();
         //amount = Integer.parseInt(amountInput);
+
 
     }
 

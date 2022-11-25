@@ -52,11 +52,12 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
      */
     Map<String, Ingredient> foodMap;
 
+    Integer itemPosition;
     /**
      * Please see the {@link com.example.lunchmunch.IngredientItemFragment} class for true identity
      */
     IngredientItemFragment fragment;
-    Integer itemPosition;
+    IngredientItemFragment fragment2;
     Spinner sortSpinner;
 
     ArrayAdapter<String> sortAdapter;
@@ -88,7 +89,8 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         // adding or editing a new item button
         final FloatingActionButton addFoodButton = findViewById(R.id.add_ingredient_button);
         fragment = new IngredientItemFragment();
-        addFoodButton.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT"));
+        fragment2 = new IngredientItemFragment();
+        addFoodButton.setOnClickListener(view -> fragment2.show(getSupportFragmentManager(), "ADD_INGREDIENT"));
 
         // Sorting Spinner
         sortSpinner = (Spinner) findViewById(R.id.SortOptions);
