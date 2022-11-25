@@ -44,8 +44,8 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
         RecyclerView recyclerView = findViewById(R.id.monday_meal_plan_items_list);
         ArrayList<String> ingredients = new ArrayList<String>();
-        Recipe recipe = new Recipe("name", ingredients, "instructions", "mealType", "image", 0, 0, "comments");
-        mealPlanList.add(new MealPlanItem(recipe));
+        //Recipe recipe = new Recipe("name", ingredients, "instructions", "mealType", "image", 0, 0, "comments");
+        //mealPlanList.add(new MealPlanItem(recipe));
         Ingredient banana =  new Ingredient("banana", "yellow fruit", new Date(), Location.FREEZER, 1,2,IngredientCategory.MEAT);
         mealPlanList.add(new MealPlanItem(banana));
         adapter = new MealPlanItemAdapter(mealPlanList);
