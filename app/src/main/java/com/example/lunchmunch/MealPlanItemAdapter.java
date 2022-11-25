@@ -35,10 +35,10 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
 
             if (viewType == 0) {
                 image = view.findViewById(R.id.meal_plan_recipe_item_image);
-                name = view.findViewById(R.id.sl_item_name);
-                time = view.findViewById(R.id.sl_item_unit);
-                servings = view.findViewById(R.id.sl_item_cost);
-                category = view.findViewById(R.id.sl_item_category);
+                name = view.findViewById(R.id.meal_plan_recipe_item_name);
+                time = view.findViewById(R.id.meal_plan_recipe_item_unit);
+                servings = view.findViewById(R.id.meal_plan_recipe_item_cost);
+                category = view.findViewById(R.id.meal_plan_recipe_item_category);
             }
             else if (viewType == 1) {
                 image = view.findViewById(R.id.meal_plan_ingredient_item_image);
