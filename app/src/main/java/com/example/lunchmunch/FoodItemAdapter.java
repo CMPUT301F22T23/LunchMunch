@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
         TextView tvName;
         TextView tvCount;
         TextView tvCost;
+        ImageView categoryImage;
     }
 
 
@@ -81,6 +83,7 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
             viewHolder.tvName = (TextView) convertView.findViewById(R.id.name_label);
             viewHolder.tvCount = (TextView) convertView.findViewById(R.id.count_label);
             viewHolder.tvCost = (TextView) convertView.findViewById(R.id.cost_label);
+            viewHolder.categoryImage = (ImageView) convertView.findViewById(R.id.category_image_view);
 
             result = convertView;
 
@@ -93,6 +96,7 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
         viewHolder.tvName.setText(foodItem.getName());
         viewHolder.tvCost.setText(String.valueOf(foodItem.getCost()));
         viewHolder.tvCount.setText(String.valueOf(foodItem.getCount()));
+        viewHolder.categoryImage.setImageResource(Ingredient.getCategoryImage(foodItem.getCategory()));
 
         return convertView;
     }

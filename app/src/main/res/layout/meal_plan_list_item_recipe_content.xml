@@ -7,6 +7,16 @@
     android:background="@drawable/rounded_square"
     tools:padding="30dp">
 
+    <ImageView
+        android:id="@+id/meal_plan_item_delete2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/trash" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/meal_plan_recipe_item_image_card"
         android:layout_width="100dp"
