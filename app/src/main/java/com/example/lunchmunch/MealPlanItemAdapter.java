@@ -1,5 +1,6 @@
 package com.example.lunchmunch;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,21 @@ import java.util.ArrayList;
 public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapter.ViewHolder> {
 
     private ArrayList<MealPlanItem> dataList;
+    private String day;
+
+    public interface OnAdapterInteractionListener {
+        void deleteItem(Integer item, String day);
+
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getDay(String day) {
+        return this.day;
+    }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -64,16 +80,22 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView;
         ViewHolder viewHolder;
+
+        // Create view for recipe items
         if (viewType == 0) {
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.meal_plan_list_item_recipe_content, parent, false);
             viewHolder = new ViewHolder(itemView, 0);
         }
+
+        // Create view for ingredient items
         else {
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.meal_plan_list_item_ingredient_content, parent, false);
             viewHolder = new ViewHolder(itemView, 1);
         }
+
+
         return viewHolder;
     }
 
@@ -90,6 +112,7 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
             holder.name.setText(item.getName());
             holder.unit.setText(item.getCount().toString());
             holder.cost.setText(item.getCost().toString());
+            holder.image.setImageResource(Ingredient.getCategoryImage(item.getCategory()));
         }
 
     }

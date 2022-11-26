@@ -11,18 +11,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -32,21 +27,21 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class MealPlanIngredientFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
+public class MealPlanRecipeFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
     View view;
-
     FirebaseFirestore db;
-    CollectionReference IngrCollec;
-
+    CollectionReference RecipeCollec;
     private OnFragmentInteractionListener listener;
-    FoodItemAdapter adapter;
-    ArrayList<Ingredient> dataList;
+    RecipeItemAdapter adapter;
+
+    ArrayList<Recipe> dataList = new ArrayList<>();
     Integer selectedItem = -1;
     String day;
 
     public interface OnFragmentInteractionListener {
-        void onIngredientOkPressed(Ingredient ingredient, String day);
+        void onRecipeOkPressed(Recipe recipe, String day);
     }
 
     public void setDay(String day) {
@@ -72,16 +67,16 @@ public class MealPlanIngredientFragment extends DialogFragment implements Adapte
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.meal_plan_add_ingredient_fragment, null);
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.meal_plan_add_recipe_fragment, null);
 
-        // init firebase reference
+        // init db for recipes
         db = FirebaseFirestore.getInstance();
-        IngrCollec = db.collection("Ingredients");
+        RecipeCollec = db.collection("Recipes");
 
-        initDBListener(IngrCollec);
+        initDBListener(RecipeCollec);
 
-        ListView mealPlanIngredientListView = view.findViewById(R.id.ingredient_list);
-        adapter = new FoodItemAdapter(getContext(),R.layout.meal_plan_add_ingredient_fragment, dataList);
+        ListView mealPlanIngredientListView = view.findViewById(R.id.recipeListView);
+        adapter = new RecipeItemAdapter(getContext(), R.layout.meal_plan_add_recipe_fragment, dataList);
         mealPlanIngredientListView.setAdapter(adapter);
 
         mealPlanIngredientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -101,6 +96,7 @@ public class MealPlanIngredientFragment extends DialogFragment implements Adapte
 
             }
         });
+
 
 
         final AlertDialog alert = new AlertDialog.Builder(getContext())
@@ -126,7 +122,7 @@ public class MealPlanIngredientFragment extends DialogFragment implements Adapte
                 saveBtn.setTextColor(Color.BLACK);
                 saveBtn.setOnClickListener(view -> {
                     if (selectedItem > -1 && selectedItem < dataList.size()) {
-                        listener.onIngredientOkPressed(dataList.get(selectedItem), getDay());
+                        listener.onRecipeOkPressed(dataList.get(selectedItem), getDay());
                     }
                     alert.dismiss();
                 });
@@ -141,6 +137,7 @@ public class MealPlanIngredientFragment extends DialogFragment implements Adapte
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
+
     }
 
     @Override
@@ -148,38 +145,41 @@ public class MealPlanIngredientFragment extends DialogFragment implements Adapte
 
     }
 
-    private void initDBListener(CollectionReference ingrCollec) {
-        dataList = new ArrayList<>();
+    void initDBListener(CollectionReference recipeCollec) {
 
-        ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        recipeCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                 if (task.isSuccessful()) {
                     // clear current list and re-add all the current ingredients
                     dataList.clear();
-                    // each document in the Ingredients collection is an Ingredient class object
                     for (QueryDocumentSnapshot document : task.getResult()) {
-
-                        Timestamp timestamp = (Timestamp) document.getData().get("bestBefore");
-                        Date bestBefore;
-                        if (timestamp == null) {
-                            bestBefore = null;
-                        }else{
-                            bestBefore = timestamp.toDate();
+                        // Make sure we add our ID to the recipe class for later use
+                        Recipe recipe = document.toObject(Recipe.class);
+                        recipe.setId(document.getId());
+                        List<String> ingredientNames = recipe.getIngredientNames();
+                        List<Ingredient> ingredients;
+                        ingredients = recipe.getIngredients();
+                        if (ingredients == null) {
+                            ingredients = new ArrayList<>();
                         }
-
-                        Ingredient ingredient = new Ingredient(
-                                (String) document.getData().get("name"),
-                                (String) document.getData().get("description"),
-                                bestBefore,
-                                Location.valueOf(document.getData().get("location").toString().toUpperCase()),
-                                ((Long) document.getData().get("count")).intValue(),
-                                ((Long) document.getData().get("cost")).intValue(),
-                                IngredientCategory.valueOf(document.getData().get("category").toString().toUpperCase())
+                        Recipe updatedRecipe = new Recipe(
+                                recipe.getId(),
+                                recipe.getName(),
+                                ingredients, //update Recipe with the list of Ingredients as Ingredients class instances
+                                recipe.getIngredientNames(),
+                                recipe.getInstructions(),
+                                recipe.getMealType(),
+                                recipe.getImage(),
+                                recipe.getServings(),
+                                recipe.getPrepTime(),
+                                recipe.getComments()
                         );
 
-                        dataList.add(ingredient);
+                        dataList.add(updatedRecipe);
+
+
 
                     }
                     adapter.notifyDataSetChanged();

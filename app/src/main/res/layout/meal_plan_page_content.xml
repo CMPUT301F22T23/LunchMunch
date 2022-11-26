@@ -69,10 +69,12 @@
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/nunito_extrabold"
                     android:text="Monday"
                     android:textColor="#BC5510"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/monday_meal_plan_items_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints" />
@@ -111,10 +113,12 @@
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/nunito_extrabold"
                     android:text="Tuesday"
                     android:textColor="#BC5510"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/tuesday_meal_plan_items_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints" />
@@ -151,10 +155,12 @@
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/nunito_extrabold"
                     android:text="Wednesday"
                     android:textColor="#BC5510"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/wednesday_meal_plan_items_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints" />
@@ -183,17 +189,20 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/thursday_meal_plan_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:id="@+id/thursday_title"
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/nunito_extrabold"
                     android:text="Thursday"
                     android:textColor="#BC5510"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/thursday_meal_plan_items_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints" />
@@ -222,17 +231,20 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/friday_meal_plan_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:id="@+id/friday_title"
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/nunito_extrabold"
                     android:text="Friday"
                     android:textColor="#BC5510"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/friday_meal_plan_items_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints" />
@@ -261,17 +273,20 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/saturday_meal_plan_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:id="@+id/saturday_title"
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/nunito_extrabold"
                     android:text="Saturday"
                     android:textColor="#BC5510"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/saturday_meal_plan_items_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints" />
@@ -286,7 +301,7 @@
                     app:srcCompat="@drawable/pencil_orange" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/saturday_meal_plan_items"
+                    android:id="@+id/saturday_meal_plan_items_list"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -300,23 +315,26 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/sunday_meal_plan_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:id="@+id/sunday_title"
                     android:layout_width="123dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/nunito_extrabold"
                     android:text="Sunday"
                     android:textColor="#BC5510"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/sunday_meal_plan_items_list"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints" />
 
                 <ImageView
-                    android:id="@+id/sunday_edit_meal_plan_pencil"
+                    android:id="@+id/sunday_meal_plan_edit_pencil"
                     android:layout_width="20dp"
                     android:layout_height="24dp"
                     android:layout_marginEnd="8dp"
@@ -325,14 +343,14 @@
                     app:srcCompat="@drawable/pencil_orange" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/sunday_meal_plan_items"
+                    android:id="@+id/sunday_meal_plan_items_list"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/sunday_title"
-                    app:layout_constraintTop_toBottomOf="@+id/sunday_edit_meal_plan_pencil"
+                    app:layout_constraintTop_toBottomOf="@+id/sunday_meal_plan_edit_pencil"
                     tools:ignore="MissingConstraints" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

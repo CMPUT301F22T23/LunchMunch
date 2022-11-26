@@ -19,6 +19,9 @@ public enum IngredientCategory {
         this.value = category.toLowerCase();
     }
 
+
+
+
     public String getValue() {
         return this.value;
     }

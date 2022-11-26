@@ -1,6 +1,7 @@
 package com.example.lunchmunch;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.Date;
@@ -58,6 +59,19 @@ public class Ingredient implements Parcelable {
             return new Ingredient[size];
         }
     };
+
+    public static Integer getCategoryImage(IngredientCategory category) {
+        switch (category) {
+            case FRUIT: return R.drawable.fruit;
+            case VEGETABLE: return R.drawable.vegetable;
+            case DAIRY: return R.drawable.dairy;
+            case MEAT: return R.drawable.meat;
+            case GRAIN: return R.drawable.grain;
+            case SEAFOOD: return R.drawable.seafood;
+            default: return R.drawable.other;
+        }
+    }
+
 
 
     public String getName() {
