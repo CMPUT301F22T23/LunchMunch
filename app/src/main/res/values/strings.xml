@@ -39,4 +39,11 @@
     <string name="title_activity_recipe">recipe</string>
     <string name="this_week">This Week</string>
     <string name="Shopping">Shopping</string>
+
+    <string name ="enterName"><font size = "16">Enter Name</font></string>
+    <string name ="enterImageURL"><font size = "16">Enter Image URL</font></string>
+    <string name ="enterInstr"><font size = "16">Enter Instructions</font></string>
+    <string name ="enterPrepTime"><font size = "16">Enter Prep Time</font></string>
+    <string name ="enterComments"><font size = "16">Enter Comments</font></string>
+    <string name ="enterServingSize"><font size = "16">Enter Serving Size</font></string>
 </resources>

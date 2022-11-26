@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+
 
 import com.example.lunchmunch.databinding.RecipeFragmentBinding;
 
@@ -42,6 +47,9 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     private EditText comments;
     private Spinner spinner;
     private Recipe recipe;
+
+    private TextView ingredientsList;
+    ImageButton editIngredient;
 
 
     public RecipeFragment() {
@@ -93,6 +101,10 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         prepTime = view.findViewById(R.id.prepTime);
         comments = view.findViewById(R.id.comments);
         spinner = (Spinner) view.findViewById(R.id.mealType);
+        
+        ingredientsList = view.findViewById(R.id.ingredient_list);
+        editIngredient = view.findViewById(R.id.editIngredientsList);
+
 
 
         if (recipe != null) {
@@ -113,6 +125,16 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+
+        editIngredient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), RecipeIngrPage.class);
+                startActivity(intent);
+            }
+        });
+
+
         boolean isNew = recipe == null;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddRecipeCustomAlertDialog);
         builder.setView(view)

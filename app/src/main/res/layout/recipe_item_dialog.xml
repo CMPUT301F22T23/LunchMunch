@@ -1,106 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="-41dp">
+    android:layout_gravity="center"
+    android:foregroundGravity="fill">
 
-    <ScrollView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="-222dp">
 
-            <EditText
-                android:id="@+id/recipeName"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="20dp"
-                android:contentDescription="Name"
-                android:ems="10"
-                android:fontFamily="@font/nunito"
-                android:hint="Enter Name"
-                android:inputType="textPersonName"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/mealType"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="20dp"
-                android:fontFamily="@font/nunito" />
+                <EditText
+                    android:id="@+id/recipeName"
+                    android:layout_width="300dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/nunito"
+                    android:hint="@string/enterName"
+                    android:inputType="textPersonName"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-            <EditText
-                android:id="@+id/recipeImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:ems="10"
-                android:fontFamily="@font/nunito"
-                android:hint="Enter Image URL"
-                android:inputType="textPersonName"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <Spinner
+                    android:id="@+id/mealType"
+                    android:layout_width="300dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/nunito" />
 
-            <EditText
-                android:id="@+id/recipeInstructions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:ems="10"
-                android:fontFamily="@font/nunito"
-                android:gravity="start|top"
-                android:hint="Enter Instructions..."
-                android:inputType="textMultiLine"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <EditText
+                    android:id="@+id/recipeImage"
+                    android:layout_width="300dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:ems="10"
+                    android:fontFamily="@font/nunito"
+                    android:hint="@string/enterImageURL"
+                    android:inputType="textPersonName"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <EditText
-                android:id="@+id/prepTime"
-                android:layout_width="248dp"
-                android:layout_height="44dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:ems="10"
-                android:fontFamily="@font/nunito"
-                android:hint="Enter Prep Time..."
-                android:inputType="number"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <EditText
+                    android:id="@+id/recipeInstructions"
+                    android:layout_width="300dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:ems="10"
+                    android:fontFamily="@font/nunito"
+                    android:gravity="start|top"
+                    android:hint="Enter Instructions..."
+                    android:inputType="textMultiLine"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <EditText
-                android:id="@+id/comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:ems="10"
-                android:fontFamily="@font/nunito"
-                android:hint="Enter Comments"
-                android:inputType="textPersonName"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/prepTime_ServingSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    tools:layout_editor_absoluteY="190dp">
 
-            <EditText
-                android:id="@+id/servings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:ems="10"
-                android:fontFamily="@font/nunito"
-                android:hint="Enter Serving Size"
-                android:inputType="number"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-        </LinearLayout>
-    </ScrollView>
+                    <EditText
+                        android:id="@+id/prepTime"
+                        android:layout_width="125dp"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:fontFamily="@font/nunito"
+                        android:hint="@string/enterPrepTime"
+                        android:inputType="number"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/servings"
+                        app:layout_constraintHorizontal_bias="0.696"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.05" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <EditText
+                        android:id="@+id/servings"
+                        android:layout_width="145dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="52dp"
+                        android:ems="10"
+                        android:fontFamily="@font/nunito"
+                        android:hint="@string/enterServingSize"
+                        android:inputType="number"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.047" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/addIngredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    tools:layout_editor_absoluteY="190dp">
+
+                    -<TextView
+                        android:id="@+id/ingredientsList"
+                        android:layout_width="225dp"
+                        android:layout_height="70dp"
+                        android:layout_marginStart="40dp"
+                        android:editable="false"
+                        android:hint="Ingredients selected will show up here"
+                        android:inputType="textMultiLine"
+                        android:lines="8"
+                        android:maxLines="10"
+                        android:minLines="5"
+                        android:scrollbars="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="Deprecated" />
+
+                    <ImageButton
+                        android:id="@+id/editIngredientsList"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.322"
+                        app:layout_constraintStart_toEndOf="@+id/ingredientsList"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.515"
+                        app:srcCompat="@drawable/pencil"
+                        android:background="@null"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <EditText
+                    android:id="@+id/comments"
+                    android:layout_width="300dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:ems="10"
+                    android:fontFamily="@font/nunito"
+                    android:hint="@string/enterComments"
+                    android:inputType="textPersonName"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>
