@@ -17,25 +17,24 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shoplistRecView"
-        android:layout_width="351dp"
-        android:layout_height="453dp"
+        android:layout_width="343dp"
+        android:layout_height="408dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/app_bar_layout"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
         app:layout_constraintVertical_bias="0.836" />
 
     <TextView
         android:id="@+id/shoppingListTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Shopping List"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/shoplistRecView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.108" />
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
+        app:layout_constraintVertical_bias="0.341" />
 
     <TextView
         android:id="@+id/thisWeekTxt"
@@ -43,25 +42,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="This Week"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/shoplistRecView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintHorizontal_bias="0.098"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
         app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/saveIngrBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save Checked to Ingredients"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.168"
-        app:layout_constraintStart_toEndOf="@+id/thisWeekTxt"
-        app:layout_constraintTop_toBottomOf="@+id/shoppingListTxt"
-        app:layout_constraintVertical_bias="0.764" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
