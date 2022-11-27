@@ -28,7 +28,7 @@ import java.util.Optional;
  */
 public class ShoppingListActivity extends AppCompatActivity implements ShoppingListAdapter.ingrPurchasedListener, AddShopIngrFragment.OnFragmentInteractionListener{
 
-    Button IngredientsNav, RecipesNav, MealPlanNav, saveIngrBtn;
+    //Button IngredientsNav, RecipesNav, MealPlanNav, saveIngrBtn;
     RecyclerView shoplistRecView;
     ArrayList<Ingredient> shoppingList;
 
@@ -37,7 +37,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
 
     LinearLayout IngredientsNav, RecipesNav, MealPlanNav;
-    ArrayList<Ingredient> shoppingList = new ArrayList<>();
+    //ArrayList<Ingredient> shoppingList = new ArrayList<>();
 
     ShoppingListAdapter shoppingListAdapter;
 
