@@ -44,10 +44,10 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         // updates shopping list with the needed ingredients
         // remove requiremnt for ingr list as can have meal plan with no ingr (add if inside func for ingr != null)
-        if (MealPlanActivity.mealPlanList != null && IngredientsActivity.ingredientsList != null) {
-            System.out.println("NOT NULL:");
+        if (MealPlanActivity.allMeals != null) {
+            //System.out.println("NOT NULL:");
             updateShoppingList();
-            System.out.println("SL:: "+shoppingList);
+            //System.out.println("SL:: "+shoppingList);
         }
 
         // init firebase reference
@@ -209,25 +209,27 @@ public class ShoppingListActivity extends AppCompatActivity {
         // subtract the count of ingredients we already have from the Ingredients page
         // the remaining ingredients get added to the shopping list
 
-        for (Ingredient ingredient : IngredientsActivity.ingredientsList) {
-            String ingrName = ingredient.getName();
-            Integer ingrCount = ingredient.getCount();
-            if (ingrMap.containsKey(ingrName)) {
-                Integer neededIngrCount = ingrMap.get(ingrName).getCount();
-                // if we have enough of this specific ingredient then remove it from the hash (dont add it to the shopping list)
-                // ingr.getCount() => neededIngrCount
-                if (ingrCount > neededIngrCount || ingrCount.equals(neededIngrCount)) {
-                    // remove specific ingr from the hashmap
-                    ingrMap.remove(ingrName);
+        if (IngredientsActivity.ingredientsList != null) {
+            for (Ingredient ingredient : IngredientsActivity.ingredientsList) {
+                String ingrName = ingredient.getName();
+                Integer ingrCount = ingredient.getCount();
+                if (ingrMap.containsKey(ingrName)) {
+                    Integer neededIngrCount = ingrMap.get(ingrName).getCount();
+                    // if we have enough of this specific ingredient then remove it from the hash (dont add it to the shopping list)
+                    // ingr.getCount() => neededIngrCount
+                    if (ingrCount > neededIngrCount || ingrCount.equals(neededIngrCount)) {
+                        // remove specific ingr from the hashmap
+                        ingrMap.remove(ingrName);
 
-                    // could do just else here if we want (but this easier to read)
-                } else if (ingrCount < neededIngrCount) {
-                    // update ingr in map to the count needed (needed from meal plan - already have from ingredients
-                    Integer newCount = ingrMap.get(ingrName).getCount() - ingrCount;
-                    Ingredient newIngr = ingrMap.get(ingrName);
-                    newIngr.setCount(newCount);
-                    //ingrMap.get(ingrName).setCount(newCount); // not sure if this will work test later
-                    ingrMap.put(ingrName, newIngr);
+                        // could do just else here if we want (but this easier to read)
+                    } else if (ingrCount < neededIngrCount) {
+                        // update ingr in map to the count needed (needed from meal plan - already have from ingredients
+                        Integer newCount = ingrMap.get(ingrName).getCount() - ingrCount;
+                        Ingredient newIngr = ingrMap.get(ingrName);
+                        newIngr.setCount(newCount);
+                        //ingrMap.get(ingrName).setCount(newCount); // not sure if this will work test later
+                        ingrMap.put(ingrName, newIngr);
+                    }
                 }
             }
         }
