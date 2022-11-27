@@ -61,7 +61,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
     }
 
-    ;
+    
 
     @Override
     public View onCreateView(

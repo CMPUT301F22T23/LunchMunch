@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ import java.util.Map;
  * Main activity for all Ingredients functionality
  */
 public class IngredientsActivity extends AppCompatActivity implements IngredientItemFragment.OnFragmentInteractionListener {
-    Button RecipesNav, MealPlanNav, ShoppingListNav;
+    LinearLayout RecipesNav, MealPlanNav, ShoppingListNav;
     FirebaseFirestore db;
     CollectionReference IngrCollec;
 

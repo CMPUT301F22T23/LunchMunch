@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ import java.util.Map;
 public class RecipeActivity extends AppCompatActivity implements RecipeFragment.OnFragmentInteractionListener {
 
     private ActivityRecipeBinding binding;
-    Button IngredientsNav, MealPlanNav, ShoppingListNav;
+    LinearLayout IngredientsNav, MealPlanNav, ShoppingListNav;
     FloatingActionButton AddRecipeButton;
     ArrayList<Recipe> recipesList;
     ListView recipesView;
@@ -108,7 +109,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                 bundle.putInt("position", i);
                 RecipeModalFragment recipeModalFragment = new RecipeModalFragment(recipe);
                 recipeModalFragment.setArguments(bundle);
-                recipeModalFragment.show(getSupportFragmentManager(), "Show Recipe");
+                recipeModalFragment.show(getSupportFragmentManager(), "Recipe Modal");
                 view.refreshDrawableState();
             }
         });

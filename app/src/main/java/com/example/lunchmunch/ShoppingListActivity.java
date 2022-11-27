@@ -4,6 +4,8 @@ package com.example.lunchmunch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.LinearLayout;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +34,10 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
     FirebaseFirestore db;
     CollectionReference IngrCollec;
+
+
+    LinearLayout IngredientsNav, RecipesNav, MealPlanNav;
+    ArrayList<Ingredient> shoppingList = new ArrayList<>();
 
     ShoppingListAdapter shoppingListAdapter;
 

@@ -52,6 +52,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
 
 
 
+
     public RecipeIngredientFragment(Recipe recipe, FoodItemAdapter recipeIngredientsAdapter) {
         this.recipe = recipe;
         this.foodItemAdapter = recipeIngredientsAdapter;
