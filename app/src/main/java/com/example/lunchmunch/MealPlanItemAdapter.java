@@ -104,14 +104,19 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
         MealPlanItem item = dataList.get(position);
         if (item.getType() == MealPlanItemType.RECIPE) {
             holder.name.setText(item.getName());
-            holder.servings.setText(item.getServings().toString());
+            holder.servings.setText(item.getServings().toString() + " " + "servings");
             holder.category.setText(item.getMealType());
-            holder.time.setText(item.getPrepTime().toString());
+            holder.time.setText(item.getPrepTime().toString() + " " + "minutes");
         }
         else {
             holder.name.setText(item.getName());
-            holder.unit.setText(item.getCount().toString());
-            holder.cost.setText(item.getCost().toString());
+            String unitNum = "";
+
+            if (item.getCount() > 1)  { unitNum = "units"; }
+            else  { unitNum = "unit"; }
+
+            holder.unit.setText(item.getCount().toString() + " " + unitNum);
+            holder.cost.setText(String.format("$%.2f", Double.valueOf(item.getCost())));
             holder.image.setImageResource(Ingredient.getCategoryImage(item.getCategory()));
         }
 
