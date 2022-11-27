@@ -1,5 +1,9 @@
 package com.example.lunchmunch;
 
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.List;
 /**
@@ -18,6 +22,8 @@ public class Recipe implements Serializable {
     private String id;
     //create empty constructor for database purposes
     public Recipe(){}
+
+
 
 
 
@@ -58,6 +64,29 @@ public class Recipe implements Serializable {
         this.comments = comments;
         this.id = id;
     }
+
+    protected Recipe(Parcel in) {
+        name = in.readString();
+        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        ingredientNames = in.createStringArrayList();
+        instructions = in.readString();
+        mealType = in.readString();
+        image = in.readString();
+        comments = in.readString();
+        if (in.readByte() == 0) {
+            servings = null;
+        } else {
+            servings = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            prepTime = null;
+        } else {
+            prepTime = in.readInt();
+        }
+        id = in.readString();
+    }
+
+
 
     public String getName() {
         return name;
@@ -133,4 +162,6 @@ public class Recipe implements Serializable {
     public String getId() {return id; }
 
     public void setId(String id) { this.id = id;}
+
+
 }

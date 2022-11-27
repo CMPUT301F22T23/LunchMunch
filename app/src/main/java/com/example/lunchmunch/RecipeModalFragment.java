@@ -71,6 +71,9 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
         recipeInstructionHeader = view.findViewById(R.id.recipeInstructionHeader);
         recipeIngredients = view.findViewById(R.id.recipeIngredients);
         // Add our ingredients to our list view
+        System.out.println(recipe);
+        // print recipe type
+        System.out.println(recipe.getClass());
         recipeIngredientsAdapter = new FoodItemAdapter(getContext(), R.layout.recipe_modal_bottom, (ArrayList<Ingredient>) recipe.getIngredients());
         recipeIngredients.setAdapter(recipeIngredientsAdapter);
 

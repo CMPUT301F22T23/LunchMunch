@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -143,19 +145,32 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
         Intent intent = new Intent(getActivity().getApplicationContext(), RecipeIngrPage.class);
 
+
+
+        ActivityResultLauncher<Intent> startForResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        assert data != null;
+                        recipe = (Recipe) data.getSerializableExtra("Recipe");
+                        System.out.println("Recipe Ingredients: " + recipe.getIngredients());
+                        // This will not work however if you look at the println of recipe.getIngredients() it will show the correct list :)
+                        //ingredientNamesList.setText(recipe.getIngredientNames().toString());
+                    }
+                });
         editIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 intent.putExtra("Recipe", recipe);
-                startActivityForResult(intent,101);
+                startForResult.launch(intent);
             }
         });
-
 
         boolean isNew = recipe == null;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddRecipeCustomAlertDialog);
         builder.setView(view)
-                .setTitle("Add Recipe")
+                .setTitle("Add/Edit Recipe")
                 .setPositiveButton("OK", (dialog, id) -> {
                     int servs = 0;
                     int prep = 0;
@@ -215,15 +230,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         return dialog;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode == 101){
-            if(resultCode == Activity.RESULT_OK){
-                recipe = (Recipe) data.getSerializableExtra("Recipe");
-            }
-        }
 
-    }
 
     int getMealTypeIndex(String mealType) {
         List<String> mealTypes = Arrays.asList(getResources().getStringArray(R.array.meal_type));

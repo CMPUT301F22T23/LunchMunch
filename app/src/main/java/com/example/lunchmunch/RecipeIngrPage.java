@@ -55,10 +55,14 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
 
         // Ingredients Lists
         Recipe recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
+        System.out.println(recipe);
+        if (recipe != null) {
+            ingredientsList = (ArrayList<Ingredient>) recipe.getIngredients();
+        } else {
+            ingredientsList = new ArrayList<>();
+        }
 
-        temp = (ArrayList<Ingredient>) recipe.getIngredients();
-        System.out.println("TEMP: " + temp);
-        ingredientsList = temp;
+
 
         //ingredientsList = new ArrayList<Ingredient>();
         existingIngrAdapter = new FoodItemAdapter(this, R.layout.content_ingredients, ingredientsList);
@@ -94,6 +98,7 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                assert recipe != null;
                 recipe.setIngredientsClass(ingredientsList);
                 Intent result = new Intent();
                 result.putExtra("Recipe", recipe);

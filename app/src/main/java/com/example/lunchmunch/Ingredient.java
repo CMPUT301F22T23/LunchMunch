@@ -4,12 +4,14 @@ package com.example.lunchmunch;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * This class defines an Ingredient
  */
-public class Ingredient implements Parcelable {
+public class Ingredient implements Parcelable, Serializable {
     private String name;
     private String description;
     private Date bestBefore;
