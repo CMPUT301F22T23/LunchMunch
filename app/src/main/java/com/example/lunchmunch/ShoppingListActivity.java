@@ -177,7 +177,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 List<Ingredient> ingredients = mealPlanItem.getIngredients();
                 for (Ingredient ingredient : ingredients) {
                     String ingrName = ingredient.getName();
-
+                    /*
                     Float ingrCount = ingredient.getCount();
 
                     // if the ingr not in the map then init with its count, otherwise if ingr already in map then just add this instance of the ingr's count to the count thats already in the map same as here( https://stackoverflow.com/a/37705877/17304003)
@@ -185,7 +185,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                      */
                     if (ingrMap.containsKey(ingrName)) {
                         // if the ingredient already exists in the map then just add to its required count
-                        Integer newCount = ingredient.getCount() + ingrMap.get(ingrName).getCount();
+                        Float newCount = ingredient.getCount() + ingrMap.get(ingrName).getCount();
                         ingredient.setCount(newCount);
 
                     }
@@ -289,7 +289,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         Ingredient existingIngr = optExistingIngr.orElse(null);
         if (existingIngr != null) {
             // not sure if can just throw ingredient.getCount() inside the setCount() w/out issues (test if time)
-            Integer ingrCount = ingredient.getCount();
+            Float ingrCount = ingredient.getCount();
             ingredient.setCount(existingIngr.getCount() + ingrCount);
         } // otherwise igr is new and doesnt already exist in ingr storage so just upload as is
 
