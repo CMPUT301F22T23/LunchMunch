@@ -12,8 +12,8 @@
         android:id="@+id/meal_plan_item_delete2"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/trash" />

@@ -182,13 +182,31 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                                 item = new MealPlanItem(new Ingredient(name, description, bestBefore, location, count, cost, category));
                             } else if (foodData.get("type").equals("RECIPE")) {
                                 String name = (String) foodData.get("name");
-                                String description = (String) foodData.get("description");
-                                Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
-                                Date bestBefore = timestamp.toDate();
-                                Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
-                                // Determine type of foodData.getCount and make it a float
-                                Float cost = new Float(0);
-                                Float count = new Float(0);
+
+                                String id = (String) foodData.get("id");
+                                String instructions = (String) foodData.get("instructions");
+                                String mealType = (String) foodData.get("mealType");
+                                String image = (String) foodData.get("image");
+                                Integer servings = ((Long) foodData.get("servings")).intValue();
+                                Integer prepTime = ((Long) foodData.get("prepTime")).intValue();
+                                String comments = (String) foodData.get("comments");
+                                ArrayList<HashMap<String, Object>> ingredientsList = (ArrayList<HashMap<String, Object>>) foodData.get("ingredients");
+
+                                ArrayList<Ingredient> newIngredientsList = new ArrayList<Ingredient>();
+                                ArrayList<String> ingredientNames = new ArrayList<String>();
+
+                                for (HashMap<String, Object> ingredient : ingredientsList) {
+                                    System.out.println(ingredient);
+
+                                    String ingredientName = (String) ingredient.get("name");
+                                    ingredientNames.add(ingredientName);
+                                    String description = (String) ingredient.get("description");
+                                    Timestamp ingredientTimestamp = (Timestamp) ingredient.get("bestBefore");
+                                    Date bestBefore = ingredientTimestamp.toDate();
+                                    Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
+                                   
+                                    Float cost = new Float(0);
+                                    Float count = new Float(0);
                                 if (foodData.get("cost") instanceof Double) {
                                     cost = ((Double) foodData.get("cost")).floatValue();
 
@@ -204,9 +222,11 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                                     count = ((Long) foodData.get("count")).floatValue();
 
                                 }
+                                    IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
+                                    newIngredientsList.add(new Ingredient(ingredientName, description, bestBefore, location, count, cost, category));
+                                }
 
-                                IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
-                                item = new MealPlanItem(new Ingredient(name, description, bestBefore, location, count, cost, category));
+                                item = new MealPlanItem(new Recipe(id, name, newIngredientsList, new ArrayList<String>() , instructions, mealType, image, servings, prepTime, comments));
 
                             }
 

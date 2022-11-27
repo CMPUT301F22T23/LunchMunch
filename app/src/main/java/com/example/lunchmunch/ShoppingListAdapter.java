@@ -4,67 +4,101 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ShoppingListAdapter extends ArrayAdapter<Ingredient> {
+public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
 
-    private ArrayList<Ingredient> shoppingList;
+    private ArrayList<Ingredient> dataList;
     Context context;
 
-    public ShoppingListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Ingredient> objects) {
-        super(context, resource, objects);
-        this.shoppingList = objects;
-        this.context = context;
+    //static ArrayList<Ingredient> checkedIngr = new ArrayList<>();
+
+    private ingrPurchasedListener mIngrPurchasedListener;
+
+    public void setIngrPurchasedListener(ingrPurchasedListener iPL) {
+        mIngrPurchasedListener = iPL;
     }
 
-    private static class ViewHolder {
-        TextView tvDescription;
-        TextView tvAmount;
-        TextView tvUnit;
-        TextView tvIngredientCategory;
-        ImageView ivIngredientCategory;
+    public interface ingrPurchasedListener {
+        void ingrPurchasedBtnClicked(Ingredient ingredient, Integer ingrIdx);
+    }
+
+
+
+    public ShoppingListAdapter(@NonNull Context context, @NonNull ArrayList<Ingredient> objects) {
+        //super(context, resource, objects);
+        this.dataList = objects;
+        this.context = context;
+
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.shopping_list_content, null);
+        RecyclerView.ViewHolder holder = new ViewHolder(v);
+        return (ViewHolder) holder;
+    }
+
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Ingredient ingredient = dataList.get(position);
+
+        holder.tvName.setText(ingredient.getName());
+        holder.tvCost.setText(String.valueOf(ingredient.getCost()));
+        holder.tvCount.setText(String.valueOf(ingredient.getCount()));
+        holder.tvCategory.setText(String.valueOf(ingredient.getCategory()));
+
+        holder.ingrPurchasedBtn.setOnClickListener(view -> {
+            mIngrPurchasedListener.ingrPurchasedBtnClicked(ingredient, position);
+        });
+
+
+        /*
+        // if the checkbox was clicked
+        holder.cbPurchased.setOnClickListener(view -> {
+            // if was clicked and read as checked then user checked ingr so add to checked Ingredients
+            if (holder.cbPurchased.isChecked()) {
+                checkedIngr.add(ingredient);
+
+            } else { // was clicked and not checked meaning user unchecked it so remove from checked Ingredients list
+                checkedIngr.remove(ingredient);
+            }
+        });
+
+         */
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Get data item for this position
-        Ingredient shopItem = getItem(position);
-        //Check if an existing view is being used, if not inflate the view
-        ViewHolder viewHolder;
+    public int getItemCount() {
+        if (dataList != null) {
+            return dataList.size();
+        } else return 0;
+    }
 
-        if (convertView == null) {
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.shopping_list_content, parent, false);
-            //assignment view to variables
-            viewHolder.tvAmount = (TextView) convertView.findViewById(R.id.sl_item_cost);
-            viewHolder.tvDescription = (TextView) convertView.findViewById(R.id.sl_item_description);
-            viewHolder.tvUnit = (TextView) convertView.findViewById(R.id.sl_item_unit);
-            viewHolder.tvIngredientCategory = (TextView) convertView.findViewById(R.id.sl_item_category);
-            viewHolder.ivIngredientCategory = (ImageView) convertView.findViewById(R.id.sl_category_image);
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvName;
+        TextView tvCount;
+        TextView tvCost;
+        TextView tvCategory;
+        Button ingrPurchasedBtn;
 
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvName = itemView.findViewById(R.id.name_label);
+            tvCount = itemView.findViewById(R.id.count_label);
+            tvCost = itemView.findViewById(R.id.cost_label);
+            tvCategory = itemView.findViewById(R.id.category_label);
+            ingrPurchasedBtn = itemView.findViewById(R.id.ingrPurchasedBtn);
         }
-
-        if (shopItem.getName() != null) {
-            viewHolder.tvDescription.setText(shopItem.getDescription());
-//            Glide.with(getContext()).load(foodItem.getImage()).apply(RequestOptions.circleCropTransform()).into(viewHolder.tvImage);
-            viewHolder.tvIngredientCategory.setText(shopItem.getCategory().toString());
-            viewHolder.tvAmount.setText("$" + Float.toString(shopItem.getCost()));
-            viewHolder.tvUnit.setText(Float.toString(shopItem.getCount()) + " units" );
-        }
-
-        return convertView;
     }
 }
+
