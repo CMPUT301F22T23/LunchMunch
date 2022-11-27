@@ -1,10 +1,11 @@
 package com.example.lunchmunch;
 
+import java.io.Serializable;
 import java.util.List;
 /**
  * This class defines a Recipe
  */
-public class Recipe {
+public class Recipe implements Serializable {
     private String name;
     private List<Ingredient> ingredients;
     private List<String> ingredientNames;

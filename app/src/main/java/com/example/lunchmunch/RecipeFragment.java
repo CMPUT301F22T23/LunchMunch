@@ -1,5 +1,6 @@
 package com.example.lunchmunch;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -27,9 +30,14 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.lunchmunch.databinding.RecipeFragmentBinding;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.grpc.internal.JsonUtil;
 
 /**
  * Fragment for adding/editing Recipe functionality
@@ -46,11 +54,15 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     EditText prepTime;
     private EditText comments;
     private Spinner spinner;
-    private Recipe recipe;
 
-    private TextView ingredientsList;
+    private TextView ingredientNamesList;
     ImageButton editIngredient;
 
+    // these are used as a way to pass the ingredient list attribute from the recipe object being created to the next activity
+    ArrayList<Ingredient> listToPass;
+    ArrayList<Ingredient> blankIngredients = new ArrayList<Ingredient>();
+    List<String> blankNames;
+    private Recipe recipe;
 
     public RecipeFragment() {
     }
@@ -69,7 +81,6 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
     }
 
-    ;
 
     @Override
     public View onCreateView(
@@ -102,8 +113,12 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         comments = view.findViewById(R.id.comments);
         spinner = (Spinner) view.findViewById(R.id.mealType);
         
-        ingredientsList = view.findViewById(R.id.ingredient_list);
+        ingredientNamesList = view.findViewById(R.id.ingredient_list);
         editIngredient = view.findViewById(R.id.editIngredientsList);
+        blankNames = new ArrayList<String>();
+
+        recipe = new Recipe("", blankIngredients, blankNames, "","","",0,0,"");
+
 
 
 
@@ -126,11 +141,13 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
+        Intent intent = new Intent(getActivity().getApplicationContext(), RecipeIngrPage.class);
+
         editIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), RecipeIngrPage.class);
-                startActivity(intent);
+            public void onClick(View view){
+                intent.putExtra("Recipe", recipe);
+                startActivityForResult(intent,101);
             }
         });
 
@@ -173,6 +190,10 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                         if (isNew) {
                             listener.onOkPressed(recipe, true, -1);
                         } else {
+                            List<Ingredient> pog = new ArrayList<Ingredient>();
+                            pog = recipe.getIngredients();
+                            System.out.println("Recipe INGR List: " + pog);
+                            // debug stuff
                             listener.onOkPressed(recipe, false, getArguments().getInt("position"));
                         }
                     }
@@ -192,6 +213,16 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
         });
         return dialog;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == 101){
+            if(resultCode == Activity.RESULT_OK){
+                recipe = (Recipe) data.getSerializableExtra("Recipe");
+            }
+        }
+
     }
 
     int getMealTypeIndex(String mealType) {

@@ -159,7 +159,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                 saveBtn.setOnClickListener(view -> {
                     getUserInput();
                     // only send inputs that are necessary and could be left blank or have an invalid input (desc can leave blank, loc & cat cant be left blank)
-                    String errMsg = validateIngrInputs(name, expirationDate, priceInput, amountInput);
+                    String errMsg = validateIngrInputs(name , priceInput, amountInput);
                     if (errMsg.equals("")) {
                         Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
                         // Check if ingredient is new
@@ -216,12 +216,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         return alert;
     }
 
-    private String validateIngrInputs(String nameInput, Date expirationDate, String priceInput, String amountInput) {
+    private String validateIngrInputs(String nameInput, String priceInput, String amountInput) {
         // the only 3 inputs that actually have any constraints
         String errMsg = "";
-
-        // not sure if Date fully constraints to valid dates (ex Feb 30th)
-        //TODO: test if possible to select Feb 30th in date input (if possible then add constraint here)
 
         if (nameInput.equals("")) {
             errMsg += "Enter a name, ";
@@ -272,8 +269,6 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         // get user inputted category from spinner
         if (id == R.id.ingredient_category) {
             category = IngredientCategory.valueOf(string);
-            System.out.println(string);
-            System.out.println(category);
         }
 
         // get user inputted location from spinner
