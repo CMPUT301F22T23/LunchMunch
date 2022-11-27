@@ -37,6 +37,7 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
     ListView recipeIngredients;
     FoodItemAdapter recipeIngredientsAdapter;
 
+
     public RecipeModalFragment() {
         // Required empty public constructor
     }
@@ -76,7 +77,6 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
         System.out.println(recipe.getClass());
         recipeIngredientsAdapter = new FoodItemAdapter(getContext(), R.layout.recipe_modal_bottom, (ArrayList<Ingredient>) recipe.getIngredients());
         recipeIngredients.setAdapter(recipeIngredientsAdapter);
-
 
 
         recipeAddIngredient.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +138,8 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 RecipeFragment recipeFrag = new RecipeFragment(recipe);
                 // Pass our arguments across fragments
+
+                System.out.println("edit args " + getArguments());
                 recipeFrag.setArguments(getArguments());
 
                 recipeFrag.show(getParentFragmentManager(), "RecipeFragment");

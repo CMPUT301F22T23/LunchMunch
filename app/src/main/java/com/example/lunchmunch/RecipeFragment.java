@@ -64,6 +64,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     ArrayList<Ingredient> listToPass;
     ArrayList<Ingredient> blankIngredients = new ArrayList<Ingredient>();
     List<String> blankNames;
+    ArrayList<Recipe> recipesList;
     private Recipe recipe;
 
     public RecipeFragment() {
@@ -119,8 +120,16 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         editIngredient = view.findViewById(R.id.editIngredientsList);
         blankNames = new ArrayList<String>();
 
-        recipe = new Recipe("", blankIngredients, blankNames, "","","",0,0,"");
 
+
+        Bundle bundle = getArguments();
+
+        recipesList = (ArrayList<Recipe>) bundle.getSerializable("recipesList");
+        if(bundle.getSerializable("position") == null){
+            recipe = new Recipe("", blankIngredients, blankNames, "","","",0,0,"");
+        } else {
+
+        }
 
 
 
@@ -175,8 +184,18 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         });
 
 
-        boolean isNew = recipe == null;
+        //boolean isNew = recipe == null;
+
+        boolean isNew = false;
+
+        if(recipesList.contains(recipe) == false){
+            isNew = true;
+        } else{
+            isNew = false;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddRecipeCustomAlertDialog);
+        boolean finalIsNew = isNew;
         builder.setView(view)
                 .setTitle("Add/Edit Recipe")
                 .setPositiveButton("OK", (dialog, id) -> {
@@ -210,7 +229,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                     }
 
                     if (listener != null) {
-                        if (isNew) {
+                        if (finalIsNew) {
                             listener.onOkPressed(recipe, true, -1);
                         } else {
                             List<Ingredient> pog = new ArrayList<Ingredient>();

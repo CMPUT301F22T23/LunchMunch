@@ -96,7 +96,10 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
         // Add Recipe button set on click listener to add fragment
         AddRecipeButton.setOnClickListener(view -> {
-           RecipeFragment recipeFragment = new RecipeFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("recipesList", recipesList);
+            RecipeFragment recipeFragment = new RecipeFragment();
+            recipeFragment.setArguments(bundle);
             recipeFragment.show(getSupportFragmentManager(), "Add Recipe");
         });
 
@@ -106,6 +109,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                 Recipe recipe = recipesList.get(i);
                 Bundle bundle = new Bundle();
                 bundle.putInt("position", i);
+                bundle.putSerializable("recipesList", recipesList);
                 RecipeModalFragment recipeModalFragment = new RecipeModalFragment(recipe);
                 recipeModalFragment.setArguments(bundle);
                 recipeModalFragment.show(getSupportFragmentManager(), "Show Recipe");
