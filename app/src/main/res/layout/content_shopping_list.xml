@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    <include
+        android:id="@+id/app_bar_layout"
+        layout="@layout/navbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textview_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/background_white"
+        android:fontFamily="@font/nunito_extrabold"
+        android:text="@string/shopping_list"
+        android:textColor="#323232"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
+        app:layout_constraintVertical_bias="0.272" />
+
+    <TextView
+        android:id="@+id/ingredients_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/nunito_extrabold"
+        android:text="@string/Shopping"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/shopping_list"
+        app:layout_constraintStart_toStartOf="@id/shopping_list" />
+
+    <ListView
+        android:id="@+id/shopping_list_view"
+        android:layout_width="371dp"
+        android:layout_height="247dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_first">
+
+    </ListView>
+
+    <Spinner
+        android:id="@+id/SortOptions"
+        android:layout_width="163dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/shopping_list"
+        app:layout_constraintEnd_toEndOf="@+id/shopping_list" />
+</androidx.constraintlayout.widget.ConstraintLayout>

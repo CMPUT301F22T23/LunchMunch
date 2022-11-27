@@ -3,6 +3,7 @@ package com.example.lunchmunch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,17 +18,24 @@ import java.util.List;
 public class ShoppingListActivity extends AppCompatActivity {
 
     Button IngredientsNav, RecipesNav, MealPlanNav;
-    ArrayList<Ingredient> shoppingList = new ArrayList<>();
+    ArrayList<Ingredient> shoppingList =  new ArrayList<>();;
+    ShoppingListAdapter shoppingListAdapter;
+    ListView shoppingListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoppinglist_activity);
 
+        initViews();
+
+        // set up shopping list adapter and list view
+        shoppingListAdapter = new ShoppingListAdapter(this, R.layout.shopping_list_content, shoppingList);
+        shoppingListView.setAdapter(shoppingListAdapter);
+
+
         // updates shopping list with the needed ingredients
         getNeededIngrs();
-
-        initViews();
 
         IngredientsNav.setOnClickListener(view -> {
             startActivity(new Intent(ShoppingListActivity.this, IngredientsActivity.class));
@@ -111,5 +119,6 @@ public class ShoppingListActivity extends AppCompatActivity {
         IngredientsNav = findViewById(R.id.ingredientsNav);
         RecipesNav = findViewById(R.id.recipesNav);
         MealPlanNav = findViewById(R.id.mealPlanNav);
+        shoppingListView = findViewById(R.id.shopping_list_view);
     }
 }
