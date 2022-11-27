@@ -299,8 +299,8 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                             Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
                             Date bestBefore = timestamp.toDate();
                             Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
-                            Integer count = ((Long) foodData.get("count")).intValue();
-                            Integer cost = ((Long) foodData.get("cost")).intValue();
+                            Float count = ((Long) foodData.get("count")).floatValue();
+                            Float cost = ((Long) foodData.get("cost")).floatValue();
                             IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
                             ingredient = new Ingredient(name, description, bestBefore, location, count, cost, category);
 

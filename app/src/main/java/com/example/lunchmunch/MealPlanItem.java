@@ -42,8 +42,8 @@ public class MealPlanItem<T> {
     private String description = "";
     private Date bestBefore = new Date();
     private Location location = Location.FREEZER;
-    private Integer count = -1;
-    private Integer cost = -1;
+    private Float count = Float.valueOf(-1);
+    private Float cost = Float.valueOf(-1);
     private IngredientCategory category = IngredientCategory.MEAT;
 
     public static MealPlanItem<Recipe> newInstance(Recipe value) {
@@ -187,19 +187,19 @@ public class MealPlanItem<T> {
         this.location = location;
     }
 
-    public Integer getCount() {
+    public Float getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Float count) {
         this.count = count;
     }
 
-    public Integer getCost() {
+    public Float getCost() {
         return cost;
     }
 
-    public void setCost(Integer cost) {
+    public void setCost(Float cost) {
         this.cost = cost;
     }
 

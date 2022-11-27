@@ -56,9 +56,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
         void onOkPressed(Recipe recipe, Boolean isNew, int position);
-
         void deleteRecipe(int position);
-
     }
 
     
@@ -116,7 +114,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         boolean isNew = recipe == null;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddRecipeCustomAlertDialog);
         builder.setView(view)
-                .setTitle("Add Recipe")
+                .setTitle("Add/Edit Recipe")
                 .setPositiveButton("OK", (dialog, id) -> {
                     int servs = 0;
                     int prep = 0;
@@ -192,7 +190,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         FragmentActivity activity = getActivity();
         //Find the recipe modal fragment
         assert activity != null;
-        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag("Show Recipe");
+        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag("Recipe Modal");
         // Remove the fragment and start a new one with the changed recipe
 
         if (fragment != null) {

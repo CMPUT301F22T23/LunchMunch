@@ -161,8 +161,23 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                                 Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
                                 Date bestBefore = timestamp.toDate();
                                 Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
-                                Integer count = ((Long) foodData.get("count")).intValue();
-                                Integer cost = ((Long) foodData.get("cost")).intValue();
+                                Float cost = new Float(0);
+                                Float count = new Float(0);
+                                if (foodData.get("cost") instanceof Double) {
+                                    cost = ((Double) foodData.get("cost")).floatValue();
+
+                                } else {
+                                    cost = ((Long) foodData.get("cost")).floatValue();
+
+                                }
+
+                                if (foodData.get("count") instanceof Double) {
+                                    count = ((Double) foodData.get("count")).floatValue();
+
+                                } else {
+                                    count = ((Long) foodData.get("count")).floatValue();
+
+                                }
                                 IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
                                 item = new MealPlanItem(new Ingredient(name, description, bestBefore, location, count, cost, category));
                             } else if (foodData.get("type").equals("RECIPE")) {
@@ -171,8 +186,25 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                                 Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
                                 Date bestBefore = timestamp.toDate();
                                 Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
-                                Integer count = ((Long) foodData.get("count")).intValue();
-                                Integer cost = ((Long) foodData.get("cost")).intValue();
+                                // Determine type of foodData.getCount and make it a float
+                                Float cost = new Float(0);
+                                Float count = new Float(0);
+                                if (foodData.get("cost") instanceof Double) {
+                                    cost = ((Double) foodData.get("cost")).floatValue();
+
+                                } else {
+                                   cost = ((Long) foodData.get("cost")).floatValue();
+
+                                }
+
+                                if (foodData.get("count") instanceof Double) {
+                                    count = ((Double) foodData.get("count")).floatValue();
+
+                                } else {
+                                    count = ((Long) foodData.get("count")).floatValue();
+
+                                }
+
                                 IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
                                 item = new MealPlanItem(new Ingredient(name, description, bestBefore, location, count, cost, category));
 

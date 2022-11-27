@@ -61,8 +61,8 @@ public class ShoppingListAdapter extends ArrayAdapter<Ingredient> {
             viewHolder.tvDescription.setText(shopItem.getDescription());
 //            Glide.with(getContext()).load(foodItem.getImage()).apply(RequestOptions.circleCropTransform()).into(viewHolder.tvImage);
             viewHolder.tvIngredientCategory.setText(shopItem.getCategory().toString());
-            viewHolder.tvAmount.setText("$" + Integer.toString(shopItem.getCost()));
-            viewHolder.tvUnit.setText(Integer.toString(shopItem.getCount()) + " units" );
+            viewHolder.tvAmount.setText("$" + Float.toString(shopItem.getCost()));
+            viewHolder.tvUnit.setText(Float.toString(shopItem.getCount()) + " units" );
         }
 
         return convertView;

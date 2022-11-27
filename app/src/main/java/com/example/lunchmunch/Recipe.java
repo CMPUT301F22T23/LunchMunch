@@ -132,4 +132,27 @@ public class Recipe {
     public String getId() {return id; }
 
     public void setId(String id) { this.id = id;}
+
+    public void scaleRecipe(Integer servings) {
+        if (this.servings == 1 && servings < 0) {
+            return;
+        }
+        Float scale = (servings.floatValue() + this.servings.floatValue()) / this.servings.floatValue();
+
+        for (Ingredient ingredient : ingredients) {
+            Float newCost = ingredient.getCost() * scale;
+            // round to 2 decimal places
+            newCost = (float) Math.round(newCost * 100) / 100;
+            ingredient.setCost(newCost);
+            Float newCount = ingredient.getCount() * scale;
+            // round to 2 decimal places
+            newCount = (float) Math.round(newCount * 100) / 100;
+            ingredient.setCount(newCount);
+            System.out.println(servings);
+            System.out.println(this.servings);
+            System.out.println(ingredient.getCount());
+            System.out.println(ingredient.getCost());
+        }
+        this.servings = servings + this.servings;
+    }
 }

@@ -42,7 +42,6 @@ public class ShoppingListActivity extends AppCompatActivity {
             startActivity(new Intent(ShoppingListActivity.this, MealPlanActivity.class));
         });
 
-
     }
 
     private void getNeededIngrs() {
@@ -50,7 +49,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         // this hashmap allows us to get the total count needed for each ingredient in our mealplan
         // ingredient_name: ingredient
-        HashMap<String, Integer> ingrMap = new HashMap<String, Integer>();
+        HashMap<String, Float> ingrMap = new HashMap<String, Float>();
 
         // iterate over every mealPlanItem in the mealPlanList and get ingredients needed
 
@@ -68,14 +67,14 @@ public class ShoppingListActivity extends AppCompatActivity {
                 List<Ingredient> ingredients = mealPlanItem.getIngredients();
                 for(Ingredient ingredient : ingredients) {
                     String ingrName = ingredient.getName();
-                    Integer ingrCount = ingredient.getCount();
+                    Float ingrCount = ingredient.getCount();
                     // if the ingr not in the map then init with its count, otherwise if ingr already in map then just add this instance of the ingr's count to the count thats already in the map same as here( https://stackoverflow.com/a/37705877/17304003)
                     ingrMap.put(ingrName, ingrMap.getOrDefault(ingrName, ingrCount) + ingrCount);
                 }
 
             } else if (mealPlanItem.getType() == MealPlanItemType.INGREDIENT) {
                 String ingrName = mealPlanItem.getName();
-                Integer ingrCount = mealPlanItem.getCount();
+                Float ingrCount = mealPlanItem.getCount();
                 ingrMap.put(ingrName, ingrMap.getOrDefault(ingrName, ingrCount) + ingrCount);
             }
         }
@@ -86,9 +85,9 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         for (Ingredient ingredient : IngredientsActivity.ingredientsList) {
             String ingrName = ingredient.getName();
-            Integer ingrCount = ingredient.getCount();
+            Float ingrCount = ingredient.getCount();
             if (ingrMap.containsKey(ingrName)) {
-                Integer neededIngrCount = ingrMap.get(ingrName);
+               Float neededIngrCount = ingrMap.get(ingrName);
                 // if we have enough of this specific ingredient then remove it from the hash (dont add it to the shopping list)
                 // ingr.getCount() => neededIngrCount
                 if (ingrCount > neededIngrCount || ingrCount.equals(neededIngrCount)) {
