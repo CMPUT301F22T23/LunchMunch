@@ -2,33 +2,69 @@ package com.example.lunchmunch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Main activity for all MealPlan functionality
  */
-public class MealPlanActivity extends AppCompatActivity implements MealPlanDateFragment.OnFragmentInteractionListener {
+public class MealPlanActivity extends AppCompatActivity implements MealPlanDateFragment.OnFragmentInteractionListener, MealPlanIngredientFragment.OnFragmentInteractionListener, MealPlanRecipeFragment.OnFragmentInteractionListener {
 
     Button IngredientsNav, RecipesNav, ShoppingListNav;
-    MealPlanItemAdapter adapter;
-    static ArrayList<MealPlanItem> mealPlanList = new ArrayList<>();
-    MealPlanDateFragment fragment;
+    String days[] = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
+    static HashMap<String, ArrayList<MealPlanItem>> allMeals = new HashMap<>();
+    HashMap<String, HashMap<String, MealPlanItem>> allMealsMap = new HashMap<>();
+    HashMap<String, RecyclerView> recyclerViews = new HashMap<>();
+    HashMap<String, ImageView> imageViews = new HashMap<>();
+    HashMap<String, MealPlanItemAdapter> adapters = new HashMap<>();
+    HashMap<String, MealPlanDateFragment> fragments = new HashMap<>();
+    ImageView editMealPlanButton;
+
+    FirebaseFirestore db;
+    CollectionReference MealPlanCollec;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mealplan_activity);
 
+        // init firebase reference
+        db = FirebaseFirestore.getInstance();
+        MealPlanCollec = db.collection("MealPlans");
+
         intiViews();
+        initRecyclerViews();
+        initImageViews();
+        initDBListener(MealPlanCollec);
+        initDateFragments();
+
 
         IngredientsNav.setOnClickListener(view -> {
             startActivity(new Intent(MealPlanActivity.this, IngredientsActivity.class));
@@ -42,25 +78,49 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
             startActivity(new Intent(MealPlanActivity.this, ShoppingListActivity.class));
         });
 
-        RecyclerView recyclerView = findViewById(R.id.monday_meal_plan_items_list);
-        ArrayList<String> ingredients = new ArrayList<String>();
-        //Recipe recipe = new Recipe("name", ingredients, "instructions", "mealType", "image", 0, 0, "comments");
-        //mealPlanList.add(new MealPlanItem(recipe));
-        Ingredient banana =  new Ingredient("banana", "yellow fruit", new Date(), Location.FREEZER, 1,2,IngredientCategory.MEAT);
-        mealPlanList.add(new MealPlanItem(banana));
-        adapter = new MealPlanItemAdapter(mealPlanList);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
 
-        // adding or editing a new item button
-        final ImageView editMealPlanButton = findViewById(R.id.monday_meal_plan_edit_pencil);
-        fragment = new MealPlanDateFragment();
-        editMealPlanButton.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "Edit Meal Plan"));
-        fragment.setDataList(mealPlanList);
 
+    }
+
+    private void initRecyclerViews() {
+        recyclerViews.put("monday", (RecyclerView) findViewById(R.id.monday_meal_plan_items_list));
+        recyclerViews.put("tuesday", (RecyclerView) findViewById(R.id.tuesday_meal_plan_items_list));
+        recyclerViews.put("wednesday", (RecyclerView) findViewById(R.id.wednesday_meal_plan_items_list));
+        recyclerViews.put("thursday", (RecyclerView) findViewById(R.id.thursday_meal_plan_items_list));
+        recyclerViews.put("friday", (RecyclerView) findViewById(R.id.friday_meal_plan_items_list));
+        recyclerViews.put("saturday",(RecyclerView)  findViewById(R.id.saturday_meal_plan_items_list));
+        recyclerViews.put("sunday", (RecyclerView) findViewById(R.id.sunday_meal_plan_items_list));
+
+        for (String day: days) {
+            RecyclerView recyclerView = recyclerViews.get(day);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        }
+
+    }
+
+    private void initImageViews() {
+        imageViews.put("monday", (ImageView) findViewById(R.id.monday_meal_plan_edit_pencil));
+        imageViews.put("tuesday", (ImageView) findViewById(R.id.tuesday_meal_plan_edit_pencil));
+        imageViews.put("wednesday", (ImageView) findViewById(R.id.wednesday_meal_plan_edit_pencil));
+        imageViews.put("thursday", (ImageView) findViewById(R.id.thursday_meal_plan_edit_pencil));
+        imageViews.put("friday", (ImageView) findViewById(R.id.friday_meal_plan_edit_pencil));
+        imageViews.put("saturday",(ImageView)  findViewById(R.id.saturday_meal_plan_edit_pencil));
+        imageViews.put("sunday", (ImageView) findViewById(R.id.sunday_meal_plan_edit_pencil));
+
+    }
+
+    private void initDateFragments() {
+        for (String day: days) {
+            // adding or editing a new item button
+            editMealPlanButton = imageViews.get(day);
+            fragments.put(day, new MealPlanDateFragment());
+            editMealPlanButton.setOnClickListener(view -> fragments.get(day).show(getSupportFragmentManager(), "Edit Meal Plan"));
+            fragments.get(day).setDay(day);
+        }
 
     }
 
@@ -69,9 +129,141 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         RecipesNav = findViewById(R.id.recipesNav);
         ShoppingListNav = findViewById(R.id.shoppingListNav);
 
+
+    }
+
+    private void initDBListener(CollectionReference mealPlanCollec) {
+
+        mealPlanCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                if (task.isSuccessful()) {
+                    // clear current list and re-add all the current ingredients
+                    allMeals.clear();
+                    // each document in the Ingredients collection is an Ingredient class object
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        ArrayList<MealPlanItem> dataList = new ArrayList<>();
+                        // convert document objects back into Ingredient class objects
+                        MealPlanItem item = null;
+                        System.out.println(document.getId());
+                        for (Object data : document.getData().values()) {
+
+                            HashMap<String, Object> foodData = (HashMap<String, Object>) data;
+                            System.out.println("Checking Document");
+                            System.out.println(foodData.get("type"));
+                            if (foodData.get("type").equals("INGREDIENT")) {
+                                String name = (String) foodData.get("name");
+                                String description = (String) foodData.get("description");
+                                Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
+                                Date bestBefore = timestamp.toDate();
+                                Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
+                                Integer count = ((Long) foodData.get("count")).intValue();
+                                Integer cost = ((Long) foodData.get("cost")).intValue();
+                                IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
+                                item = new MealPlanItem(new Ingredient(name, description, bestBefore, location, count, cost, category));
+                            } else if (foodData.get("type").equals("RECIPE")) {
+                                String name = (String) foodData.get("name");
+                                String description = (String) foodData.get("description");
+                                Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
+                                Date bestBefore = timestamp.toDate();
+                                Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
+                                Integer count = ((Long) foodData.get("count")).intValue();
+                                Integer cost = ((Long) foodData.get("cost")).intValue();
+                                IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
+                                item = new MealPlanItem(new Ingredient(name, description, bestBefore, location, count, cost, category));
+
+                            }
+
+                            if (allMeals.get(document.getId()) == null) {
+                                allMeals.put(document.getId(), new ArrayList<>());
+                                allMealsMap.put(document.getId(), new HashMap<>());
+                            }
+
+                            allMealsMap.get(document.getId()).put(item.getName(), item);
+
+                            dataList.add(item);
+
+                            //https://stackoverflow.com/questions/66071922/how-to-wait-for-an-async-method-to-complete-before-the-return-statement-runs
+//                            dbIngredients.onSuccess(ingredientsList);
+                        }
+                            adapters.put(document.getId(), new MealPlanItemAdapter(dataList));
+                            recyclerViews.get(document.getId()).setAdapter(adapters.get(document.getId()));
+                            fragments.get(document.getId()).setDataList(dataList);
+                            allMeals.put(document.getId(), dataList);
+
+
+                    }
+                }
+            }
+        });
     }
 
 
+    @Override
+    public void onIngredientOkPressed(Ingredient ingredient, String day) {
+        MealPlanItem item = new MealPlanItem(ingredient);
+
+        if (allMeals.get(day) == null || allMealsMap.get(day) == null)  {
+            allMeals.put(day, new ArrayList<>());
+            allMealsMap.put(day, new HashMap<>());
+        }
+        allMealsMap.get(day).put(ingredient.getName(), item);
+        allMeals.put(day, new ArrayList<>(allMealsMap.get(day).values()));
+
+        adapters.put(day, new MealPlanItemAdapter(allMeals.get(day)));
+        recyclerViews.get(day).setAdapter(adapters.get(day));
+        fragments.get(day).setDataList(allMeals.get(day));
+
+        // add to db
+        MealPlanCollec.document(day).set(allMealsMap.get(day))
+                .addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        System.out.println("Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Fail");
+                    }
+                });
+
+    }
+
+    @Override
+    public void onRecipeOkPressed(Recipe recipe, String day) {
+        MealPlanItem item = new MealPlanItem(recipe);
+
+        if (allMeals.get(day) == null || allMealsMap.get(day) == null)  {
+            allMeals.put(day, new ArrayList<>());
+            allMealsMap.put(day, new HashMap<>());
+        }
+        allMealsMap.get(day).put(recipe.getName(), item);
+        allMeals.put(day, new ArrayList<>(allMealsMap.get(day).values()));
+
+        adapters.put(day, new MealPlanItemAdapter(allMeals.get(day)));
+        recyclerViews.get(day).setAdapter(adapters.get(day));
+        fragments.get(day).setDataList(allMeals.get(day));
+
+        // add to db
+        MealPlanCollec.document(day).set(allMealsMap.get(day))
+                .addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        System.out.println("Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Fail");
+                    }
+                });
+
+    }
 }
 
 

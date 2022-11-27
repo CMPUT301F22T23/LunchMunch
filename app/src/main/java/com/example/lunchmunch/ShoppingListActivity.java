@@ -147,7 +147,15 @@ public class ShoppingListActivity extends AppCompatActivity {
         // ingredient_name: ingredient
         HashMap<String, Ingredient> ingrMap = new HashMap<String, Ingredient>();
         // iterate over every mealPlanItem in the mealPlanList and get ingredients needed
-        for (MealPlanItem mealPlanItem : MealPlanActivity.mealPlanList) {
+
+        ArrayList<MealPlanItem> allItems = new ArrayList<>();
+        for (ArrayList<MealPlanItem> mealPlan: MealPlanActivity.allMeals.values()) {
+            for (MealPlanItem item: mealPlan) {
+                allItems.add(item);
+            }
+        }
+
+        for (MealPlanItem mealPlanItem : allItems) {
 
             if (mealPlanItem.getType() == MealPlanItemType.RECIPE) {
                 // wouldnt let me put mealPlanItem.getIngredients() in for loop without changing for loop class to Object
