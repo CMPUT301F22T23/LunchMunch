@@ -1,7 +1,6 @@
 package com.example.lunchmunch;
 
 
-import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -16,11 +15,11 @@ public class Ingredient implements Parcelable, Serializable {
     private String description;
     private Date bestBefore;
     private Location location;
-    private Integer count;
-    private Integer cost;
+    private Float count;
+    private Float cost;
     private IngredientCategory category;
 
-    public Ingredient(String name, String description, Date bestBefore, Location location, Integer count, Integer cost, IngredientCategory category){
+    public Ingredient(String name, String description, Date bestBefore, Location location, Float count, Float cost, IngredientCategory category){
         this.name = name;
         this.description = description;
         this.bestBefore = bestBefore;
@@ -41,12 +40,12 @@ public class Ingredient implements Parcelable, Serializable {
         if (in.readByte() == 0) {
             count = null;
         } else {
-            count = in.readInt();
+            count = in.readFloat();
         }
         if (in.readByte() == 0) {
             cost = null;
         } else {
-            cost = in.readInt();
+            cost = in.readFloat();
         }
     }
 
@@ -108,7 +107,7 @@ public class Ingredient implements Parcelable, Serializable {
         this.location = location;
     }
 
-    public Integer getCost() {
+    public Float getCost() {
         return this.cost;
     }
 
@@ -117,15 +116,15 @@ public class Ingredient implements Parcelable, Serializable {
 //
 //    }
 
-    public void setCost(Integer cost) {
+    public void setCost(Float cost) {
         this.cost = cost;
     }
 
-    public Integer getCount() {
+    public Float getCount() {
         return this.count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Float count) {
         this.count = count;
     }
 
@@ -159,13 +158,13 @@ public class Ingredient implements Parcelable, Serializable {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeInt(count);
+            parcel.writeFloat(count);
         }
         if (cost == null) {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeInt(cost);
+            parcel.writeFloat(cost);
         }
         if(bestBefore != null){
             parcel.writeSerializable(bestBefore);

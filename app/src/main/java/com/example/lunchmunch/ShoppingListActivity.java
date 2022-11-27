@@ -152,7 +152,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
             startActivity(new Intent(ShoppingListActivity.this, MealPlanActivity.class));
         });
 
-
     }
 
     private void updateShoppingList() {
@@ -160,6 +159,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
         // this hashmap allows us to get the total count needed for each ingredient in our mealplan
         // ingredient_name: ingredient
+
         HashMap<String, Ingredient> ingrMap = new HashMap<String, Ingredient>();
         // iterate over every mealPlanItem in the mealPlanList and get ingredients needed
 
@@ -177,13 +177,15 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 List<Ingredient> ingredients = mealPlanItem.getIngredients();
                 for (Ingredient ingredient : ingredients) {
                     String ingrName = ingredient.getName();
-                    /*Integer ingrCount = ingredient.getCount();
+                    /*
+                    Float ingrCount = ingredient.getCount();
+
                     // if the ingr not in the map then init with its count, otherwise if ingr already in map then just add this instance of the ingr's count to the count thats already in the map same as here( https://stackoverflow.com/a/37705877/17304003)
                     ingrMap.put(ingrName, ingrMap.getOrDefault(ingrName, ingrCount) + ingrCount);
                      */
                     if (ingrMap.containsKey(ingrName)) {
                         // if the ingredient already exists in the map then just add to its required count
-                        Integer newCount = ingredient.getCount() + ingrMap.get(ingrName).getCount();
+                        Float newCount = ingredient.getCount() + ingrMap.get(ingrName).getCount();
                         ingredient.setCount(newCount);
 
                     }
@@ -192,6 +194,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 }
 
             } else if (mealPlanItem.getType() == MealPlanItemType.INGREDIENT) {
+
 
                 // do this as wont allow us to put mealPlanItem in ingrMap.put (as technically not Ingredient instance)
                 Ingredient ingredient = new Ingredient(
@@ -209,12 +212,13 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 //ingrMap.put(ingrName, ingrMap.getOrDefault(ingrName, ingrCount) + ingrCount);
                 if (ingrMap.containsKey(ingrName)) {
                     // if the ingredient already exists in the map then just add to its required count
-                    Integer newCount = mealPlanItem.getCount() + ingrMap.get(ingrName).getCount();
+                    Float newCount = mealPlanItem.getCount() + ingrMap.get(ingrName).getCount();
                     mealPlanItem.setCount(newCount);
 
                 }
                 // hashmap will be either updated with the new ingredient count value or will get added the newly required ingredient
                 ingrMap.put(ingrName, ingredient);
+
             }
 
         }
@@ -224,12 +228,13 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         // subtract the count of ingredients we already have from the Ingredients page
         // the remaining ingredients get added to the shopping list
 
+
         if (IngredientsActivity.ingredientsList != null) {
             for (Ingredient ingredient : IngredientsActivity.ingredientsList) {
                 String ingrName = ingredient.getName();
-                Integer ingrCount = ingredient.getCount();
+                Float ingrCount = ingredient.getCount();
                 if (ingrMap.containsKey(ingrName)) {
-                    Integer neededIngrCount = ingrMap.get(ingrName).getCount();
+                    Float neededIngrCount = ingrMap.get(ingrName).getCount();
                     // if we have enough of this specific ingredient then remove it from the hash (dont add it to the shopping list)
                     // ingr.getCount() => neededIngrCount
                     if (ingrCount > neededIngrCount || ingrCount.equals(neededIngrCount)) {
@@ -239,7 +244,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                         // could do just else here if we want (but this easier to read)
                     } else if (ingrCount < neededIngrCount) {
                         // update ingr in map to the count needed (needed from meal plan - already have from ingredients
-                        Integer newCount = ingrMap.get(ingrName).getCount() - ingrCount;
+                        Float newCount = ingrMap.get(ingrName).getCount() - ingrCount;
                         Ingredient newIngr = ingrMap.get(ingrName);
                         newIngr.setCount(newCount);
                         //ingrMap.get(ingrName).setCount(newCount); // not sure if this will work test later
@@ -284,7 +289,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         Ingredient existingIngr = optExistingIngr.orElse(null);
         if (existingIngr != null) {
             // not sure if can just throw ingredient.getCount() inside the setCount() w/out issues (test if time)
-            Integer ingrCount = ingredient.getCount();
+            Float ingrCount = ingredient.getCount();
             ingredient.setCount(existingIngr.getCount() + ingrCount);
         } // otherwise igr is new and doesnt already exist in ingr storage so just upload as is
 

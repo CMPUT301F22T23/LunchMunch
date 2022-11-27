@@ -26,8 +26,9 @@ import java.util.ArrayList;
 /**
  * Fragment for adding/editing RecipeModal functionality
  */
-public class RecipeModalFragment extends DialogFragment {
+public class RecipeModalFragment extends DialogFragment implements AdapterView.OnItemClickListener {
     Recipe recipe;
+    private RecipeFragment.OnFragmentInteractionListener listener;
     TextView recipeName;
     TextView recipeInstructions;
     TextView recipeTime;
@@ -37,6 +38,8 @@ public class RecipeModalFragment extends DialogFragment {
     CardView recipeImage;
     ImageView editRecipe;
     ImageView deleteRecipe;
+    ImageView recipeScalePlus;
+    ImageView recipeScaleMinus;
     TextView recipeInstructionHeader;
     TextView recipeCommentsHeader;
     ImageView recipeAddIngredient;
@@ -82,6 +85,8 @@ public void onCreate(Bundle savedInstanceState) {
         recipeCommentsHeader = view.findViewById(R.id.recipeCommentHeader);
         recipeInstructionHeader = view.findViewById(R.id.recipeInstructionHeader);
         recipeIngredients = view.findViewById(R.id.recipeIngredients);
+        recipeScalePlus = view.findViewById(R.id.recipeScalePlus);
+        recipeScaleMinus = view.findViewById(R.id.recipeScaleMinus);
         // Add our ingredients to our list view
         recipeIngredientsAdapter = new FoodItemAdapter(getContext(), R.layout.recipe_modal_bottom, (ArrayList<Ingredient>) recipe.getIngredients());
         recipeIngredients.setAdapter(recipeIngredientsAdapter);
@@ -143,6 +148,31 @@ public void onCreate(Bundle savedInstanceState) {
                 assert getArguments() != null;
                 assert activity != null;
                 activity.deleteRecipe(getArguments().getInt("position"));
+                dismiss();
+            }
+        });
+
+        recipeScaleMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the current activity
+                recipe.scaleRecipe(-1);
+                updateRecipe();
+                recipeIngredientsAdapter.notifyDataSetChanged();
+            }
+        });
+
+        recipeScalePlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the current activity
+                recipe.scaleRecipe(1);
+                updateRecipe();
+                recipeIngredientsAdapter.notifyDataSetChanged();
+
+                if (listener != null) {
+                    listener.onOkPressed(recipe, false, getArguments().getInt("position"));
+                }
 
             }
         });
@@ -191,7 +221,6 @@ public void onCreate(Bundle savedInstanceState) {
     public void onDetach() {
         super.onDetach();
 
-
     }
 
     public void updateRecipe() {
@@ -205,7 +234,7 @@ public void onCreate(Bundle savedInstanceState) {
         if (recipe.getComments().equals("")) {
             recipeComments.setVisibility(View.GONE);
             recipeCommentsHeader.setVisibility(View.GONE);
-        } else{
+        } else {
             recipeComments.setVisibility(View.VISIBLE);
             recipeCommentsHeader.setVisibility(View.VISIBLE);
         }
@@ -226,4 +255,18 @@ public void onCreate(Bundle savedInstanceState) {
 
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof RecipeFragment.OnFragmentInteractionListener) {
+            listener = (RecipeFragment.OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + "must implement listener");
+        }
+    }
 }

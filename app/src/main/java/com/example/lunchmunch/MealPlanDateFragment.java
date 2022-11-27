@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,6 +38,11 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
     MealPlanIngredientFragment  ingredientFragment;
     MealPlanRecipeFragment recipeFragment;
     String day;
+
+
+
+
+
 
 
     @Override
@@ -75,6 +81,7 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
             throw new RuntimeException(context + "must implement listener");
         }
     }
+
 
 
     @NonNull
