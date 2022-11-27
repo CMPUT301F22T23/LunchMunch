@@ -3,6 +3,7 @@ package com.example.lunchmunch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class ShoppingListActivity extends AppCompatActivity {
 
-    Button IngredientsNav, RecipesNav, MealPlanNav;
+    LinearLayout IngredientsNav, RecipesNav, MealPlanNav;
     ArrayList<Ingredient> shoppingList = new ArrayList<>();
 
     @Override

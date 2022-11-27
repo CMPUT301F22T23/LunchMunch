@@ -3,74 +3,137 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/background_white"
+
     android:backgroundTint="@color/background_white">
 
-    <Button
+
+    <LinearLayout
         android:id="@+id/ingredientsNav"
-        android:layout_width="108dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="4dp"
-        android:backgroundTint="@color/background_white"
-        android:inputType="textCapSentences"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="Ingredients"
-        android:textColor="@color/black_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/shoppingListNav"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/mealPlanNav"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.069" />
+        app:layout_constraintVertical_bias="0.5">
 
-    <Button
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:srcCompat="@drawable/ingredient" />
+
+        <TextView
+            android:id="@+id/viewTextNav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:backgroundTint="@color/background_white"
+            android:inputType="textCapSentences"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Ingredients"
+            android:textColor="@color/black_header" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/recipesNav"
-        android:layout_width="106dp"
-        android:layout_height="45dp"
-        android:backgroundTint="@color/background_white"
-        android:inputType="textCapSentences"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="Recipes"
-        android:textColor="@color/black_header"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ingredientsNav"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.069" />
-
-    <Button
-        android:id="@+id/mealPlanNav"
-        android:layout_width="90dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="4dp"
-        android:backgroundTint="@color/background_white"
-        android:inputType="textCapSentences"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="Meal Plan"
-        android:textColor="@color/black_header"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.97"
-        app:layout_constraintStart_toEndOf="@+id/recipesNav"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.069" />
-
-    <Button
-        android:id="@+id/shoppingListNav"
-        android:layout_width="100dp"
-        android:layout_height="45dp"
-        android:backgroundTint="@color/background_white"
-        android:inputType="textCapSentences"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="Shopping"
-        android:textColor="@color/black_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/mealPlanNav"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:srcCompat="@drawable/recipe" />
+
+        <TextView
+            android:id="@+id/viewTextNav2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/background_white"
+            android:inputType="textCapSentences"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Recipes"
+            android:textColor="@color/black_header" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mealPlanNav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ingredientsNav"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/recipesNav"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.069" />
+        app:layout_constraintVertical_bias="0.5">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:srcCompat="@drawable/meal_plan" />
+
+        <TextView
+            android:id="@+id/viewTextNav3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:backgroundTint="@color/background_white"
+            android:inputType="textCapSentences"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Meal Plan"
+            android:textColor="@color/black_header" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/shoppingListNav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ingredientsNav"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:srcCompat="@drawable/shopping_cart" />
+
+        <TextView
+            android:id="@+id/viewTextNav4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/background_white"
+            android:inputType="textCapSentences"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Shopping"
+            android:textColor="@color/black_header" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

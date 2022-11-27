@@ -1,17 +1,23 @@
 package com.example.lunchmunch;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -20,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Fragment for adding/editing RecipeModal functionality
  */
-public class RecipeModalFragment extends BottomSheetDialogFragment {
+public class RecipeModalFragment extends DialogFragment {
     Recipe recipe;
     TextView recipeName;
     TextView recipeInstructions;
@@ -34,8 +40,17 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
     TextView recipeInstructionHeader;
     TextView recipeCommentsHeader;
     ImageView recipeAddIngredient;
+    ImageView recipeCancel;
     ListView recipeIngredients;
     FoodItemAdapter recipeIngredientsAdapter;
+
+    @Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setStyle(DialogFragment.STYLE_NORMAL,
+             R.style.FullScreenDialog);
+}
+
 
     public RecipeModalFragment() {
         // Required empty public constructor
@@ -46,10 +61,7 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
         this.recipe = recipe;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,7 +86,13 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
         recipeIngredientsAdapter = new FoodItemAdapter(getContext(), R.layout.recipe_modal_bottom, (ArrayList<Ingredient>) recipe.getIngredients());
         recipeIngredients.setAdapter(recipeIngredientsAdapter);
 
-
+        recipeCancel = view.findViewById(R.id.cancelRecipe);
+        recipeCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         recipeAddIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +143,7 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
                 assert getArguments() != null;
                 assert activity != null;
                 activity.deleteRecipe(getArguments().getInt("position"));
-                dismiss();
+
             }
         });
 
@@ -156,6 +174,23 @@ public class RecipeModalFragment extends BottomSheetDialogFragment {
         });
 
         return view;
+
+    }
+
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        requireActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+    }
+
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
 
     }
 

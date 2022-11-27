@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +37,7 @@ import java.util.stream.Stream;
  */
 public class MealPlanActivity extends AppCompatActivity implements MealPlanDateFragment.OnFragmentInteractionListener, MealPlanIngredientFragment.OnFragmentInteractionListener, MealPlanRecipeFragment.OnFragmentInteractionListener {
 
-    Button IngredientsNav, RecipesNav, ShoppingListNav;
+    LinearLayout IngredientsNav, RecipesNav, ShoppingListNav;
     String days[] = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
     static HashMap<String, ArrayList<MealPlanItem>> allMeals = new HashMap<>();
     HashMap<String, HashMap<String, MealPlanItem>> allMealsMap = new HashMap<>();
@@ -65,7 +66,6 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         initDBListener(MealPlanCollec);
         initDateFragments();
 
-
         IngredientsNav.setOnClickListener(view -> {
             startActivity(new Intent(MealPlanActivity.this, IngredientsActivity.class));
         });
@@ -77,6 +77,8 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         ShoppingListNav.setOnClickListener(view -> {
             startActivity(new Intent(MealPlanActivity.this, ShoppingListActivity.class));
         });
+
+
 
 
 

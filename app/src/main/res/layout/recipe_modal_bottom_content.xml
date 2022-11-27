@@ -21,30 +21,45 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="50dp"
                 android:layoutDirection="rtl"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:layout_margin="8dp"
+                android:padding="4dp">
 
                 <ImageView
                     android:id="@+id/editRecipe"
+                    android:layout_weight="1"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="right"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:layout_alignParentRight="true"
                     app:srcCompat="@drawable/pencil" />
 
                 <ImageView
+                    android:layout_weight="1"
                     android:id="@+id/deleteRecipe"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="right"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_alignParentRight="true"
                     app:srcCompat="@drawable/trash" />
-            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/cancelRecipe"
+                    android:layout_weight="8"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start"
+                    android:layout_alignParentLeft="true"
+                    app:srcCompat="@drawable/cancel" />
+
+            </RelativeLayout>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/recipeImageModal"

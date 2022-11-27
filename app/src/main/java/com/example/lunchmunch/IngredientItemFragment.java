@@ -79,6 +79,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
             throw new RuntimeException(context + "must implement listener");
         }
     }
+
+
+
     /**
      * Returns an alert object that will is used to take user input about an ingredient
      * @param savedInstanceState In case we need to restore ourselves to a previous state, can be NULL
@@ -215,6 +218,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         return alert;
     }
+
+
+
 
     private String validateIngrInputs(String nameInput, Date expirationDate, String priceInput, String amountInput) {
         // the only 3 inputs that actually have any constraints

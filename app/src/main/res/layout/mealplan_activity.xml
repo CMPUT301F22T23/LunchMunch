@@ -6,23 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
+    <include
+        layout="@layout/meal_plan_page_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="64dp"
+        />
     <include
         android:id="@+id/app_bar_layout"
         layout="@layout/navbar_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        layout="@layout/meal_plan_page_content"
-        android:layout_width="416dp"
-        android:layout_height="689dp"
+        android:layout_height="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@id/meal_plan_content" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
