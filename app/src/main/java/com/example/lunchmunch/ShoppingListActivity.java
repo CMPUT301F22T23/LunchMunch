@@ -24,7 +24,7 @@ import java.util.Optional;
 /**
  * Main activity for all ShoppingList functionality
  */
-public class ShoppingListActivity extends AppCompatActivity {
+public class ShoppingListActivity extends AppCompatActivity implements ShoppingListAdapter.ingrPurchasedListener, AddShopIngrFragment.OnFragmentInteractionListener{
 
     Button IngredientsNav, RecipesNav, MealPlanNav, saveIngrBtn;
     RecyclerView shoplistRecView;
@@ -60,6 +60,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         shoplistRecView.setLayoutManager(new LinearLayoutManager(this));
         shoplistRecView.setAdapter(shoppingListAdapter);
 
+        /*
         saveIngrBtn.setOnClickListener(view -> {
             //IngredientsActivity.updateIngrList(ShoppingListAdapter.checkedIngr);
 
@@ -121,7 +122,15 @@ public class ShoppingListActivity extends AppCompatActivity {
                 ShoppingListAdapter.checkedIngr.clear();
             }
 
+        });
 
+        */
+
+        shoppingListAdapter.setIngrPurchasedListener(new ShoppingListAdapter.ingrPurchasedListener() {
+            @Override
+            public void ingrPurchasedBtnClicked(Ingredient ingredient, Integer ingrIdx) {
+                new AddShopIngrFragment().newInstance(ingredient, ingrIdx).show(getSupportFragmentManager(), "Add_Ingr");
+            }
         });
 
 
@@ -246,7 +255,75 @@ public class ShoppingListActivity extends AppCompatActivity {
         IngredientsNav = findViewById(R.id.ingredientsNav);
         RecipesNav = findViewById(R.id.recipesNav);
         MealPlanNav = findViewById(R.id.mealPlanNav);
-        saveIngrBtn = findViewById(R.id.saveIngrBtn);
         shoplistRecView = findViewById(R.id.shoplistRecView);
+    }
+
+    //ignore this
+    @Override
+    public void ingrPurchasedBtnClicked(Ingredient ingredient, Integer ingrIdx) {
+        // open up popup dialog where user enters Ingredient expiry date, location, unit/price, and count (min has to be the amount required)
+        //new AddShopIngrFragment().newInstance(ingredient, ingrIdx).show(getSupportFragmentManager(), "Add_Ingr");
+
+    }
+
+    @Override
+    public void onOkPressed(Ingredient ingredient, Integer ingrIdx) {
+
+        // first check if ingr already exists in IngredientsActivity.ingredientsList
+        // if it does then get the current count of said igr then add the count we just added from shopping list
+        // then upload to db
+        Optional<Ingredient> optExistingIngr = IngredientsActivity.ingredientsList.stream().
+                filter(i -> i.getName().equals(ingredient.getName())).
+                findFirst(); // can use findFirst as we know that ingr name is its unique id so will have only one occurance
+        Ingredient existingIngr = optExistingIngr.orElse(null);
+        if (existingIngr != null) {
+            // not sure if can just throw ingredient.getCount() inside the setCount() w/out issues (test if time)
+            Integer ingrCount = ingredient.getCount();
+            ingredient.setCount(existingIngr.getCount() + ingrCount);
+        } // otherwise igr is new and doesnt already exist in ingr storage so just upload as is
+
+
+        IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
+                .addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        // after successfully uploaded to ingr collec we can remove from the shopping list
+                        System.out.println("onOK-Success");
+                        //shoppingList.remove(ingredient);
+                        // update array as well as this only gets updated from database when we visit ingr page so update incase user doesnt visit ingr page after checking off ingr in shop list
+                        // incase ingr already exists we are just updating the count, wont throw an error if doesnt exist
+                        IngredientsActivity.ingredientsList.remove(ingredient);
+                        IngredientsActivity.ingredientsList.add(ingredient);
+
+
+                        // Prob dont need to update shopping list manually here as can just run updateShoppingList() instead since ingrList in IngrActivity being modified
+
+                        //overwrite the ingredient in shopping list if count is less than the amount required otherwise remove the element from the shopping list
+                        Optional<Ingredient> optExistingIngr = shoppingList.stream().
+                                filter(i -> i.getName().equals(ingredient.getName())).
+                                findFirst(); // can use findFirst as we know that ingr name is its unique id so will have only one occurance
+                        Ingredient existingIngr = optExistingIngr.orElse(null);
+                        if (existingIngr != null) {
+                            // if the amount of ingr we required in the shopping list is still greater then the amount the user entered then just update the ingr in the shopping list
+                            // since we create a new Ingr instance in addShopIngrFragment we cant directly acess we have to access by name to delete
+                            shoppingList.remove(existingIngr);
+
+
+                        } // otherwise remove ingr from shopping list
+
+
+                        shoppingListAdapter.notifyDataSetChanged();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Fail");
+                        Toast.makeText(getApplicationContext(),"Failed to upload "+ingredient.getName()+ " to database, please try again.",Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
     }
 }
