@@ -116,7 +116,7 @@
                     android:layout_height="90dp"
                     tools:layout_editor_absoluteY="190dp">
 
-                    -<TextView
+                     <TextView
                         android:id="@+id/ingredientsList"
                         android:layout_width="225dp"
                         android:layout_height="70dp"

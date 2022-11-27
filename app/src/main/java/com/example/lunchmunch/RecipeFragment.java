@@ -57,7 +57,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     private EditText comments;
     private Spinner spinner;
 
-    private TextView ingredientNamesList;
+    TextView ingredientNamesList;
     ImageButton editIngredient;
 
     // these are used as a way to pass the ingredient list attribute from the recipe object being created to the next activity
@@ -115,7 +115,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         comments = view.findViewById(R.id.comments);
         spinner = (Spinner) view.findViewById(R.id.mealType);
         
-        ingredientNamesList = view.findViewById(R.id.ingredient_list);
+        ingredientNamesList = view.findViewById(R.id.ingredientsList);
         editIngredient = view.findViewById(R.id.editIngredientsList);
         blankNames = new ArrayList<String>();
 
@@ -154,11 +154,18 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                         Intent data = result.getData();
                         assert data != null;
                         recipe = (Recipe) data.getSerializableExtra("Recipe");
-                        System.out.println("Recipe Ingredients: " + recipe.getIngredients());
+                        System.out.println("Recipe Ingredients: " + recipe.getIngredients().toString());
                         // This will not work however if you look at the println of recipe.getIngredients() it will show the correct list :)
-                        //ingredientNamesList.setText(recipe.getIngredientNames().toString());
+                        String names = "";
+                        for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                            names += recipe.getIngredients().get(i).getName() + " ";
+                        }
+
+                        ingredientNamesList.setText(names);
+
                     }
                 });
+
         editIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
@@ -166,6 +173,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                 startForResult.launch(intent);
             }
         });
+
 
         boolean isNew = recipe == null;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddRecipeCustomAlertDialog);
