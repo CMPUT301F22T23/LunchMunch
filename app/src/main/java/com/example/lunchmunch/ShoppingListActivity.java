@@ -32,6 +32,7 @@ import java.util.Optional;
  */
 public class ShoppingListActivity extends AppCompatActivity implements ShoppingListAdapter.ingrPurchasedListener, AddShopIngrFragment.OnFragmentInteractionListener{
 
+    float epsilon = Float.MIN_NORMAL;
 
     RecyclerView shoplistRecView;
     ArrayList<Ingredient> shoppingList;
@@ -47,7 +48,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
     Spinner sortSpinner;
     ArrayAdapter<String> sortAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,78 +75,11 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         shoplistRecView.setAdapter(shoppingListAdapter);
 
         // Sorting Spinner
-        sortSpinner = (Spinner) findViewById(R.id.SortOptions);
         sortAdapter = new ArrayAdapter<String>(ShoppingListActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sortOptionsS));
         sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortSpinner.setAdapter(sortAdapter);
 
-
-        /*
-        saveIngrBtn.setOnClickListener(view -> {
-            //IngredientsActivity.updateIngrList(ShoppingListAdapter.checkedIngr);
-
-            //
-            for (Ingredient ingredient : ShoppingListAdapter.checkedIngr) {
-                //String shopLIngrName = ingredient.getName();
-                //boolean ingrExists = IngredientsActivity.ingredientsList.stream().map(Ingredient::getName).anyMatch(shopLIngrName::equals);
-                // if the ingr exists then we need to get the count of the ingr in the ingr page and add the count we got from our shopping list
-                // otherwise we are adding to db as new ingr we bought up from shopping list
-
-
-                Optional<Ingredient> optExistingIngr = IngredientsActivity.ingredientsList.stream().
-                        filter(i -> i.getName().equals(ingredient.getName())).
-                        findFirst(); // can use findFirst as we know that ingr name is its unique id so will have only one occurance
-                Ingredient existingIngr = optExistingIngr.orElse(null);
-                if (existingIngr != null) {
-                    // update the ingredient to have the sum of the count we already have (from existingIngr) and the count we just got from ingr
-                    ingredient.setCount(ingredient.getCount() + existingIngr.getCount());
-                } // otherwise we are just adding the ingr we picked up to ingr collec
-
-                final boolean[] failedIngrUpload = {false};
-
-                // this will either add or overwrite (if ingr already exists) to ingr collec
-                // therefore do not need to worry if only need to update exiting ingr count
-                IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
-                        .addOnSuccessListener(new OnSuccessListener() {
-                            @Override
-                            public void onSuccess(Object o) {
-                                // after successfully uploaded to ingr collec we can remove from the shopping list
-                                System.out.println("Success");
-                                shoppingList.remove(ingredient);
-                                // update array as well as this only gets updated from database when we visit ingr page so update incase user doesnt visit ingr page after checking off ingr in shop list
-                                // incase ingr already exists we are just updating the count, wont throw an error if doesnt exist
-                                IngredientsActivity.ingredientsList.remove(ingredient);
-                                IngredientsActivity.ingredientsList.add(ingredient);
-                                shoppingListAdapter.notifyDataSetChanged();
-
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                System.out.println("Fail");
-                                failedIngrUpload[0] = true;
-                                //
-
-//                        Log.w(TAG, "Error adding document", e);
-                            }
-                        });
-                if (failedIngrUpload[0]) {
-                    Toast.makeText(getApplicationContext(),"Failed to upload "+ingredient.getName()+ " to database",Toast.LENGTH_LONG).show();
-                    break;
-                }
-
-            }
-            // if we actually checked off ingr and pressed save checked to ingr btn
-            if (ShoppingListAdapter.checkedIngr.size() > 0) {
-                Toast.makeText(getApplicationContext(), "Ingredients that were checked off and deleted have been added to Ingredients page", Toast.LENGTH_LONG).show();
-                ShoppingListAdapter.checkedIngr.clear();
-            }
-
-        });
-
-        */
 
         shoppingListAdapter.setIngrPurchasedListener(new ShoppingListAdapter.ingrPurchasedListener() {
             @Override
@@ -193,8 +126,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
             }
         });
 
-
-
     }
 
     private void updateShoppingList() {
@@ -220,12 +151,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 List<Ingredient> ingredients = mealPlanItem.getIngredients();
                 for (Ingredient ingredient : ingredients) {
                     String ingrName = ingredient.getName();
-                    /*
-                    Float ingrCount = ingredient.getCount();
 
-                    // if the ingr not in the map then init with its count, otherwise if ingr already in map then just add this instance of the ingr's count to the count thats already in the map same as here( https://stackoverflow.com/a/37705877/17304003)
-                    ingrMap.put(ingrName, ingrMap.getOrDefault(ingrName, ingrCount) + ingrCount);
-                     */
                     if (ingrMap.containsKey(ingrName)) {
                         // if the ingredient already exists in the map then just add to its required count
                         Float newCount = ingredient.getCount() + ingrMap.get(ingrName).getCount();
@@ -253,6 +179,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 String ingrName = ingredient.getName();
                 //Integer ingrCount = mealPlanItem.getCount();
                 //ingrMap.put(ingrName, ingrMap.getOrDefault(ingrName, ingrCount) + ingrCount);
+                // if the ingr was added to ingrMap in a prev iter of this for loop (same ingr used in multiple meals)
                 if (ingrMap.containsKey(ingrName)) {
                     // if the ingredient already exists in the map then just add to its required count
                     Float newCount = mealPlanItem.getCount() + ingrMap.get(ingrName).getCount();
@@ -280,16 +207,23 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                     Float neededIngrCount = ingrMap.get(ingrName).getCount();
                     // if we have enough of this specific ingredient then remove it from the hash (dont add it to the shopping list)
                     // ingr.getCount() => neededIngrCount
-                    if (ingrCount > neededIngrCount || ingrCount.equals(neededIngrCount)) {
+                    Float diff = ingrCount - neededIngrCount;
+                    // if ingr Count => neededIngr count
+
+
+                    if (diff > 0.01 || Math.abs(diff) < epsilon) {//ingrCount.equals(neededIngrCount)) {
                         // remove specific ingr from the hashmap
                         ingrMap.remove(ingrName);
 
                         // could do just else here if we want (but this easier to read)
-                    } else if (ingrCount < neededIngrCount) {
+                        // else if ingr count < neededIngr count
+                    } else if (diff < 0) {
                         // update ingr in map to the count needed (needed from meal plan - already have from ingredients
-                        Float newCount = ingrMap.get(ingrName).getCount() - ingrCount;
+                        Float newCount = neededIngrCount - ingrCount;
+
                         Ingredient newIngr = ingrMap.get(ingrName);
                         newIngr.setCount(newCount);
+
                         //ingrMap.get(ingrName).setCount(newCount); // not sure if this will work test later
                         ingrMap.put(ingrName, newIngr);
                     }
@@ -310,6 +244,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         RecipesNav = findViewById(R.id.recipesNav);
         MealPlanNav = findViewById(R.id.mealPlanNav);
         shoplistRecView = findViewById(R.id.shoplistRecView);
+        sortSpinner = findViewById(R.id.SortOptions);
     }
 
     //ignore this
@@ -356,11 +291,23 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                         Optional<Ingredient> optExistingIngr = shoppingList.stream().
                                 filter(i -> i.getName().equals(ingredient.getName())).
                                 findFirst(); // can use findFirst as we know that ingr name is its unique id so will have only one occurance
-                        Ingredient existingIngr = optExistingIngr.orElse(null);
-                        if (existingIngr != null) {
+                        Ingredient shopIngr = optExistingIngr.orElse(null);
+                        if (shopIngr != null) {
                             // if the amount of ingr we required in the shopping list is still greater then the amount the user entered then just update the ingr in the shopping list
                             // since we create a new Ingr instance in addShopIngrFragment we cant directly acess we have to access by name to delete
-                            shoppingList.remove(existingIngr);
+
+                            Float diff = shopIngr.getCount() - ingredient.getCount();
+
+                            System.out.println();
+
+                            // if the count of the ingr the user entered is less than or equal to the amount required
+                            if (diff > 0.01) {
+                                //update the item in the shopping list as user did not get enough count to get off shopping list
+                                shopIngr.setCount(diff);
+                                shoppingList.set(ingrIdx, shopIngr);
+                            } else {
+                                shoppingList.remove(shopIngr);
+                            }
 
 
                         } // otherwise remove ingr from shopping list

@@ -158,7 +158,7 @@ public class AddShopIngrFragment extends DialogFragment {
                 Button addBtn = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
 
                 addBtn.setOnClickListener(view -> {
-                   name = ingredientName.getText().toString();
+                    name = ingredientName.getText().toString();
 
                     // get user inputted exp date
                     inputExpirationDate = ingredientExpiry.getText().toString();
@@ -169,16 +169,16 @@ public class AddShopIngrFragment extends DialogFragment {
                     // get user inputted desc
                     description = ingredientDescription.getText().toString();
                     // get user selected location
-                    location = Location.valueOf("PANTRY");//Location.valueOf((String) locationSpinner.getSelectedItem());
-
-                    category = FRUIT;//(IngredientCategory) ingredientSpinner.getSelectedItem();
+                    location = Location.valueOf(locationSpinner.getSelectedItem().toString().toUpperCase());
+                    // get user selected category
+                    category = IngredientCategory.valueOf(ingredientSpinner.getSelectedItem().toString().toUpperCase());
 
                     String errMsg = validateIngrInputs(inputExpirationDate, priceInput, amountInput);
 
                     System.out.println("inEXPDATE: "+ inputExpirationDate);
 
                     if (errMsg.equals("")) {
-                        Ingredient newIngredient = new Ingredient(name, description, expirationDate, location, price, amount , category);
+                        Ingredient newIngredient = new Ingredient(name, description, expirationDate, location, amount, price, category);
                         Integer newIngrIdx = getArguments().getInt("ingrIdx");
 
                         listener.onOkPressed(newIngredient, newIngrIdx);
@@ -216,12 +216,9 @@ public class AddShopIngrFragment extends DialogFragment {
     private String validateIngrInputs(String inputExpirationDate, String priceInput, String amountInput) {
         String errMsg = "";
 
-        /*if (inputExpirationDate.equals("")) {
+        if (inputExpirationDate.equals("")) {
             errMsg += "Please select an expiry date, ";
-        } else {
-            expirationDate = inputExpirationDate;
         }
-         */
 
         if (priceInput.equals("")) {
             errMsg += "Enter a number for price, ";
