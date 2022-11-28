@@ -40,16 +40,20 @@
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/nunito" />
 
-            <EditText
+            <Button
                 android:id="@+id/recipeImage"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
+                app:cornerRadius="15dp"
                 android:ems="10"
-                android:fontFamily="@font/nunito"
-                android:hint="Enter Image URL"
+                android:backgroundTint="@color/white_button"
+                android:textColor="@color/black_header"
+                android:textSize="14dp"
+                android:fontFamily="@font/nunito_extrabold"
                 android:inputType="textPersonName"
+                android:text="Choose Image"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <EditText
