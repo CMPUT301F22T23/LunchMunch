@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,12 +15,15 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.util.ArrayUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,7 +39,7 @@ import java.util.stream.Stream;
 /**
  * Main activity for all MealPlan functionality
  */
-public class MealPlanActivity extends AppCompatActivity implements MealPlanDateFragment.OnFragmentInteractionListener, MealPlanIngredientFragment.OnFragmentInteractionListener, MealPlanRecipeFragment.OnFragmentInteractionListener {
+public class MealPlanActivity extends AppCompatActivity implements MealPlanDateFragment.OnFragmentInteractionListener, MealPlanIngredientFragment.OnFragmentInteractionListener, MealPlanRecipeFragment.OnFragmentInteractionListener, MealPlanItemAdapter.OnAdapterInteractionListener {
 
     LinearLayout IngredientsNav, RecipesNav, ShoppingListNav;
     String days[] = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
@@ -243,6 +247,7 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 //                            dbIngredients.onSuccess(ingredientsList);
                         }
                             adapters.put(document.getId(), new MealPlanItemAdapter(dataList));
+                            adapters.get(document.getId()).setDay(document.getId());
                             recyclerViews.get(document.getId()).setAdapter(adapters.get(document.getId()));
                             fragments.get(document.getId()).setDataList(dataList);
                             allMeals.put(document.getId(), dataList);
@@ -318,6 +323,38 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                 });
 
     }
+
+    @Override
+    public void deleteItem(Integer position, String day) {
+        System.out.println(allMeals);
+        MealPlanItem item = allMeals.get(day).get(position);
+        deleteMealPlanItem(item, day);
+        allMealsMap.get(day).remove(item.getName());
+        allMeals.put(day, new ArrayList<MealPlanItem>(allMealsMap.get(day).values()));
+        System.out.println(allMeals.get(day));
+        adapters.put(day, new MealPlanItemAdapter(allMeals.get(day)));
+        adapters.get(day).setDay(day);
+        recyclerViews.get(day).setAdapter(adapters.get(day));
+        fragments.get(day).setDataList(allMeals.get(day));
+    }
+
+    /**
+     * Deletes an Meal Plan Item from database
+     */
+    public void deleteMealPlanItem(MealPlanItem item, String day) {
+
+
+        DocumentReference ref = MealPlanCollec.document(day);
+        Map<String,Object> updates = new HashMap<>();
+        updates.put(item.getName(), FieldValue.delete());
+        ref.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                System.out.println("Success");
+            }
+        });
+    }
+
 }
 
 
