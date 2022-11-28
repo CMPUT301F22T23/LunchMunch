@@ -6,23 +6,25 @@
     android:layout_height="match_parent"
     android:background="@color/background_white"
     tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="-41dp">
+    tools:layout_editor_absoluteY="81dp">
 
     <ListView
         android:id="@+id/ingredient_list"
-        android:layout_width="402dp"
-        android:layout_height="461dp"
+        android:layout_width="399dp"
+        android:layout_height="484dp"
+        android:layout_marginTop="116dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addIngredientsButton"
-        android:layout_width="53dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="61dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="28dp"
         android:clickable="true"
+        app:backgroundTint="#E1CFCA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ingredient_list"
         app:srcCompat="@drawable/add" />
@@ -31,11 +33,25 @@
         android:id="@+id/save"
         android:layout_width="51dp"
         android:layout_height="45dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addIngredientsButton"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/addIngredientsButton"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_list"
         app:srcCompat="@drawable/ic_save" />
+
+    <TextView
+        android:id="@+id/RecipeIngredients"
+        android:layout_width="247dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/nunito_extrabold"
+
+        android:text="Ingredients to be Added"
+        android:textColor="#323232"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/ingredient_list"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
