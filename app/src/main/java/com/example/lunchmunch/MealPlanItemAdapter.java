@@ -16,11 +16,14 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
 
     private ArrayList<MealPlanItem> dataList;
     private String day;
+    private Boolean isTrashVisible = false;
+
+    private OnAdapterInteractionListener listener;
 
     public interface OnAdapterInteractionListener {
-        void deleteItem(Integer item, String day);
-
+        void deleteItem(Integer position, String day);
     }
+
 
     public void setDay(String day) {
         this.day = day;
@@ -28,6 +31,14 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
 
     public String getDay(String day) {
         return this.day;
+    }
+
+    public void setIsTrashVisible(Boolean visibility) {
+
+        this.isTrashVisible = visibility;
+        if (visibility) {
+
+        }
     }
 
 
@@ -44,7 +55,7 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;
+        ImageView image, trash;
         TextView name, time, servings, category, cost, unit;
         public ViewHolder(View view, int viewType) {
             super(view);
@@ -55,13 +66,16 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
                 time = view.findViewById(R.id.meal_plan_recipe_item_unit);
                 servings = view.findViewById(R.id.meal_plan_recipe_item_cost);
                 category = view.findViewById(R.id.meal_plan_recipe_item_category);
+                trash = view.findViewById(R.id.meal_plan_item_delete2);
             }
             else if (viewType == 1) {
                 image = view.findViewById(R.id.meal_plan_ingredient_item_image);
                 name = view.findViewById(R.id.meal_plan_ingredient_item_name);
                 unit = view.findViewById(R.id.meal_plan_ingredient_item_unit);
                 cost = view.findViewById(R.id.meal_plan_ingredient_item_cost);
+                trash = view.findViewById(R.id.meal_plan_item_delete);
             }
+
 
         }
         public ViewHolder(@NonNull View itemView) {
@@ -94,6 +108,13 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
                     .inflate(R.layout.meal_plan_list_item_ingredient_content, parent, false);
             viewHolder = new ViewHolder(itemView, 1);
         }
+        if (parent.getContext() instanceof OnAdapterInteractionListener) {
+            listener = (OnAdapterInteractionListener) parent.getContext();
+        }
+        else {
+            throw new RuntimeException("must implement listener");
+        }
+
 
 
         return viewHolder;
@@ -120,6 +141,21 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
             holder.image.setImageResource(Ingredient.getCategoryImage(item.getCategory()));
         }
 
+        if (!isTrashVisible) {
+            holder.trash.setVisibility(View.GONE);
+            return;
+        }
+        holder.trash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callDeleteItem(holder);
+            }
+        });
+
+    }
+
+    private void callDeleteItem(ViewHolder holder) {
+        listener.deleteItem(holder.getAbsoluteAdapterPosition(), day);
     }
 
     @Override

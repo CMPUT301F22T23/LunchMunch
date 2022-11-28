@@ -31,6 +31,7 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
     View view;
     MealPlanItemAdapter adapter;
     public OnFragmentInteractionListener listener;
+    public MealPlanItemAdapter.OnAdapterInteractionListener adapterInteractionListener;
 
     RecyclerView recyclerView;
     TextView titleTextView;
@@ -41,12 +42,8 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
 
 
 
-
-
-
-
     @Override
-    public void deleteItem(Integer item, String day) {
+    public void deleteItem(Integer position, String day) {
 
     }
 
@@ -65,7 +62,10 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
         System.out.println("SetDataList in Meal Plan Date Fragment");
         this.dataList = dataList;
         if (recyclerView != null) {
-            recyclerView.setAdapter(new MealPlanItemAdapter(dataList));
+            adapter = new MealPlanItemAdapter(dataList);
+            adapter.setIsTrashVisible(true);
+            adapter.setDay(day);
+            recyclerView.setAdapter(adapter);
         }
 
     }
@@ -76,6 +76,13 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
 
         if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
+        }
+        else {
+            throw new RuntimeException(context + "must implement listener");
+        }
+
+        if (context instanceof MealPlanItemAdapter.OnAdapterInteractionListener) {
+            adapterInteractionListener = (MealPlanItemAdapter.OnAdapterInteractionListener) context;
         }
         else {
             throw new RuntimeException(context + "must implement listener");
@@ -93,6 +100,7 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
         recyclerView = view.findViewById(R.id.fragment_meal_plan_items);
         adapter = new MealPlanItemAdapter(dataList);
         adapter.setDay(day);
+        adapter.setIsTrashVisible(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(mLayoutManager);
