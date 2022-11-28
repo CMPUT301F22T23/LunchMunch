@@ -39,6 +39,7 @@ import java.util.Optional;
 
 /**
  * Main activity for all ShoppingList functionality
+ * Handles the functionality for displaying the ingredients the user needs to add to ingredient storage to have enough to complete their mealplan
  */
 public class ShoppingListActivity extends AppCompatActivity implements ShoppingListAdapter.ingrPurchasedListener, AddShopIngrFragment.OnFragmentInteractionListener{
 
@@ -59,6 +60,12 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
     Spinner sortSpinner;
     ArrayAdapter<String> sortAdapter;
+
+    /**
+     * Runs on the initialization of the activity
+     * part of the nececary methods used in AppCompatActivity class
+     * @param savedInstanceState
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +96,11 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         sortSpinner.setAdapter(sortAdapter);
 
 
+        /**
+         * Checkbox click listener
+         * when a checkbox is clicked in the recyclerview from the ShoppingListAdapter its associated Ingredient instance is sent here to then be sent to AddShopIngrFragment.java
+         * AddShopIngrFragment.java takes this Ingredient data and lets the user fill in some missing info and add it into the ingredients page
+         */
         shoppingListAdapter.setIngrPurchasedListener(new ShoppingListAdapter.ingrPurchasedListener() {
             @Override
             public void ingrPurchasedBtnClicked(Ingredient ingredient, Integer ingrIdx) {
@@ -96,7 +108,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
             }
         });
 
-
+        // nav button click listeners open up their associated activity page
         IngredientsNav.setOnClickListener(view -> {
             startActivity(new Intent(ShoppingListActivity.this, IngredientsActivity.class));
         });
@@ -136,14 +148,32 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
     }
 
+    /**
+     * General function for updating the shopping list using database calls
+     * We first call method dbMealPlanIngr() to get a HashMap with all the ingredients needed for MealPlan
+     * After the method calls back we get all the ingredients the user currently has in ingredient storage
+     * We then subtract the difference to get the ingredients that the user is missing to eat their mealplan
+     */
     private void dbUpdateShoppingList() {
         dbMealPlanIngr(new MealPlanDBCallBack() {
+
+            /**
+             * The callback function in action from the interface
+             * Here we know that we have the ingrMap Hashmap from the MealPlan database call so we can now safely call a Ingredients db call and subtract the ingredients we have
+             * @param ingrMap
+             */
             @Override
             public void onCallBack(HashMap<String, Ingredient> ingrMap) {
                 // now have the ingrMap after getting all ingr in MealPlan (remove ingr in ingr storage from ingrMap now)
 
                 IngrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
+                    /**
+                     * onComplete method that will run after our call to our Ingredients collection database has completed
+                     * Here we iterate over each collection in the Ingredients db and subtract its count value from the Mealplan ingredients needed if they match
+                     * task is the data from the database call
+                     * @param task
+                     */
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
@@ -159,7 +189,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
                                 } else {
                                     ingrCount = ((Long) document.getData().get("count")).floatValue();
-
                                 }
 
                                 if (ingrMap.containsKey(ingrName)) {
@@ -168,8 +197,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                                     // ingr.getCount() => neededIngrCount
                                     Float diff = ingrCount - neededIngrCount;
                                     // if ingr Count => neededIngr count
-
-
                                     if (diff > 0.01 || Math.abs(diff) < epsilon) {//ingrCount.equals(neededIngrCount)) {
                                         // remove specific ingr from the hashmap
                                         ingrMap.remove(ingrName);
@@ -201,13 +228,32 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         });
     }
 
+    /**
+     * Interface that allows us to create a call back function for our database call to MealPlan
+     */
     private interface MealPlanDBCallBack {
+        /**
+         * The callback method we need to implement it will hold the info that we need from the mealplan database call
+         * this info is a HashMap that contains the name of each ingr as the key and the ingredient as the value
+         * each of these ingredients are from the mealplan
+         * @param ingrMap
+         */
         void onCallBack(HashMap<String, Ingredient> ingrMap);
     }
 
+
+    /**
+     * Database call to MealPlan database
+     * gets all the ingredients needed for mealplan, stored them in a ingrMap HashMap then runs the callback method with the ingrMap
+     * @param mealPlanDBCallBack
+     */
     private void dbMealPlanIngr(MealPlanDBCallBack mealPlanDBCallBack) {
 
         MealPlanCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            /**
+             * the onComplete method runs after our mealplan database call has completed its call to the database and has gotten all the nececary info
+             * @param task
+             */
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
@@ -218,7 +264,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         // convert document objects back into Ingredient class objects
                         Ingredient ingr = null;
-
 
                         for (Object data : document.getData().values()) {
 
@@ -264,10 +309,8 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                             } else if (foodData.get("type").equals("RECIPE")) {
                                 ArrayList<HashMap<String, Object>> ingredientsList = (ArrayList<HashMap<String, Object>>) foodData.get("ingredients");
                                 for (HashMap<String, Object> ingredient : ingredientsList) {
-                                    System.out.println(ingredient);
 
                                     String ingredientName = (String) ingredient.get("name");
-                                    //ingredientNames.add(ingredientName);
                                     String description = (String) ingredient.get("description");
                                     Timestamp ingredientTimestamp = (Timestamp) ingredient.get("bestBefore");
                                     Date bestBefore = ingredientTimestamp.toDate();
@@ -305,15 +348,19 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                                 }
                             }
                         }
-                        // after we have retrieved all the ingr in mealplan and put them inside ingrMap run the callback
-                        //mealPlanDBCallBack.onCallBack(ingrMap);
                     }
+                    // after we have retrieved all the ingr in mealplan and put them inside ingrMap run the callback
                     mealPlanDBCallBack.onCallBack(ingrMap);
                 }
             }
         });
     }
 
+    /**
+     * initViews initializes the views of the activity
+     * meaning it defines the frontend xml variables that the user sees
+     * by defining the features it lets us interact with the frontend components through our code
+     */
     private void initViews() {
         IngredientsNav = findViewById(R.id.ingredientsNav);
         RecipesNav = findViewById(R.id.recipesNav);
@@ -322,30 +369,42 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         sortSpinner = findViewById(R.id.SortOptions);
     }
 
-    //ignore this
+
+
+    /**
+     * Already defined above see {Checkbox click listener}
+     * Just have to put this here to avoid errors
+     * @param ingredient
+     * @param ingrIdx
+     */
     @Override
     public void ingrPurchasedBtnClicked(Ingredient ingredient, Integer ingrIdx) {
         // open up popup dialog where user enters Ingredient expiry date, location, unit/price, and count (min has to be the amount required)
-        //new AddShopIngrFragment().newInstance(ingredient, ingrIdx).show(getSupportFragmentManager(), "Add_Ingr");
-
     }
 
+    /**
+     * Ok/save button handler for our Add ShoppingList Ingredient Fragment (AddShopIngrFragment.java)
+     * When the user presses the button they would like to add the ingredient they selected to ingredient storage
+     * this method takes the info from the fragment and sends it to the ingredients page by uploading it to the ingredients collection
+     * @param ingredient
+     * @param ingrIdx
+     */
     @Override
     public void onOkPressed(Ingredient ingredient, Integer ingrIdx) {
 
-
         IngrCollec.document(ingredient.getName()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
+            /**
+             * Same functionality as all the other onComplete methods above
+             * This one checks if the ingredient the user is trying to send to the ingredients page already exists in the ingredients collection
+             * if it does exist it simple adds to the total count
+             * @param task
+             */
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 // if the ingredient exists
                 if (task.isSuccessful()) {
                     // Document found in the offline cache
-
-                    System.out.println("task get Result: "+task);
-                    System.out.println("get result: "+task.getResult());
-                    System.out.println("get data: "+ task.getResult().getData());
-
                     DocumentSnapshot document = task.getResult();
 
                     // if the ingr exists in ingr storage
@@ -371,9 +430,21 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         });
     }
 
+    /**
+     * Attempts to upload an ingredient to the ingredients collection
+     * if the ingredient count the user entered is less than the amount required then edit the ingredient in the shopping list (at its index hence ingrIdx)
+     * otherwise if the count is greater than or equal to then delete the ingredient from the shopping list and add it to the ingredients collection
+     * @param ingredient
+     * @param ingrIdx
+     */
     private void addIngrFromShopLtoIngr(Ingredient ingredient, Integer ingrIdx) {
         IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
                 .addOnSuccessListener(new OnSuccessListener() {
+                    /**
+                     * Success method for the database call
+                     * if the database upload of the ingredient was successfull then remove or edit the ingredient in the shopping list
+                     * @param o
+                     */
                     @Override
                     public void onSuccess(Object o) {
                         // after successfully uploaded to ingr collec we can remove from the shopping list
@@ -412,11 +483,14 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
+                    /**
+                     * Fail handler for the database upload of the ingredient to the ingredients collection
+                     * simply just output a toast message for the user to see. Encouraging them to try again
+                     * @param e
+                     */
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        System.out.println("Fail");
                         Toast.makeText(getApplicationContext(),"Failed to upload "+ingredient.getName()+ " to database, please try again.",Toast.LENGTH_LONG).show();
-
                     }
                 });
     }

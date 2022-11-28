@@ -1,6 +1,5 @@
 package com.example.lunchmunch;
 
-import static com.example.lunchmunch.IngredientCategory.FRUIT;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -10,7 +9,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -28,6 +26,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Handles the user interaction with a popup DialogFragment that lets the user add an Ingredient from the shoppingList to the Ingredients page
+ * extends DialogFragment class and implements its methods
+ */
 public class AddShopIngrFragment extends DialogFragment {
 
     //View view;
@@ -60,9 +62,17 @@ public class AddShopIngrFragment extends DialogFragment {
 
     private OnFragmentInteractionListener listener;
 
+    /**
+     * This static fragment allows us to receive Ingredient info from the ShoppingListActivity into the fragment so we can display it in the inputs
+     * ingrIdx is used if we want to edit the ingredient in its place of the shoppinglist
+     * Uses the Serializable method to send the class instance
+     * @param ingredient
+     * @param ingrIdx
+     * @return AddShopIngrFragment returns the class fragment to be used in shoppinglist activity to send the ingredient to the ingredients page
+     */
     static AddShopIngrFragment newInstance(Ingredient ingredient, Integer ingrIdx) {
         Bundle args = new Bundle();
-        args.putSerializable("ingredient", (Serializable) ingredient);
+        args.putSerializable("ingredient", ingredient);
         args.putInt("ingrIdx", ingrIdx);
 
         AddShopIngrFragment fragment = new AddShopIngrFragment();
@@ -70,11 +80,24 @@ public class AddShopIngrFragment extends DialogFragment {
         return fragment;
     }
 
-
+    /**
+     * Fragment interaction listener allows us to implement a nececary method to handle what happens when the user presses the ok/save button
+     */
     public interface OnFragmentInteractionListener {
+        /**
+         * Makes sure that the Ok/Save method gets implemented in the shoppinglist activity
+         * what happens when the user wants to save the inputs from the dialog fragment
+         * @param ingredient
+         * @param newIngrIdx
+         */
         void onOkPressed(Ingredient ingredient, Integer newIngrIdx);
     }
 
+    /**
+     * Nececcary onAttach method for the dialogFragment
+     * makes sure the listener is assigned the activity context
+     * @param context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -86,6 +109,13 @@ public class AddShopIngrFragment extends DialogFragment {
         }
     }
 
+    /**
+     * Method to handle the initialization of the popup dialog fragment
+     * defines the frontend inputs, sets their values, and grabs the users input on the non disabled inputs
+     * the passed in values to display to the frontend input is the Serialized ingredient we defined earlier @see AddShopIngrFragment
+     * @param savedInstanceState
+     * @return returns the overall dialog to be used with its rules and methods implemented inside
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -153,6 +183,13 @@ public class AddShopIngrFragment extends DialogFragment {
                 .create();
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            /**
+             * onShow method allows us to close the dialog based on certain conditions
+             * not when the user clicks on a negative or positive button
+             * this allows us to add error checking to make sure the user entered valid info in all inputs
+             * to change these rules we pass in the dialogInterface and then we can redefine its base rules
+             * @param dialogInterface
+             */
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 Button addBtn = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
@@ -198,6 +235,10 @@ public class AddShopIngrFragment extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * This method undisables/ungreys out and clears all the inputs after the user has pressed the saveButton for the dialogfragment
+     * So we dont see the info from a previous add when we get the dialog to popup again (clears the xml inputs)
+     */
     private void clearUserInput() {
         //reset inputs (incase affects fragment in ingredient activity)
         ingredientSpinner.setEnabled(true);
@@ -213,6 +254,18 @@ public class AddShopIngrFragment extends DialogFragment {
 
     }
 
+
+    /**
+     * Validates the users inputs based on rules defined inside we make sure that the price and amount the user entered are both positive values
+     * This also makes sure the user didnt miss any inputs and every input that needs an input will have one (Like expiryDate for example)
+     * If any of these rules are violated we display a message in the fragment for the user to see and correct the mistake
+     * Also converts valid amount and price inputs to Floats to allow scaling
+     * Each of the inputs for the method are variables we need valid inputs for
+     * @param inputExpirationDate
+     * @param priceInput
+     * @param amountInput
+     * @return returns an error string to display in the dialog fragment. If the string is empty then we have no errors and can thus proceed to adding the ingredient to the ingredients page
+     */
     private String validateIngrInputs(String inputExpirationDate, String priceInput, String amountInput) {
         String errMsg = "";
 
@@ -251,13 +304,21 @@ public class AddShopIngrFragment extends DialogFragment {
         return errMsg;
     }
 
-    private void initDatePicker()
-    {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
-        {
+    /**
+     * initialized the datePicker for the date selection input
+     * Makes sure to split the input into the nececary parts like Year, Month, and Day
+     */
+    private void initDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            /**
+             * on a passed in year, month, and day set the dateinputs values to the passed in values
+             * @param datePicker
+             * @param year
+             * @param month
+             * @param day
+             */
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day)
-            {
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // get user inputted date and set the textview to display selected expiry date
                 expirationDate = new GregorianCalendar(year, month, day).getTime();
                 String fullDate = expirationDate.toString();
