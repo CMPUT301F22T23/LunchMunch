@@ -192,7 +192,10 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                     });
         }
     }
-
+    /**
+     * Initializes DB listener
+     * @param recipeCollec  collection reference
+     */
     void initDBListener(CollectionReference recipeCollec) {
 
         recipeCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

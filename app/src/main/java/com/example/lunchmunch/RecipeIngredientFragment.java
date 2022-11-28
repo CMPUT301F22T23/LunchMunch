@@ -227,10 +227,11 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
 
         // date picker dialog
         expirationDate = currentIngredient.getBestBefore();
-        String fullDate = expirationDate.toString();
-        String [] displayDate = fullDate.split(" ");
-        ingredientExpiry.setText(displayDate[1] + " " + displayDate[2] + " " + displayDate[5]);
-
+        if (expirationDate != null) {
+            String fullDate = expirationDate.toString();
+            String [] displayDate = fullDate.split(" ");
+            ingredientExpiry.setText(displayDate[1] + " " +displayDate[2] + " " +  displayDate[5]);
+        }
         // user inputted name
         ingredientName = view.findViewById(R.id.ingredient_name);
         ingredientName.setText(currentIngredient.getName());

@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -56,6 +57,8 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     private Float price;
     private Float amount;
     private Date expirationDate;
+
+    ArrayList<Ingredient> ingrList;
 
     private OnFragmentInteractionListener listener;
     // Interaction with fragment
@@ -130,6 +133,8 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         //textview for any possible error msgs
         errMsgTxt = view.findViewById(R.id.errMsgTxt);
 
+
+
         final AlertDialog alert = new AlertDialog.Builder(getContext())
                 .setView(view)
                 .setTitle("Add/Edit Ingredient")
@@ -164,7 +169,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                     // only send inputs that are necessary and could be left blank or have an invalid input (desc can leave blank, loc & cat cant be left blank)
                     String errMsg = validateIngrInputs(name , priceInput, amountInput);
                     if (errMsg.equals("")) {
-                        Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
+                        Ingredient ingredient = new Ingredient(name, description, expirationDate, location, amount, price, category);
                         // Check if ingredient is new
                         if (getArguments() != null) {
                             Integer position = getArguments().getInt("currentIngredientPosition");
@@ -214,6 +219,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         if (bundle != null) {
             Ingredient currentIngredient = bundle.getParcelable("currentIngredient");
             setCurrentIngredient(currentIngredient);
+
         }
 
         return alert;
