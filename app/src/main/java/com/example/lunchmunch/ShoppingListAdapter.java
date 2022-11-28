@@ -139,7 +139,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             tvCount = itemView.findViewById(R.id.count_label);
             tvCost = itemView.findViewById(R.id.cost_label);
             tvCategory = itemView.findViewById(R.id.category_label);
-            tvDescription = itemView.findViewById(R.id.description_label);
             ingrPurchasedBtn = itemView.findViewById(R.id.ingrPurchasedBtn);
         }
     }

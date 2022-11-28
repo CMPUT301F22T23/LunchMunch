@@ -3,4 +3,6 @@
   <component name="ProjectRootManager" version="2" default="true">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

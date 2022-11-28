@@ -6,30 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.common.base.MoreObjects;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.internal.InternalTokenProvider;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-/* stuff left:
-- add button in recipeIngr adds to listview/list
-- save button sets the recipe ingredients list to list of ingredients from the recipe ingr page
-- textview in recipe fragment displays names (and maybe count) of ingredients in the recipe list
-- reformat buttons on recipeingr page
+/**
+ * This is the page where the user can add ingredients to the recipe they are creating
  */
 
 public class RecipeIngrPage extends AppCompatActivity implements IngredientItemFragment.OnFragmentInteractionListener {
@@ -59,7 +45,8 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
 
         // Ingredients Lists
         Recipe recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
-        System.out.println(recipe);
+        // sets the ingredient list to empty if the recipe is new
+        // else set it to the list of ingredients belonging to recipe instance
         if (recipe != null) {
             ingredientsList = (ArrayList<Ingredient>) recipe.getIngredients();
         } else {
@@ -77,10 +64,13 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
 
         foodNames = new ArrayList<String>(); // used to store unique ingredient names
 
+        // pulls up fragment to add ingredients
         addIngredients.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "Add Ingredients"));
+
 
         ingredientsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
+            // pulls up fragment and populates it with selected ingredient attributes
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 itemPosition = i;
                 Bundle args = new Bundle();
@@ -100,34 +90,34 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
+            //Returns to the recipe fragment and returns the list of added ingredients
             public void onClick(View view) {
                 assert recipe != null;
                 recipe.setIngredientsClass(ingredientsList);
                 Intent result = new Intent();
                 result.putExtra("Recipe", recipe);
                 setResult(Activity.RESULT_OK, result);
-                System.out.println("list: " + recipe.getIngredients());
-
                 finish();
 
             }
-    });
+        });
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
+            // cancels the add ingredients to the recipe
             public void onClick(View view) {
                 finish();
             }
         });
 
-
-
-
     }
 
 
-
-
+    /**
+     *
+     * @param ingredient Is the added/edited ingredient and puts it into the ingredients list for the page
+     * @param position The position of the added/edited ingredient
+     */
     @Override
     public void onOkPressed(Ingredient ingredient, int position) {
 
@@ -146,33 +136,33 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
         }
 
 
-
-
     }
 
-
+    /**
+     * Handles deleting the ingredient
+     */
     @Override
     public void deleteIngredient() {
         if (itemPosition == null) {
-            System.out.println(ingredientsList);
             return;
         }
         String name = ingredientsList.get(itemPosition).getName();
 
         Log.d("ITEM POSITION", "Position is: " + String.valueOf(itemPosition));
         if (foodNames.contains(name)) {
-            System.out.println("poo " + ingredientsList);
             foodNames.remove(name);
             ingredientsList.remove(ingredientsList.get(itemPosition));
             existingIngrAdapter.notifyDataSetChanged();
         } else {
             ingredientsList.clear();
-            System.out.println("nothing in list " + ingredientsList);
             existingIngrAdapter.notifyDataSetChanged();
             return;
         }
     }
 
+    /**
+     * Initializes buttons and views on the page
+     */
     public void initViews(){
 
         ingredientsListView = (ListView) findViewById(R.id.ingredient_list);
