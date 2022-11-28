@@ -34,11 +34,7 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
     }
 
     public void setIsTrashVisible(Boolean visibility) {
-
         this.isTrashVisible = visibility;
-        if (visibility) {
-
-        }
     }
 
 
