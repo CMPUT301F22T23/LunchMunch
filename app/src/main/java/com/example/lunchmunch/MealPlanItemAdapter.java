@@ -124,6 +124,7 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
             holder.servings.setText(item.getServings().toString() + " " + "servings");
             holder.category.setText(item.getMealType());
             holder.time.setText(item.getPrepTime().toString() + " " + "minutes");
+            holder.image.setImageResource(R.drawable.recipe);
         }
         else {
             holder.name.setText(item.getName());
