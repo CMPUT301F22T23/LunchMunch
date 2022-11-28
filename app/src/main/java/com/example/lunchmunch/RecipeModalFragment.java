@@ -49,11 +49,11 @@ public class RecipeModalFragment extends DialogFragment implements AdapterView.O
 
 
     @Override
-public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setStyle(DialogFragment.STYLE_NORMAL,
-             R.style.FullScreenDialog);
-}
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL,
+                R.style.FullScreenDialog);
+    }
 
 
     public RecipeModalFragment() {
@@ -139,7 +139,7 @@ public void onCreate(Bundle savedInstanceState) {
             if (recipe.getImage() != null) {
                 Glide.with(requireContext()).load(recipe.getImage()).into((ImageView) recipeImage.findViewById(R.id.recipeImageItem));
             }
-            }
+        }
 
         deleteRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,8 +185,6 @@ public void onCreate(Bundle savedInstanceState) {
             public void onClick(View v) {
                 RecipeFragment recipeFrag = new RecipeFragment(recipe);
                 // Pass our arguments across fragments
-
-                System.out.println("edit args " + getArguments());
                 recipeFrag.setArguments(getArguments());
                 recipeFrag.show(getParentFragmentManager(), "RecipeFragment");
 

@@ -59,9 +59,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         // updates shopping list with the needed ingredients
         // remove requiremnt for ingr list as can have meal plan with no ingr (add if inside func for ingr != null)
         if (MealPlanActivity.allMeals != null) {
-            //System.out.println("NOT NULL:");
             updateShoppingList();
-            //System.out.println("SL:: "+shoppingList);
         }
 
         // init firebase reference
@@ -297,8 +295,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                             // since we create a new Ingr instance in addShopIngrFragment we cant directly acess we have to access by name to delete
 
                             Float diff = shopIngr.getCount() - ingredient.getCount();
-
-                            System.out.println();
 
                             // if the count of the ingr the user entered is less than or equal to the amount required
                             if (diff > 0.01) {

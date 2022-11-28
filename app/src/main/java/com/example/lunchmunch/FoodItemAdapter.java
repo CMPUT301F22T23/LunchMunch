@@ -20,7 +20,7 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
     private ArrayList<Ingredient> dataList;
     Context context;
 
- 
+
 
     private static class ViewHolder {
         TextView tvName;
@@ -56,7 +56,6 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
     public void updateList(ArrayList<Ingredient> data) {
         dataList.clear();
         dataList.addAll(data);
-        System.out.println(dataList.get(0).getName());
         notifyDataSetChanged();
     }
     /**

@@ -125,7 +125,7 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
         final TextView addFromIngredientsButton = view.findViewById(R.id.add_from_ingredients);
         ingredientFragment = new MealPlanIngredientFragment();
         addFromIngredientsButton.setOnClickListener(view ->
-            ingredientFragment.show(getParentFragmentManager(), "Add From Ingredients"));
+                ingredientFragment.show(getParentFragmentManager(), "Add From Ingredients"));
 
         // Pass in date to ingredient fragment
         ingredientFragment.setDay(day);

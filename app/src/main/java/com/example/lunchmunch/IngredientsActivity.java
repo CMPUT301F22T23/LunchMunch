@@ -155,12 +155,12 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
     }
     /**
-    * Inserts an Ingredient into database or edits existing ingredient
-    *   @param ingredient
+     * Inserts an Ingredient into database or edits existing ingredient
+     *   @param ingredient
      *      ingredient to edit or add
      * @param position
      *      position of existing ingredient
-    */
+     */
     @Override
     public void onOkPressed(Ingredient ingredient, int position) {
 
@@ -190,40 +190,40 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             foodMap.put(ingredient.getName(), ingredient);
 
              */
-            // update ingr list in db by overwriting it with the current ingredientsList
-            // restructured db to have list of collections instead of one collection
-            IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
-                    .addOnSuccessListener(new OnSuccessListener() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            System.out.println("Success");
-                            // incase already exists and we are just editing //removing if doesnt exist wont cause any errors
-                            if (position == -1) {
-                                ingredientsList.add(ingredient);
-                                ingredientAdapter.notifyDataSetChanged();
-                            }
-                            else {
-                                ingredientsList.set(position, ingredient);
-                                ingredientAdapter.notifyDataSetChanged();
-                            }
+        // update ingr list in db by overwriting it with the current ingredientsList
+        // restructured db to have list of collections instead of one collection
+        IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
+                .addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        System.out.println("Success");
+                        // incase already exists and we are just editing //removing if doesnt exist wont cause any errors
+                        if (position == -1) {
+                            ingredientsList.add(ingredient);
+                            ingredientAdapter.notifyDataSetChanged();
+                        }
+                        else {
+                            ingredientsList.set(position, ingredient);
+                            ingredientAdapter.notifyDataSetChanged();
+                        }
 //                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            System.out.println("Fail");
-                            Toast.makeText(getApplicationContext(),"Failed to upload "+ingredient.getName()+ " to database, try again",Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Fail");
+                        Toast.makeText(getApplicationContext(),"Failed to upload "+ingredient.getName()+ " to database, try again",Toast.LENGTH_LONG).show();
 //                        Log.w(TAG, "Error adding document", e);
-                        }
-                    });
+                    }
+                });
 
-            // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
+        // Delete Food obj (delete from ingredientsList then run add code above (this will overwrite the list in the db)
 
-            // Edit Food obj (edit from ingriendsList then same as above ^^)
-        }
+        // Edit Food obj (edit from ingriendsList then same as above ^^)
+    }
 
-     /**
+    /**
      * Deletes an Ingredient from database
      */
     @Override

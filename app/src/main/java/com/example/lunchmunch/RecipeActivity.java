@@ -215,20 +215,20 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                         if (ingredients == null) {
                             ingredients = new ArrayList<>();
                         }
-                            Recipe updatedRecipe = new Recipe(
-                                    recipe.getId(),
-                                    recipe.getName(),
-                                    ingredients, //update Recipe with the list of Ingredients as Ingredients class instances
-                                    recipe.getIngredientNames(),
-                                    recipe.getInstructions(),
-                                    recipe.getMealType(),
-                                    recipe.getImage(),
-                                    recipe.getServings(),
-                                    recipe.getPrepTime(),
-                                    recipe.getComments()
-                            );
+                        Recipe updatedRecipe = new Recipe(
+                                recipe.getId(),
+                                recipe.getName(),
+                                ingredients, //update Recipe with the list of Ingredients as Ingredients class instances
+                                recipe.getIngredientNames(),
+                                recipe.getInstructions(),
+                                recipe.getMealType(),
+                                recipe.getImage(),
+                                recipe.getServings(),
+                                recipe.getPrepTime(),
+                                recipe.getComments()
+                        );
 
-                            recipesList.add(updatedRecipe);
+                        recipesList.add(updatedRecipe);
 
 
 
