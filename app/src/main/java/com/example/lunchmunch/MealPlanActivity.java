@@ -208,24 +208,24 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                                     Timestamp ingredientTimestamp = (Timestamp) ingredient.get("bestBefore");
                                     Date bestBefore = ingredientTimestamp.toDate();
                                     Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
-                                   
+
                                     Float cost = new Float(0);
                                     Float count = new Float(0);
-                                if (foodData.get("cost") instanceof Double) {
-                                    cost = ((Double) foodData.get("cost")).floatValue();
+                                    if (foodData.get("cost") instanceof Double) {
+                                        cost = ((Double) foodData.get("cost")).floatValue();
 
-                                } else {
-                                   cost = ((Long) foodData.get("cost")).floatValue();
+                                    } else {
+                                        cost = ((Long) foodData.get("cost")).floatValue();
 
-                                }
+                                    }
 
-                                if (foodData.get("count") instanceof Double) {
-                                    count = ((Double) foodData.get("count")).floatValue();
+                                    if (foodData.get("count") instanceof Double) {
+                                        count = ((Double) foodData.get("count")).floatValue();
 
-                                } else {
-                                    count = ((Long) foodData.get("count")).floatValue();
+                                    } else {
+                                        count = ((Long) foodData.get("count")).floatValue();
 
-                                }
+                                    }
                                     IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
                                     newIngredientsList.add(new Ingredient(ingredientName, description, bestBefore, location, count, cost, category));
                                 }
@@ -246,11 +246,11 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                             //https://stackoverflow.com/questions/66071922/how-to-wait-for-an-async-method-to-complete-before-the-return-statement-runs
 //                            dbIngredients.onSuccess(ingredientsList);
                         }
-                            adapters.put(document.getId(), new MealPlanItemAdapter(dataList));
-                            adapters.get(document.getId()).setDay(document.getId());
-                            recyclerViews.get(document.getId()).setAdapter(adapters.get(document.getId()));
-                            fragments.get(document.getId()).setDataList(dataList);
-                            allMeals.put(document.getId(), dataList);
+                        adapters.put(document.getId(), new MealPlanItemAdapter(dataList));
+                        adapters.get(document.getId()).setDay(document.getId());
+                        recyclerViews.get(document.getId()).setAdapter(adapters.get(document.getId()));
+                        fragments.get(document.getId()).setDataList(dataList);
+                        allMeals.put(document.getId(), dataList);
 
 
                     }

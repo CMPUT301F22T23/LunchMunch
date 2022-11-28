@@ -1,9 +1,9 @@
 package com.example.lunchmunch;
 
 /**
-This enum defines Categories what Ingredients can be
+ This enum defines Categories what Ingredients can be
  see {@link com.example.lunchmunch.Ingredient}
-**/
+ **/
 public enum IngredientCategory {
     VEGETABLE("vegetable"),
     FRUIT("fruit"),
