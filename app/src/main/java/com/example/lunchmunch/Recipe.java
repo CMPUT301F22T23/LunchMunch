@@ -1,5 +1,6 @@
 package com.example.lunchmunch;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,6 +21,7 @@ public class Recipe implements Serializable {
     private Integer servings;
     private Integer prepTime;
     private String id;
+    private Bitmap imgMap;
     //create empty constructor for database purposes
     public Recipe(){}
 
@@ -163,7 +165,9 @@ public class Recipe implements Serializable {
 
     public void setId(String id) { this.id = id;}
 
+    public Bitmap getImgMap() {return imgMap;}
 
+    public void setImgMap(Bitmap imgMap) {this.imgMap = imgMap;}
 
     public void scaleRecipe(Integer servings) {
         if (this.servings == 1 && servings < 0) {

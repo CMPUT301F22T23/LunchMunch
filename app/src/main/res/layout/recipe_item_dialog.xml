@@ -35,12 +35,37 @@
                     android:hint="@string/enterName"
                     android:inputType="textPersonName"
                      />
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal">
 
+                    <Button
+                        android:id="@+id/addImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:text="Add Image" />
+
+                    <ImageView
+                        android:id="@+id/previewImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:layout_centerInParent="true"
+                        app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+                </LinearLayout>
                 <Spinner
                     android:id="@+id/mealType"
                     android:layout_width="300dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="0dp"
                     android:layout_marginBottom="20dp"
                     android:layout_gravity="center"
                     android:fontFamily="@font/nunito" />
