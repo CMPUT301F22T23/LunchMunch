@@ -1,5 +1,6 @@
 package com.example.lunchmunch;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Parcel;
@@ -22,6 +23,7 @@ public class Recipe implements Serializable {
     private Integer prepTime;
     private String id;
     private Bitmap imageBitmap;
+    private Context cxt;
     //create empty constructor for database purposes
     public Recipe(){}
 
@@ -30,7 +32,7 @@ public class Recipe implements Serializable {
 
 
     // so able to store recipe in database without list of full ingredients objects (just store their names instead)
-    public Recipe(String name, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments) {
+    public Recipe(String name, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Context cxt) {
         this.name = name;
         this.ingredientNames = ingredientNames;
         this.instructions = instructions;
@@ -46,7 +48,7 @@ public class Recipe implements Serializable {
     }
 
 
-    public Recipe(String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments) {
+    public Recipe(String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Context cxt) {
         this.name = name;
         this.ingredients = ingredients;
         this.ingredientNames = ingredientNames;
@@ -62,7 +64,7 @@ public class Recipe implements Serializable {
         this.comments = comments;
     }
 
-    public Recipe(String id, String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments) {
+    public Recipe(String id, String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Context cxt) {
         this.name = name;
         this.ingredients = ingredients;
         this.ingredientNames = ingredientNames;
@@ -176,6 +178,10 @@ public class Recipe implements Serializable {
     public String getId() {return id; }
 
     public void setId(String id) { this.id = id;}
+
+    public Context getCxt() {return cxt; }
+
+    public void setCxt(Context cxt) { this.cxt = cxt;}
 
 
 

@@ -180,7 +180,8 @@ public class MealPlanRecipeFragment extends DialogFragment implements AdapterVie
                                 recipe.getImage(),
                                 recipe.getServings(),
                                 recipe.getPrepTime(),
-                                recipe.getComments()
+                                recipe.getComments(),
+                                recipe.getCxt()
                         );
 
                         dataList.add(updatedRecipe);

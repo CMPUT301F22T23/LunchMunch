@@ -230,7 +230,7 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                                     newIngredientsList.add(new Ingredient(ingredientName, description, bestBefore, location, count, cost, category));
                                 }
 
-                                item = new MealPlanItem(new Recipe(id, name, newIngredientsList, new ArrayList<String>() , instructions, mealType, image, servings, prepTime, comments));
+                                item = new MealPlanItem(new Recipe(id, name, newIngredientsList, new ArrayList<String>() , instructions, mealType, image, servings, prepTime, comments, MealPlanActivity.this));
 
                             }
 

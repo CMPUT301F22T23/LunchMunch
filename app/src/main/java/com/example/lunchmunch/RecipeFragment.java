@@ -137,7 +137,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
         recipesList = (ArrayList<Recipe>) bundle.getSerializable("recipesList");
         if(bundle.getSerializable("position") == null){
-            recipe = new Recipe("", blankIngredients, blankNames, "","","",0,0,"");
+            recipe = new Recipe("", blankIngredients, blankNames, "","","",0,0,"", getActivity());
         } else {
 
         }
@@ -246,7 +246,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
                     if (recipe == null) {
                         List<String> ingredients = new ArrayList<String>();
-                        recipe = new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString());
+                        recipe = new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString(), getActivity());
                     }
                     {
                         recipe.setName(recipeName.getText().toString());
