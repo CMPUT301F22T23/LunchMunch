@@ -41,6 +41,11 @@
             android:name=".ShoppingListActivity"
             android:theme="@style/Theme.LunchMunch.NoActionBar"
             android:exported="false"/>
+        <activity
+            android:name=".RecipeIngrPage"
+            android:theme="@style/Theme.LunchMunch.NoActionBar"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

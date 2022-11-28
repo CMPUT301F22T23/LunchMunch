@@ -3,9 +3,13 @@ package com.example.lunchmunch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +45,10 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
     ShoppingListAdapter shoppingListAdapter;
 
+    Spinner sortSpinner;
+    ArrayAdapter<String> sortAdapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +73,14 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         shoppingListAdapter = new ShoppingListAdapter(this, shoppingList);
         shoplistRecView.setLayoutManager(new LinearLayoutManager(this));
         shoplistRecView.setAdapter(shoppingListAdapter);
+
+        // Sorting Spinner
+        sortSpinner = (Spinner) findViewById(R.id.SortOptions);
+        sortAdapter = new ArrayAdapter<String>(ShoppingListActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sortOptionsS));
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(sortAdapter);
+
 
         /*
         saveIngrBtn.setOnClickListener(view -> {
@@ -151,6 +167,33 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         MealPlanNav.setOnClickListener(view -> {
             startActivity(new Intent(ShoppingListActivity.this, MealPlanActivity.class));
         });
+
+        // Spinner Sorting Functionality
+        // sets spinner to default
+        sortSpinner.setSelection(0);
+
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String choice = sortSpinner.getSelectedItem().toString();
+                Sort.ingredientSort(shoppingList, choice);
+                shoppingListAdapter.notifyDataSetChanged();
+                shoplistRecView.refreshDrawableState();
+
+                if(!choice.equals("Sort By")) {
+                    Toast toast = Toast.makeText(ShoppingListActivity.this, "Now sorting by " + choice, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
 
     }
 
