@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.Image;
 import android.net.Uri;
@@ -134,10 +135,10 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
 
         Bundle bundle = getArguments();
-
+        Bitmap icon = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.check);
         recipesList = (ArrayList<Recipe>) bundle.getSerializable("recipesList");
         if(bundle.getSerializable("position") == null){
-            recipe = new Recipe("", blankIngredients, blankNames, "","","",0,0,"", getActivity());
+            recipe = new Recipe("", blankIngredients, blankNames, "","","",0,0,"", icon);
         } else {
 
         }
@@ -153,6 +154,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
             comments.setText(recipe.getComments());
             mealType = recipe.getMealType();
             spinner.setSelection(getMealTypeIndex(mealType));
+            previewImage.setImageBitmap(recipe.getImageBitmap());
         }
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -246,7 +248,8 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
                     if (recipe == null) {
                         List<String> ingredients = new ArrayList<String>();
-                        recipe = new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString(), getActivity());
+                        Bitmap icon2 = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.check);
+                        recipe = new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString(), icon2);
                     }
                     {
                         recipe.setName(recipeName.getText().toString());
@@ -316,9 +319,12 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                         }
                         previewImage.setImageBitmap(
                                 selectedImageBitmap);
+                        recipe.setImageBitmap(selectedImageBitmap);
                     }
                 }
             });
+
+
 
     int getMealTypeIndex(String mealType) {
         List<String> mealTypes = Arrays.asList(getResources().getStringArray(R.array.meal_type));

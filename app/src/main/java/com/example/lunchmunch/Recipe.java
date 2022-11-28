@@ -23,7 +23,7 @@ public class Recipe implements Serializable {
     private Integer prepTime;
     private String id;
     private Bitmap imageBitmap;
-    private Context cxt;
+    //private Context cxt;
     //create empty constructor for database purposes
     public Recipe(){}
 
@@ -32,7 +32,7 @@ public class Recipe implements Serializable {
 
 
     // so able to store recipe in database without list of full ingredients objects (just store their names instead)
-    public Recipe(String name, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Context cxt) {
+    public Recipe(String name, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Bitmap imageBitmap) {
         this.name = name;
         this.ingredientNames = ingredientNames;
         this.instructions = instructions;
@@ -45,10 +45,11 @@ public class Recipe implements Serializable {
         this.servings = servings;
         this.prepTime = prepTime;
         this.comments = comments;
+        this.imageBitmap = imageBitmap;
     }
 
 
-    public Recipe(String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Context cxt) {
+    public Recipe(String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Bitmap imageBitmap) {
         this.name = name;
         this.ingredients = ingredients;
         this.ingredientNames = ingredientNames;
@@ -62,9 +63,10 @@ public class Recipe implements Serializable {
         this.servings = servings;
         this.prepTime = prepTime;
         this.comments = comments;
+        this.imageBitmap = imageBitmap;
     }
 
-    public Recipe(String id, String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Context cxt) {
+    public Recipe(String id, String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Bitmap imageBitmap) {
         this.name = name;
         this.ingredients = ingredients;
         this.ingredientNames = ingredientNames;
@@ -79,6 +81,7 @@ public class Recipe implements Serializable {
         this.prepTime = prepTime;
         this.comments = comments;
         this.id = id;
+        this.imageBitmap = imageBitmap;
     }
 
     protected Recipe(Parcel in) {
@@ -179,9 +182,9 @@ public class Recipe implements Serializable {
 
     public void setId(String id) { this.id = id;}
 
-    public Context getCxt() {return cxt; }
+    public Bitmap getImageBitmap(){return imageBitmap;}
 
-    public void setCxt(Context cxt) { this.cxt = cxt;}
+    public void setImageBitmap(Bitmap imageBitmap){this.imageBitmap = imageBitmap;}
 
 
 

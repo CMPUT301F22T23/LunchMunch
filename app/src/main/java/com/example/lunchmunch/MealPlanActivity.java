@@ -1,6 +1,8 @@
 package com.example.lunchmunch;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -229,8 +231,8 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                                     IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
                                     newIngredientsList.add(new Ingredient(ingredientName, description, bestBefore, location, count, cost, category));
                                 }
-
-                                item = new MealPlanItem(new Recipe(id, name, newIngredientsList, new ArrayList<String>() , instructions, mealType, image, servings, prepTime, comments, MealPlanActivity.this));
+                                Bitmap icon = BitmapFactory.decodeResource(MealPlanActivity.this.getResources(), R.drawable.check);
+                                item = new MealPlanItem(new Recipe(id, name, newIngredientsList, new ArrayList<String>() , instructions, mealType, image, servings, prepTime, comments, icon));
 
                             }
 

@@ -226,7 +226,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                                 recipe.getServings(),
                                 recipe.getPrepTime(),
                                 recipe.getComments(),
-                                recipe.getCxt()
+                                recipe.getImageBitmap()
                         );
 
                         recipesList.add(updatedRecipe);
