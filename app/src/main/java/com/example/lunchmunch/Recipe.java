@@ -194,10 +194,6 @@ public class Recipe implements Serializable {
             // round to 2 decimal places
             newCount = (float) Math.round(newCount * 100) / 100;
             ingredient.setCount(newCount);
-            System.out.println(servings);
-            System.out.println(this.servings);
-            System.out.println(ingredient.getCount());
-            System.out.println(ingredient.getCost());
         }
         this.servings = servings + this.servings;
     }

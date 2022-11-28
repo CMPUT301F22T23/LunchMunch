@@ -173,7 +173,9 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
         return alert;
     }
 
-
+    /**
+     * Sets the expiry date and its display
+     */
     public void initDatePicker()
     {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
@@ -204,6 +206,10 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
 
     }
 
+    /**
+     *
+     * @param currentIngredient sets the values of the ingredient being created
+     */
     private void setCurrentIngredient(Ingredient currentIngredient) {
         // ingredient category spinner
         String[] categoryValues = getResources().getStringArray(R.array.ingredient_categories);
@@ -251,6 +257,13 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     }
 
 
+    /**
+     * This function sets the category and location of the ingredient in the view
+     * @param adapterView the adapter
+     * @param view the current view
+     * @param i unused
+     * @param l unused
+     */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         int id = adapterView.getId();
@@ -259,8 +272,6 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
         // get user inputted category from spinner
         if (id == R.id.ingredient_category) {
             category = IngredientCategory.valueOf(string);
-            System.out.println(string);
-            System.out.println(category);
         }
 
         // get user inputted location from spinner
@@ -268,11 +279,17 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
 
     }
 
+    /**
+     * On nothing selected, do nothing (pretty self explanatory)
+     * @param parent parent view
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
-
+    /**
+     * Gets the user inputs for the ingredient being created, sets the values for ingredient, then clears
+     */
     public void getUserInput() {
         // get user inputted name
         name = ingredientName.getText().toString();

@@ -56,7 +56,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         holder.tvCost.setText(String.valueOf(ingredient.getCost()));
         holder.tvCount.setText(String.valueOf(ingredient.getCount()));
         holder.tvCategory.setText(String.valueOf(ingredient.getCategory()));
-        holder.tvDescription.setText(ingredient.getDescription());
+
         holder.ingrPurchasedBtn.setOnClickListener(view -> {
             mIngrPurchasedListener.ingrPurchasedBtnClicked(ingredient, position);
         });
@@ -89,7 +89,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         TextView tvCount;
         TextView tvCost;
         TextView tvCategory;
-        TextView tvDescription;
         Button ingrPurchasedBtn;
 
         public ViewHolder(@NonNull View itemView) {
@@ -98,7 +97,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             tvCount = itemView.findViewById(R.id.count_label);
             tvCost = itemView.findViewById(R.id.cost_label);
             tvCategory = itemView.findViewById(R.id.category_label);
-            tvDescription = itemView.findViewById(R.id.description_label);
             ingrPurchasedBtn = itemView.findViewById(R.id.ingrPurchasedBtn);
         }
     }

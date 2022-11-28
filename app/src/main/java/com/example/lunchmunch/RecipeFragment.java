@@ -180,7 +180,6 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                         Intent data = result.getData();
                         assert data != null;
                         recipe = (Recipe) data.getSerializableExtra("Recipe");
-                        System.out.println("Recipe Ingredients: " + recipe.getIngredients().toString());
                         // Remove recipefragments from supportFragmentManager except for the first one
                         // This is to prevent the user from being able to go back to the recipe fragment
                         // after they have already created a recipe
