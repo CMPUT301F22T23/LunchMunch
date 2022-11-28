@@ -6,10 +6,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +39,7 @@ import com.example.lunchmunch.databinding.RecipeFragmentBinding;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +63,9 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     private EditText comments;
     private Spinner spinner;
 
+    private Button addImage;
+    private ImageView previewImage;
+
     TextView ingredientNamesList;
     ImageButton editIngredient;
 
@@ -67,6 +75,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     List<String> blankNames;
     ArrayList<Recipe> recipesList;
     private Recipe recipe;
+
 
     public RecipeFragment() {
     }
@@ -115,6 +124,8 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         prepTime = view.findViewById(R.id.prepTime);
         comments = view.findViewById(R.id.comments);
         spinner = (Spinner) view.findViewById(R.id.mealType);
+        addImage = view.findViewById(R.id.addImage);
+        previewImage = view.findViewById(R.id.previewImage);
 
         ingredientNamesList = view.findViewById(R.id.ingredientsList);
         editIngredient = view.findViewById(R.id.editIngredientsList);
@@ -151,6 +162,12 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+        addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageChooser();
+            }
+        });
 
         Intent intent = new Intent(getActivity().getApplicationContext(), RecipeIngrPage.class);
 
@@ -267,7 +284,42 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         return dialog;
     }
 
+    private void imageChooser()
+    {
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
 
+        launchSomeActivity.launch(i);
+    }
+
+    ActivityResultLauncher<Intent> launchSomeActivity
+            = registerForActivityResult(
+            new ActivityResultContracts
+                    .StartActivityForResult(),
+            result -> {
+                if (result.getResultCode()
+                        == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    // do your operation from here....
+                    if (data != null
+                            && data.getData() != null) {
+                        Uri selectedImageUri = data.getData();
+                        Bitmap selectedImageBitmap = null;
+                        try {
+                            selectedImageBitmap
+                                    = MediaStore.Images.Media.getBitmap(
+                                    getActivity().getContentResolver(),
+                                    selectedImageUri);
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        previewImage.setImageBitmap(
+                                selectedImageBitmap);
+                    }
+                }
+            });
 
     int getMealTypeIndex(String mealType) {
         List<String> mealTypes = Arrays.asList(getResources().getStringArray(R.array.meal_type));
