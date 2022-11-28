@@ -226,7 +226,7 @@ public class AddShopIngrFragment extends DialogFragment {
         if (priceInput.equals("")) {
             errMsg += "Enter a number for price, ";
         } else { // otherwise we have a valid int and we can parse
-            price = Integer.parseInt(priceInput);
+            price = Float.parseFloat(priceInput);
             //xml restricts entering neg number
             if (price == 0) {
                 errMsg += "Enter a positive number for price, ";
@@ -238,7 +238,7 @@ public class AddShopIngrFragment extends DialogFragment {
         if (amountInput.equals("")) {
             errMsg += "Enter a number for amount, ";
         } else { // otherwise we have a valid int and we can parse
-            amount = Integer.parseInt(amountInput);
+            amount = Float.parseFloat(amountInput);
             //xml restricts entering neg number
             if (amount == 0) {
                 errMsg += "Enter a positive number for amount, ";

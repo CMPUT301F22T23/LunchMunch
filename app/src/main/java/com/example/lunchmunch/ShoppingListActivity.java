@@ -37,7 +37,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
 
     LinearLayout IngredientsNav, RecipesNav, MealPlanNav;
-    ArrayList<Ingredient> shoppingList;
+
 
     ShoppingListAdapter shoppingListAdapter;
 
