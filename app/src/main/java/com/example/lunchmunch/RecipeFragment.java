@@ -131,10 +131,11 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
 
         Bundle bundle = getArguments();
+        previewImage.buildDrawingCache();
 
         recipesList = (ArrayList<Recipe>) bundle.getSerializable("recipesList");
         if(bundle.getSerializable("position") == null){
-            recipe = new Recipe("", blankIngredients, blankNames, "","","",0,0,"");
+            recipe = new Recipe("", blankIngredients, blankNames, "","",previewImage.getDrawingCache(),0,0,"");
         } else {
 
         }
@@ -144,12 +145,12 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         if (recipe != null) {
             recipeName.setText(recipe.getName());
             recipeInstructions.setText(recipe.getInstructions());
-            recipeImage.setText(recipe.getImage());
             servings.setText(Integer.toString(recipe.getServings()));
             prepTime.setText(Integer.toString(recipe.getPrepTime()));
             comments.setText(recipe.getComments());
             mealType = recipe.getMealType();
             spinner.setSelection(getMealTypeIndex(mealType));
+            previewImage.setImageBitmap(recipe.getImage());
         }
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -232,12 +233,12 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
                     if (recipe == null) {
                         List<String> ingredients = new ArrayList<String>();
-                        recipe = new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString());
+                        recipe = new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, previewImage.getDrawingCache(), servs, prep, comments.getText().toString());
                     }
                     {
                         recipe.setName(recipeName.getText().toString());
                         recipe.setInstructions(recipeInstructions.getText().toString());
-                        recipe.setImage(recipeImage.getText().toString());
+                        recipe.setImage(previewImage.getDrawingCache());
                         recipe.setServings(servs);
                         recipe.setPrepTime(prep);
                         recipe.setComments(comments.getText().toString());
