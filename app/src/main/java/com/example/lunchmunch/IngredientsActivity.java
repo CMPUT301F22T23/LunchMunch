@@ -197,9 +197,14 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                         public void onSuccess(Object o) {
                             System.out.println("Success");
                             // incase already exists and we are just editing //removing if doesnt exist wont cause any errors
-                            ingredientsList.remove(ingredient);
-                            ingredientsList.add(ingredient);
-                            ingredientAdapter.notifyDataSetChanged();
+                            if (position == -1) {
+                                ingredientsList.add(ingredient);
+                                ingredientAdapter.notifyDataSetChanged();
+                            }
+                            else {
+                                ingredientsList.set(position, ingredient);
+                                ingredientAdapter.notifyDataSetChanged();
+                            }
 //                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                         }
                     })
