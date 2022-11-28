@@ -39,7 +39,8 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
     ArrayList<Ingredient> temp;
     ListView ingredientsListView;
     FloatingActionButton addIngredients;
-    ImageButton save;
+    FloatingActionButton save;
+    FloatingActionButton cancel;
     IngredientItemFragment fragment;
     IngredientItemFragment fragment2;
 
@@ -110,6 +111,13 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
             }
     });
 
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
 
 
 
@@ -168,6 +176,8 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
         ingredientsListView = (ListView) findViewById(R.id.ingredient_list);
         addIngredients = findViewById(R.id.addIngredientsButton);
         save = findViewById(R.id.save);
+        cancel = findViewById(R.id.cancel);
         addIngredients = findViewById(R.id.addIngredientsButton);
+
     }
 }
