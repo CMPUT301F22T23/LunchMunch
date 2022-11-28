@@ -105,6 +105,11 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
+            /**
+             * Functionality for the sort spinner
+             * on selection passes in choice as a string into the sort method which sorts the list
+             * updates the view to display sorted list
+             */
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 String choice = sortSpinner.getSelectedItem().toString();
@@ -119,6 +124,9 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
             }
 
             @Override
+            /**
+             * on nothing selected do nothing (pretty self explanatory)
+             */
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
