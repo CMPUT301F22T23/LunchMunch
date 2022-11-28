@@ -1,5 +1,6 @@
 package com.example.lunchmunch;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,6 +21,7 @@ public class Recipe implements Serializable {
     private Integer servings;
     private Integer prepTime;
     private String id;
+    private Bitmap imageBitmap;
     //create empty constructor for database purposes
     public Recipe(){}
 
@@ -33,7 +35,11 @@ public class Recipe implements Serializable {
         this.ingredientNames = ingredientNames;
         this.instructions = instructions;
         this.mealType = mealType;
-        this.image = image;
+        if (image == "") {
+            this.image = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/800px-Question_mark_%28black%29.svg.png";
+        }else{
+            this.image = image;
+        }
         this.servings = servings;
         this.prepTime = prepTime;
         this.comments = comments;
@@ -46,7 +52,11 @@ public class Recipe implements Serializable {
         this.ingredientNames = ingredientNames;
         this.instructions = instructions;
         this.mealType = mealType;
-        this.image = image;
+        if (image == "") {
+            this.image = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/800px-Question_mark_%28black%29.svg.png";
+        }else{
+            this.image = image;
+        }
         this.servings = servings;
         this.prepTime = prepTime;
         this.comments = comments;
@@ -58,7 +68,11 @@ public class Recipe implements Serializable {
         this.ingredientNames = ingredientNames;
         this.instructions = instructions;
         this.mealType = mealType;
-        this.image = image;
+        if (image == "") {
+            this.image = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/800px-Question_mark_%28black%29.svg.png";
+        }else{
+            this.image = image;
+        }
         this.servings = servings;
         this.prepTime = prepTime;
         this.comments = comments;
