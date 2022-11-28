@@ -8,7 +8,7 @@ A meal plan app for CMPUT 301
 
 ## Project UML
 
-[Link to UML Diagram (zoom in to see clearly)](https://drive.google.com/file/d/1vcfz5boj_dtu_KTiFz1BNAAyM8OKz52T/view?usp=sharing)
+[Link to UML Diagram (zoom in to see clearly)](https://drive.google.com/file/d/1QdvI_W_3qicAqYG3lkITyWue8q4ncj1x/view?usp=sharing)
 
 ## Sprint Meetings Info
 [Sprint Meetings Document](https://docs.google.com/document/d/1DgKKf0gFcli8K33okR32dJRUVAa5YLAnym2MrkfVAX0/edit?usp=sharing)
