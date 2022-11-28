@@ -14,15 +14,25 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.collection.CircularArray;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +48,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
     ArrayList<Ingredient> shoppingList;
 
     FirebaseFirestore db;
+    CollectionReference MealPlanCollec;
     CollectionReference IngrCollec;
 
 
@@ -56,17 +67,14 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
         shoppingList = new ArrayList<>();
 
-        // updates shopping list with the needed ingredients
-        // remove requiremnt for ingr list as can have meal plan with no ingr (add if inside func for ingr != null)
-        if (MealPlanActivity.allMeals != null) {
-            //System.out.println("NOT NULL:");
-            updateShoppingList();
-            //System.out.println("SL:: "+shoppingList);
-        }
 
         // init firebase reference
         db = FirebaseFirestore.getInstance();
+        MealPlanCollec = db.collection("MealPlans");
         IngrCollec = db.collection("Ingredients");
+
+        // fetch the ingr needed from database by subtracting ingr needed for meal plan minus the ingr already owned in the ingredients page
+        dbUpdateShoppingList();
 
         initViews();
 
@@ -128,116 +136,183 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
     }
 
-    private void updateShoppingList() {
-        //ArrayList<MealPlanItem> mealPlanList = MealPlanActivity.mealPlanList;
+    private void dbUpdateShoppingList() {
+        dbMealPlanIngr(new MealPlanDBCallBack() {
+            @Override
+            public void onCallBack(HashMap<String, Ingredient> ingrMap) {
+                // now have the ingrMap after getting all ingr in MealPlan (remove ingr in ingr storage from ingrMap now)
 
-        // this hashmap allows us to get the total count needed for each ingredient in our mealplan
-        // ingredient_name: ingredient
+                IngrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
-        HashMap<String, Ingredient> ingrMap = new HashMap<String, Ingredient>();
-        // iterate over every mealPlanItem in the mealPlanList and get ingredients needed
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-        ArrayList<MealPlanItem> allItems = new ArrayList<>();
-        for (ArrayList<MealPlanItem> mealPlan: MealPlanActivity.allMeals.values()) {
-            for (MealPlanItem item: mealPlan) {
-                allItems.add(item);
-            }
-        }
+                        if (task.isSuccessful()) {
 
-        for (MealPlanItem mealPlanItem : allItems) {
+                            // each document in the Ingredients collection is an Ingredient class object
+                            for (QueryDocumentSnapshot document : task.getResult()) {
 
-            if (mealPlanItem.getType() == MealPlanItemType.RECIPE) {
-                // wouldnt let me put mealPlanItem.getIngredients() in for loop without changing for loop class to Object
-                List<Ingredient> ingredients = mealPlanItem.getIngredients();
-                for (Ingredient ingredient : ingredients) {
-                    String ingrName = ingredient.getName();
+                                String ingrName = (String) document.getData().get("name");
+                                Float ingrCount = Float.valueOf(0);
+                                if (document.getData().get("count") instanceof Double) {
+                                    ingrCount = ((Double) document.getData().get("count")).floatValue();
 
-                    if (ingrMap.containsKey(ingrName)) {
-                        // if the ingredient already exists in the map then just add to its required count
-                        Float newCount = ingredient.getCount() + ingrMap.get(ingrName).getCount();
-                        ingredient.setCount(newCount);
+                                } else {
+                                    ingrCount = ((Long) document.getData().get("count")).floatValue();
 
+                                }
+
+                                if (ingrMap.containsKey(ingrName)) {
+                                    Float neededIngrCount = ingrMap.get(ingrName).getCount();
+                                    // if we have enough of this specific ingredient then remove it from the hash (dont add it to the shopping list)
+                                    // ingr.getCount() => neededIngrCount
+                                    Float diff = ingrCount - neededIngrCount;
+                                    // if ingr Count => neededIngr count
+
+
+                                    if (diff > 0.01 || Math.abs(diff) < epsilon) {//ingrCount.equals(neededIngrCount)) {
+                                        // remove specific ingr from the hashmap
+                                        ingrMap.remove(ingrName);
+
+                                        // could do just else here if we want (but this easier to read)
+                                        // else if ingr count < neededIngr count
+                                    } else if (diff < 0) {
+                                        // update ingr in map to the count needed (needed from meal plan - already have from ingredients
+                                        Float newCount = neededIngrCount - ingrCount;
+
+                                        Ingredient newIngr = ingrMap.get(ingrName);
+                                        newIngr.setCount(newCount);
+
+                                        ingrMap.put(ingrName, newIngr);
+                                    }
+                                }
+                            }
+
+                            // here we update shopping list
+                            // iterate over all the ingredients in our map (these are the ingredients we need at the counts we need)
+                            for (Ingredient ingredient : ingrMap.values()) {
+                                shoppingList.add(ingredient);
+                            }
+                            shoppingListAdapter.notifyDataSetChanged();
+                        }
                     }
-                    // hashmap will be either updated with the new ingredient count value or will get added the newly required ingredient
-                    ingrMap.put(ingrName, ingredient);
-                }
-
-            } else if (mealPlanItem.getType() == MealPlanItemType.INGREDIENT) {
-
-
-                // do this as wont allow us to put mealPlanItem in ingrMap.put (as technically not Ingredient instance)
-                Ingredient ingredient = new Ingredient(
-                        mealPlanItem.getName(),
-                        mealPlanItem.getDescription(),
-                        mealPlanItem.getBestBefore(),
-                        mealPlanItem.getLocation(),
-                        mealPlanItem.getCount(),
-                        mealPlanItem.getCost(),
-                        mealPlanItem.getCategory()
-                );
-
-                String ingrName = ingredient.getName();
-                //Integer ingrCount = mealPlanItem.getCount();
-                //ingrMap.put(ingrName, ingrMap.getOrDefault(ingrName, ingrCount) + ingrCount);
-                // if the ingr was added to ingrMap in a prev iter of this for loop (same ingr used in multiple meals)
-                if (ingrMap.containsKey(ingrName)) {
-                    // if the ingredient already exists in the map then just add to its required count
-                    Float newCount = mealPlanItem.getCount() + ingrMap.get(ingrName).getCount();
-                    mealPlanItem.setCount(newCount);
-
-                }
-                // hashmap will be either updated with the new ingredient count value or will get added the newly required ingredient
-                ingrMap.put(ingrName, ingredient);
-
+                });
             }
-
-        }
-
-
-        // now we have a map that contains the total count of all ingredients needed
-        // subtract the count of ingredients we already have from the Ingredients page
-        // the remaining ingredients get added to the shopping list
-
-
-        if (IngredientsActivity.ingredientsList != null) {
-            for (Ingredient ingredient : IngredientsActivity.ingredientsList) {
-                String ingrName = ingredient.getName();
-                Float ingrCount = ingredient.getCount();
-                if (ingrMap.containsKey(ingrName)) {
-                    Float neededIngrCount = ingrMap.get(ingrName).getCount();
-                    // if we have enough of this specific ingredient then remove it from the hash (dont add it to the shopping list)
-                    // ingr.getCount() => neededIngrCount
-                    Float diff = ingrCount - neededIngrCount;
-                    // if ingr Count => neededIngr count
-
-
-                    if (diff > 0.01 || Math.abs(diff) < epsilon) {//ingrCount.equals(neededIngrCount)) {
-                        // remove specific ingr from the hashmap
-                        ingrMap.remove(ingrName);
-
-                        // could do just else here if we want (but this easier to read)
-                        // else if ingr count < neededIngr count
-                    } else if (diff < 0) {
-                        // update ingr in map to the count needed (needed from meal plan - already have from ingredients
-                        Float newCount = neededIngrCount - ingrCount;
-
-                        Ingredient newIngr = ingrMap.get(ingrName);
-                        newIngr.setCount(newCount);
-
-                        //ingrMap.get(ingrName).setCount(newCount); // not sure if this will work test later
-                        ingrMap.put(ingrName, newIngr);
-                    }
-                }
-            }
-        }
-
-        // iterate over all the ingredients in our map (these are the ingredients we need at the counts we need)
-        for (Ingredient ingredient : ingrMap.values()) {
-            shoppingList.add(ingredient);
-        }
-
+        });
     }
 
+    private interface MealPlanDBCallBack {
+        void onCallBack(HashMap<String, Ingredient> ingrMap);
+    }
+
+    private void dbMealPlanIngr(MealPlanDBCallBack mealPlanDBCallBack) {
+
+        MealPlanCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                if (task.isSuccessful()) {
+
+                    HashMap<String, Ingredient> ingrMap = new HashMap<String, Ingredient>();
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // convert document objects back into Ingredient class objects
+                        Ingredient ingr = null;
+
+
+                        for (Object data : document.getData().values()) {
+
+                            HashMap<String, Object> foodData = (HashMap<String, Object>) data;
+                            if (foodData.get("type").equals("INGREDIENT")) {
+                                String name = (String) foodData.get("name");
+                                String description = (String) foodData.get("description");
+                                Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
+                                Date bestBefore = timestamp.toDate();
+                                Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
+                                Float cost = Float.valueOf(0);
+                                Float count = Float.valueOf(0);
+                                if (foodData.get("cost") instanceof Double) {
+                                    cost = ((Double) foodData.get("cost")).floatValue();
+
+                                } else {
+                                    cost = ((Long) foodData.get("cost")).floatValue();
+
+                                }
+
+                                if (foodData.get("count") instanceof Double) {
+                                    count = ((Double) foodData.get("count")).floatValue();
+
+                                } else {
+                                    count = ((Long) foodData.get("count")).floatValue();
+
+                                }
+                                IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
+
+
+                                ingr = new Ingredient(name, description, bestBefore, location, count, cost, category);
+
+                                if (ingrMap.containsKey(name)) {
+                                    // if the ingredient already exists in the map then just add to its required count
+                                    Float newCount = ingr.getCount() + ingrMap.get(name).getCount();
+                                    ingr.setCount(newCount);
+
+                                }
+                                // hashmap will be either updated with the new ingredient count value or will get added the newly required ingredient
+                                ingrMap.put(name, ingr);
+
+
+                            } else if (foodData.get("type").equals("RECIPE")) {
+                                ArrayList<HashMap<String, Object>> ingredientsList = (ArrayList<HashMap<String, Object>>) foodData.get("ingredients");
+                                for (HashMap<String, Object> ingredient : ingredientsList) {
+                                    System.out.println(ingredient);
+
+                                    String ingredientName = (String) ingredient.get("name");
+                                    //ingredientNames.add(ingredientName);
+                                    String description = (String) ingredient.get("description");
+                                    Timestamp ingredientTimestamp = (Timestamp) ingredient.get("bestBefore");
+                                    Date bestBefore = ingredientTimestamp.toDate();
+                                    Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
+
+                                    Float cost = new Float(0);
+                                    Float count = new Float(0);
+                                    if (foodData.get("cost") instanceof Double) {
+                                        cost = ((Double) foodData.get("cost")).floatValue();
+
+                                    } else {
+                                        cost = ((Long) foodData.get("cost")).floatValue();
+
+                                    }
+
+                                    if (foodData.get("count") instanceof Double) {
+                                        count = ((Double) foodData.get("count")).floatValue();
+
+                                    } else {
+                                        count = ((Long) foodData.get("count")).floatValue();
+
+                                    }
+                                    IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
+                                    ingr = new Ingredient(ingredientName, description, bestBefore, location, count, cost, category);
+
+                                    if (ingrMap.containsKey(ingredientName)) {
+                                        // if the ingredient already exists in the map then just add to its required count
+                                        Float newCount = ingr.getCount() + ingrMap.get(ingredientName).getCount();
+                                        ingr.setCount(newCount);
+
+                                    }
+                                    // hashmap will be either updated with the new ingredient count value or will get added the newly required ingredient
+                                    ingrMap.put(ingredientName, ingr);
+
+                                }
+                            }
+                        }
+                        // after we have retrieved all the ingr in mealplan and put them inside ingrMap run the callback
+                        //mealPlanDBCallBack.onCallBack(ingrMap);
+                    }
+                    mealPlanDBCallBack.onCallBack(ingrMap);
+                }
+            }
+        });
+    }
 
     private void initViews() {
         IngredientsNav = findViewById(R.id.ingredientsNav);
@@ -258,20 +333,45 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
     @Override
     public void onOkPressed(Ingredient ingredient, Integer ingrIdx) {
 
-        // first check if ingr already exists in IngredientsActivity.ingredientsList
-        // if it does then get the current count of said igr then add the count we just added from shopping list
-        // then upload to db
-        Optional<Ingredient> optExistingIngr = IngredientsActivity.ingredientsList.stream().
-                filter(i -> i.getName().equals(ingredient.getName())).
-                findFirst(); // can use findFirst as we know that ingr name is its unique id so will have only one occurance
-        Ingredient existingIngr = optExistingIngr.orElse(null);
-        if (existingIngr != null) {
-            // not sure if can just throw ingredient.getCount() inside the setCount() w/out issues (test if time)
-            Float ingrCount = ingredient.getCount();
-            ingredient.setCount(existingIngr.getCount() + ingrCount);
-        } // otherwise igr is new and doesnt already exist in ingr storage so just upload as is
 
+        IngrCollec.document(ingredient.getName()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                // if the ingredient exists
+                if (task.isSuccessful()) {
+                    // Document found in the offline cache
+
+                    System.out.println("task get Result: "+task);
+                    System.out.println("get result: "+task.getResult());
+                    System.out.println("get data: "+ task.getResult().getData());
+
+                    DocumentSnapshot document = task.getResult();
+
+                    // if the ingr exists in ingr storage
+                    if (document.getData() != null) {
+
+                        Float ingrCount = new Float(0); //(Float) document.getData().get("count");
+
+                        if (document.getData().get("count") instanceof Double) {
+                            ingrCount = ((Double) document.getData().get("count")).floatValue();
+
+                        } else {
+                            ingrCount = ((Long) document.getData().get("count")).floatValue();
+
+                        }
+                        ingredient.setCount(ingredient.getCount() + ingrCount);
+                    } // otherwise the ingredient doesnt exist so no need to modify
+                    // after we have the proper count for the ingr we can now send it to the ingredient storage
+                    // and we either edit its value in place or delete it from the shopping list
+                    addIngrFromShopLtoIngr(ingredient, ingrIdx);
+                }
+            }
+
+        });
+    }
+
+    private void addIngrFromShopLtoIngr(Ingredient ingredient, Integer ingrIdx) {
         IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
                 .addOnSuccessListener(new OnSuccessListener() {
                     @Override
@@ -279,11 +379,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                         // after successfully uploaded to ingr collec we can remove from the shopping list
                         System.out.println("onOK-Success");
                         //shoppingList.remove(ingredient);
-                        // update array as well as this only gets updated from database when we visit ingr page so update incase user doesnt visit ingr page after checking off ingr in shop list
-                        // incase ingr already exists we are just updating the count, wont throw an error if doesnt exist
-                        IngredientsActivity.ingredientsList.remove(ingredient);
-                        IngredientsActivity.ingredientsList.add(ingredient);
-
 
                         // Prob dont need to update shopping list manually here as can just run updateShoppingList() instead since ingrList in IngrActivity being modified
 
@@ -324,6 +419,5 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
                     }
                 });
-
     }
 }

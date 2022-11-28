@@ -45,7 +45,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     /**
      * Array list of Ingredient instances for use in array adapter
      */
-    static ArrayList<Ingredient> ingredientsList;
+    ArrayList<Ingredient> ingredientsList;
     /**
      * Map of Ingredient instances for uniqueness
      */
