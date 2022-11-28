@@ -36,7 +36,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     String mealType = "";
     EditText recipeName;
     EditText recipeInstructions;
-    private EditText recipeImage;
+    private Button recipeImage;
     EditText servings;
     EditText prepTime;
     private EditText comments;
