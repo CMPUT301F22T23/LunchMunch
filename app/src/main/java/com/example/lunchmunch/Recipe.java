@@ -1,5 +1,9 @@
 package com.example.lunchmunch;
 
+import android.graphics.Bitmap;
+import android.widget.Button;
+import android.widget.ImageView;
+
 import java.util.List;
 /**
  * This class defines a Recipe
@@ -10,48 +14,50 @@ public class Recipe {
     private List<String> ingredientNames;
     private String instructions;
     private String mealType;
-    private String image;
+    private Bitmap imageBitMap;
     private String comments;
     private Integer servings;
     private Integer prepTime;
     private String id;
+    private Button addImage;
+    private ImageView previewImage;
     //create empty constructor for database purposes
     public Recipe(){}
 
 
 
     // so able to store recipe in database without list of full ingredients objects (just store their names instead)
-    public Recipe(String name, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments) {
+    public Recipe(String name, List<String> ingredientNames, String instructions, String mealType, Bitmap imageBitMap, Integer servings, Integer prepTime, String comments) {
         this.name = name;
         this.ingredientNames = ingredientNames;
         this.instructions = instructions;
         this.mealType = mealType;
-        this.image = image;
+        this.imageBitMap = imageBitMap;
         this.servings = servings;
         this.prepTime = prepTime;
         this.comments = comments;
     }
 
 
-    public Recipe(String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments) {
+    public Recipe(String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, Bitmap imageBitMap, Integer servings, Integer prepTime, String comments) {
         this.name = name;
         this.ingredients = ingredients;
         this.ingredientNames = ingredientNames;
         this.instructions = instructions;
         this.mealType = mealType;
-        this.image = image;
+        this.imageBitMap = imageBitMap;
         this.servings = servings;
         this.prepTime = prepTime;
         this.comments = comments;
     }
 
-    public Recipe(String id, String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments) {
+    public Recipe(String id, String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, Bitmap imageBitMap, Integer servings, Integer prepTime, String comments) {
         this.name = name;
         this.ingredients = ingredients;
         this.ingredientNames = ingredientNames;
         this.instructions = instructions;
         this.mealType = mealType;
-        this.image = image;
+        this.imageBitMap = imageBitMap;
         this.servings = servings;
         this.prepTime = prepTime;
         this.comments = comments;
@@ -97,12 +103,12 @@ public class Recipe {
         this.mealType = mealType;
     }
 
-    public String getImage() {
-        return image;
+    public Bitmap getImage() {
+        return imageBitMap;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImage(Bitmap imageBitMap) {
+        this.imageBitMap = imageBitMap;
     }
 
     public Integer getServings() {
