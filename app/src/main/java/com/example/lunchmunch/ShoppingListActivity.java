@@ -28,7 +28,6 @@ import java.util.Optional;
  */
 public class ShoppingListActivity extends AppCompatActivity implements ShoppingListAdapter.ingrPurchasedListener, AddShopIngrFragment.OnFragmentInteractionListener{
 
-    Button saveIngrBtn;
     RecyclerView shoplistRecView;
 
     FirebaseFirestore db;
@@ -176,9 +175,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 for (Ingredient ingredient : ingredients) {
                     String ingrName = ingredient.getName();
 
-                    Float ingrCount = ingredient.getCount();
-
-
+                   
 
                     if (ingrMap.containsKey(ingrName)) {
                         // if the ingredient already exists in the map then just add to its required count
