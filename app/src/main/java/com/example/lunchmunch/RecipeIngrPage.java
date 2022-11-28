@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.base.MoreObjects;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.internal.InternalTokenProvider;
 
 import org.checkerframework.checker.units.qual.A;
@@ -41,8 +43,9 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
     IngredientItemFragment fragment;
     IngredientItemFragment fragment2;
 
-    Map<String, Ingredient> foodMap;
+    ArrayList<String> foodNames;
     Integer itemPosition;
+
 
 
     @Override
@@ -63,7 +66,6 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
         }
 
 
-
         //ingredientsList = new ArrayList<Ingredient>();
         existingIngrAdapter = new FoodItemAdapter(this, R.layout.content_ingredients, ingredientsList);
         ingredientsListView.setAdapter(existingIngrAdapter);
@@ -72,7 +74,7 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
         fragment = new IngredientItemFragment();
         fragment2 = new IngredientItemFragment();
 
-        foodMap = new HashMap<String, Ingredient>(); // used for storing unique ingredients
+        foodNames = new ArrayList<String>(); // used to store unique ingredient names
 
         addIngredients.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "Add Ingredients"));
 
@@ -118,19 +120,23 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
 
     @Override
     public void onOkPressed(Ingredient ingredient, int position) {
+
         // update existing ingredient
-        if(position != -1){
+        if(position != -1 ){
             ingredientsList.set(position, ingredient);
-            foodMap.put(ingredient.getName(), ingredient);
             existingIngrAdapter.notifyDataSetChanged();
             return;
         }
+
         // if the ingredient is new then add it to the list
-        if(!foodMap.containsKey(ingredient.getName())){
+        if(!foodNames.contains(ingredient.getName())){
+            foodNames.add(ingredient.getName());
             ingredientsList.add(ingredient);
             existingIngrAdapter.notifyDataSetChanged();
         }
-        foodMap.put(ingredient.getName(), ingredient);
+
+
+
 
     }
 
@@ -138,18 +144,23 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
     @Override
     public void deleteIngredient() {
         if (itemPosition == null) {
+            System.out.println(ingredientsList);
             return;
         }
         String name = ingredientsList.get(itemPosition).getName();
 
         Log.d("ITEM POSITION", "Position is: " + String.valueOf(itemPosition));
-        if (foodMap.containsKey(name)) {
-            foodMap.remove(name);
-            ingredientsList.clear();
-            ingredientsList.addAll(foodMap.values());
+        if (foodNames.contains(name)) {
+            System.out.println("poo " + ingredientsList);
+            foodNames.remove(name);
+            ingredientsList.remove(ingredientsList.get(itemPosition));
             existingIngrAdapter.notifyDataSetChanged();
+        } else {
+            ingredientsList.clear();
+            System.out.println("nothing in list " + ingredientsList);
+            existingIngrAdapter.notifyDataSetChanged();
+            return;
         }
-        else { return; }
     }
 
     public void initViews(){
