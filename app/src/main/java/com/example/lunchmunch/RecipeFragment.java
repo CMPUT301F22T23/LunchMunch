@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +22,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -28,9 +34,13 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+
 import com.example.lunchmunch.databinding.RecipeFragmentBinding;
 
 import java.io.IOException;
+import org.checkerframework.checker.units.qual.A;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,6 +60,15 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     EditText prepTime;
     private EditText comments;
     private Spinner spinner;
+
+    TextView ingredientNamesList;
+    ImageButton editIngredient;
+
+    // these are used as a way to pass the ingredient list attribute from the recipe object being created to the next activity
+    ArrayList<Ingredient> listToPass;
+    ArrayList<Ingredient> blankIngredients = new ArrayList<Ingredient>();
+    List<String> blankNames;
+    ArrayList<Recipe> recipesList;
     private Recipe recipe;
     private Button addImage;
     private ImageView previewImage;
@@ -105,6 +124,22 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         addImage = view.findViewById(R.id.addImage);
         previewImage = view.findViewById(R.id.previewImage);
 
+        ingredientNamesList = view.findViewById(R.id.ingredientsList);
+        editIngredient = view.findViewById(R.id.editIngredientsList);
+        blankNames = new ArrayList<String>();
+
+
+
+        Bundle bundle = getArguments();
+
+        recipesList = (ArrayList<Recipe>) bundle.getSerializable("recipesList");
+        if(bundle.getSerializable("position") == null){
+            recipe = new Recipe("", blankIngredients, blankNames, "","","",0,0,"");
+        } else {
+
+        }
+
+
 
         if (recipe != null) {
             recipeName.setText(recipe.getName());
@@ -124,6 +159,49 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+
+        Intent intent = new Intent(getActivity().getApplicationContext(), RecipeIngrPage.class);
+
+
+
+        ActivityResultLauncher<Intent> startForResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        assert data != null;
+                        recipe = (Recipe) data.getSerializableExtra("Recipe");
+                        System.out.println("Recipe Ingredients: " + recipe.getIngredients().toString());
+                        // This will not work however if you look at the println of recipe.getIngredients() it will show the correct list :)
+                        String names = "";
+                        for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                            names += recipe.getIngredients().get(i).getName() + " ";
+                        }
+
+                        ingredientNamesList.setText(names);
+
+                    }
+                });
+
+        editIngredient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                intent.putExtra("Recipe", recipe);
+                startForResult.launch(intent);
+            }
+        });
+
+
+        //boolean isNew = recipe == null;
+
+        boolean isNew = false;
+
+        if(recipesList.contains(recipe) == false){
+            isNew = true;
+        } else{
+            isNew = false;
+        }
+
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,8 +209,9 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
             }
         });
 
-        boolean isNew = recipe == null;
+        //boolean isNew = recipe == null;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AddRecipeCustomAlertDialog);
+        boolean finalIsNew = isNew;
         builder.setView(view)
                 .setTitle("Add/Edit Recipe")
                 .setPositiveButton("OK", (dialog, id) -> {
@@ -166,7 +245,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                     }
 
                     if (listener != null) {
-                        if (isNew) {
+                        if (finalIsNew) {
                             listener.onOkPressed(recipe, true, -1);
                         } else {
                             listener.onOkPressed(recipe, false, getArguments().getInt("position"));

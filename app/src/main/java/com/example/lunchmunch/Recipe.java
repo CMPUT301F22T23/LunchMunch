@@ -4,11 +4,16 @@ import android.graphics.Bitmap;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.List;
 /**
  * This class defines a Recipe
  */
-public class Recipe {
+public class Recipe implements Serializable {
     private String name;
     private List<Ingredient> ingredients;
     private List<String> ingredientNames;
@@ -23,6 +28,8 @@ public class Recipe {
     private ImageView previewImage;
     //create empty constructor for database purposes
     public Recipe(){}
+
+
 
 
 
@@ -63,6 +70,29 @@ public class Recipe {
         this.comments = comments;
         this.id = id;
     }
+
+    protected Recipe(Parcel in) {
+        name = in.readString();
+        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        ingredientNames = in.createStringArrayList();
+        instructions = in.readString();
+        mealType = in.readString();
+        imageBitMap = null;
+        comments = in.readString();
+        if (in.readByte() == 0) {
+            servings = null;
+        } else {
+            servings = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            prepTime = null;
+        } else {
+            prepTime = in.readInt();
+        }
+        id = in.readString();
+    }
+
+
 
     public String getName() {
         return name;
