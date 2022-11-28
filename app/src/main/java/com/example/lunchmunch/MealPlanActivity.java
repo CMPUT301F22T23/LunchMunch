@@ -43,7 +43,7 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
     LinearLayout IngredientsNav, RecipesNav, ShoppingListNav;
     String days[] = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
-    static HashMap<String, ArrayList<MealPlanItem>> allMeals = new HashMap<>();
+    HashMap<String, ArrayList<MealPlanItem>> allMeals = new HashMap<>();
     HashMap<String, HashMap<String, MealPlanItem>> allMealsMap = new HashMap<>();
     HashMap<String, RecyclerView> recyclerViews = new HashMap<>();
     HashMap<String, ImageView> imageViews = new HashMap<>();
@@ -64,7 +64,7 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         db = FirebaseFirestore.getInstance();
         MealPlanCollec = db.collection("MealPlans");
 
-        intiViews();
+        initViews();
         initRecyclerViews();
         initImageViews();
         initDBListener(MealPlanCollec);
@@ -89,13 +89,13 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
     }
 
     private void initRecyclerViews() {
-        recyclerViews.put("monday", (RecyclerView) findViewById(R.id.monday_meal_plan_items_list));
-        recyclerViews.put("tuesday", (RecyclerView) findViewById(R.id.tuesday_meal_plan_items_list));
-        recyclerViews.put("wednesday", (RecyclerView) findViewById(R.id.wednesday_meal_plan_items_list));
-        recyclerViews.put("thursday", (RecyclerView) findViewById(R.id.thursday_meal_plan_items_list));
-        recyclerViews.put("friday", (RecyclerView) findViewById(R.id.friday_meal_plan_items_list));
-        recyclerViews.put("saturday",(RecyclerView)  findViewById(R.id.saturday_meal_plan_items_list));
-        recyclerViews.put("sunday", (RecyclerView) findViewById(R.id.sunday_meal_plan_items_list));
+        recyclerViews.put("monday", findViewById(R.id.monday_meal_plan_items_list));
+        recyclerViews.put("tuesday", findViewById(R.id.tuesday_meal_plan_items_list));
+        recyclerViews.put("wednesday", findViewById(R.id.wednesday_meal_plan_items_list));
+        recyclerViews.put("thursday", findViewById(R.id.thursday_meal_plan_items_list));
+        recyclerViews.put("friday", findViewById(R.id.friday_meal_plan_items_list));
+        recyclerViews.put("saturday", findViewById(R.id.saturday_meal_plan_items_list));
+        recyclerViews.put("sunday", findViewById(R.id.sunday_meal_plan_items_list));
 
         for (String day: days) {
             RecyclerView recyclerView = recyclerViews.get(day);
@@ -130,7 +130,7 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
     }
 
-    private void intiViews() {
+    private void initViews() {
         IngredientsNav = findViewById(R.id.ingredientsNav);
         RecipesNav = findViewById(R.id.recipesNav);
         ShoppingListNav = findViewById(R.id.shoppingListNav);
