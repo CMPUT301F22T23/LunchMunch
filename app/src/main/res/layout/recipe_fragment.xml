@@ -39,6 +39,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
             android:dropDownWidth="180dp"
+            android:background="@color/grey_light"
             android:spinnerMode="dropdown"
             android:theme="@style/SpinnerTheme"
             app:layout_constraintEnd_toEndOf="parent"
