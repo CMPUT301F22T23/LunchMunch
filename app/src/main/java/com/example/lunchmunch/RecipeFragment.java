@@ -212,42 +212,55 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         builder.setView(view)
                 .setTitle("Add/Edit Recipe")
                 .setPositiveButton("OK", (dialog, id) -> {
-                    int servs = 0;
-                    int prep = 0;
 
-                    try {
-                        servs = Integer.parseInt(servings.getText().toString());
+                            //Do nothing here because we override this button later to change the close behaviour.
+                            //However, we still need this because on older versions of Android unless we
+                            //pass a handler the button doesn't get instantiated
+                            int servs = 0;
+                            int prep = 0;
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        prep = Integer.parseInt(prepTime.getText().toString());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                            String recipeNameString = recipeName.getText().toString();
+                            if (recipeNameString.isEmpty()) {
+                                recipeNameString = "Recipe Name";
+                            }
 
-                    if (recipe == null) {
-                        List<String> ingredients = new ArrayList<String>();
-                        recipe = new Recipe(recipeName.getText().toString(), ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString());
-                    }
-                    {
-                        recipe.setName(recipeName.getText().toString());
-                        recipe.setInstructions(recipeInstructions.getText().toString());
-                        recipe.setImage(recipeImage.getText().toString());
-                        recipe.setServings(servs);
-                        recipe.setPrepTime(prep);
-                        recipe.setComments(comments.getText().toString());
-                        recipe.setMealType(mealType);
-                    }
+                            try {
+                                servs = Integer.parseInt(servings.getText().toString());
 
-                    if (listener != null) {
-                        if (finalIsNew) {
-                            listener.onOkPressed(recipe, true, -1);
-                        } else {
-                            listener.onOkPressed(recipe, false, getArguments().getInt("position"));
-                        }
-                    }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                prep = Integer.parseInt(prepTime.getText().toString());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            if (recipe == null) {
+                                List<String> ingredients = new ArrayList<String>();
+                                recipe = new Recipe(recipeNameString, ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString());
+                            }
+                            {
+                                recipe.setName(recipeNameString);
+                                recipe.setInstructions(recipeInstructions.getText().toString());
+                                recipe.setImage(recipeImage.getText().toString());
+                                recipe.setServings(servs);
+                                recipe.setPrepTime(prep);
+                                recipe.setComments(comments.getText().toString());
+                                recipe.setMealType(mealType);
+                            }
+
+                            if (listener != null) {
+                                if (finalIsNew) {
+                                    listener.onOkPressed(recipe, true, -1);
+                                } else {
+                                    listener.onOkPressed(recipe, false, getArguments().getInt("position"));
+                                }
+                            }
+                            dialog.dismiss();
+
+
+
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {
                     // User cancelled the dialog

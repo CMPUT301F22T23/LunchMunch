@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -131,6 +132,7 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getUserInput();
+
                         Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
                         assert getArguments() != null;
                         Integer ingPosition = getArguments().getInt("currentIngredientPosition", -1);
