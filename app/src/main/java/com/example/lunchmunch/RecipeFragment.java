@@ -167,12 +167,15 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                         // Remove recipefragments from supportFragmentManager except for the first one
                         // This is to prevent the user from being able to go back to the recipe fragment
                         // after they have already created a recipe
-                        if (getParentFragmentManager() != null) {
-                            System.out.println("Parent Fragment Manager is not null");
-                            System.out.println(getParentFragmentManager().getBackStackEntryCount());
-                            getParentFragmentManager().popBackStack("RecipeFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                            System.out.println(getParentFragmentManager().getBackStackEntryCount());
+
+                        System.out.println(getParentFragmentManager().getFragments().size());
+                        if (getParentFragmentManager().getFragments().size() > 4) {
+                            Fragment fragment = getParentFragmentManager().findFragmentByTag("RecipeFragment");
+                            assert fragment != null;
+                            getParentFragmentManager().beginTransaction().remove(fragment).commit();
+                            getParentFragmentManager().popBackStack();
                         }
+                        System.out.println(getParentFragmentManager().getFragments().size());
                         // This will not work however if you look at the println of recipe.getIngredients() it will show the correct list :)
                         String names = "";
                         for (int i = 0; i < recipe.getIngredients().size(); i++) {
