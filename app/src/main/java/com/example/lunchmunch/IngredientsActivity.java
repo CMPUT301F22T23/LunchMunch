@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Main activity for all Ingredients functionality
@@ -264,6 +265,17 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                             bestBefore = null;
                         }else{
                             bestBefore = timestamp.toDate();
+                        }
+                        if (document.getData() == null) {
+                            continue;
+                        }else{
+                            String content = document.getData().entrySet()
+                                    .stream()
+                                    .map(e -> e.getKey() + "=\"" + e.getValue() + "\"")
+                                    .collect(Collectors.joining(", "));
+
+                            System.out.println(content);
+                            Log.d("DOCUMENT", content);
                         }
 
                         Ingredient ingredient = new Ingredient(
