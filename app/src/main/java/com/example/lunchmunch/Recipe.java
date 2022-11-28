@@ -1,5 +1,6 @@
 package com.example.lunchmunch;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,6 +21,7 @@ public class Recipe implements Serializable {
     private Integer servings;
     private Integer prepTime;
     private String id;
+    private Bitmap imageBitmap;
     //create empty constructor for database purposes
     public Recipe(){}
 
@@ -28,6 +30,42 @@ public class Recipe implements Serializable {
 
 
     // so able to store recipe in database without list of full ingredients objects (just store their names instead)
+    public Recipe(String name, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Bitmap imageBitmap) {
+        this.name = name;
+        this.ingredientNames = ingredientNames;
+        this.instructions = instructions;
+        this.mealType = mealType;
+        this.image = image;
+        this.servings = servings;
+        this.prepTime = prepTime;
+        this.comments = comments;
+    }
+
+
+    public Recipe(String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Bitmap imageBitmap) {
+        this.name = name;
+        this.ingredients = ingredients;
+        this.ingredientNames = ingredientNames;
+        this.instructions = instructions;
+        this.mealType = mealType;
+        this.image = image;
+        this.servings = servings;
+        this.prepTime = prepTime;
+        this.comments = comments;
+    }
+
+    public Recipe(String id, String name, List<Ingredient> ingredients, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments, Bitmap imageBitmap) {
+        this.name = name;
+        this.ingredients = ingredients;
+        this.ingredientNames = ingredientNames;
+        this.instructions = instructions;
+        this.mealType = mealType;
+        this.image = image;
+        this.servings = servings;
+        this.prepTime = prepTime;
+        this.comments = comments;
+        this.id = id;
+    }
     public Recipe(String name, List<String> ingredientNames, String instructions, String mealType, String image, Integer servings, Integer prepTime, String comments) {
         this.name = name;
         this.ingredientNames = ingredientNames;
@@ -64,7 +102,6 @@ public class Recipe implements Serializable {
         this.comments = comments;
         this.id = id;
     }
-
     protected Recipe(Parcel in) {
         name = in.readString();
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);
@@ -163,7 +200,9 @@ public class Recipe implements Serializable {
 
     public void setId(String id) { this.id = id;}
 
+    public Bitmap getImageBitmap() {return imageBitmap;}
 
+    public void setImageBitmap(Bitmap selectedImageBitmap) { this.imageBitmap = imageBitmap;}
 
     public void scaleRecipe(Integer servings) {
         if (this.servings == 1 && servings < 0) {
@@ -183,4 +222,6 @@ public class Recipe implements Serializable {
         }
         this.servings = servings + this.servings;
     }
+
+
 }
