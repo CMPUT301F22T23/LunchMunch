@@ -18,8 +18,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     private ArrayList<Ingredient> dataList;
     Context context;
 
-    //static ArrayList<Ingredient> checkedIngr = new ArrayList<>();
-
     private ingrPurchasedListener mIngrPurchasedListener;
 
     public void setIngrPurchasedListener(ingrPurchasedListener iPL) {
@@ -29,7 +27,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     public interface ingrPurchasedListener {
         void ingrPurchasedBtnClicked(Ingredient ingredient, Integer ingrIdx);
     }
-
 
 
     public ShoppingListAdapter(@NonNull Context context, @NonNull ArrayList<Ingredient> objects) {
@@ -57,24 +54,18 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         holder.tvCount.setText(String.valueOf(ingredient.getCount()));
         holder.tvCategory.setText(String.valueOf(ingredient.getCategory()));
         holder.tvDescription.setText(ingredient.getDescription());
+
+        // init to always be unchecked (for the case when user clicks on listview to only edit quant)
+        holder.ingrPurchasedBtn.setChecked(false);
+
+        //if (holder.ingrPurchasedBtn.isChecked()) {
+
+        //}
+
         holder.ingrPurchasedBtn.setOnClickListener(view -> {
             mIngrPurchasedListener.ingrPurchasedBtnClicked(ingredient, position);
         });
 
-
-        /*
-        // if the checkbox was clicked
-        holder.cbPurchased.setOnClickListener(view -> {
-            // if was clicked and read as checked then user checked ingr so add to checked Ingredients
-            if (holder.cbPurchased.isChecked()) {
-                checkedIngr.add(ingredient);
-
-            } else { // was clicked and not checked meaning user unchecked it so remove from checked Ingredients list
-                checkedIngr.remove(ingredient);
-            }
-        });
-
-         */
     }
 
     @Override
@@ -90,7 +81,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         TextView tvCost;
         TextView tvCategory;
         TextView tvDescription;
-        Button ingrPurchasedBtn;
+        CheckBox ingrPurchasedBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

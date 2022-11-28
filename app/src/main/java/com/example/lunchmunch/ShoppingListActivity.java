@@ -298,7 +298,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
                             Float diff = shopIngr.getCount() - ingredient.getCount();
 
-                            System.out.println();
 
                             // if the count of the ingr the user entered is less than or equal to the amount required
                             if (diff > 0.01) {

@@ -64,7 +64,7 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         db = FirebaseFirestore.getInstance();
         MealPlanCollec = db.collection("MealPlans");
 
-        intiViews();
+        initViews();
         initRecyclerViews();
         initImageViews();
         initDBListener(MealPlanCollec);
@@ -130,7 +130,7 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
     }
 
-    private void intiViews() {
+    private void initViews() {
         IngredientsNav = findViewById(R.id.ingredientsNav);
         RecipesNav = findViewById(R.id.recipesNav);
         ShoppingListNav = findViewById(R.id.shoppingListNav);
