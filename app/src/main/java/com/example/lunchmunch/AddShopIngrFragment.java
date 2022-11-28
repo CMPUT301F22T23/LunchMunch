@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,7 +44,7 @@ public class AddShopIngrFragment extends DialogFragment {
     EditText ingredientAmount;
     EditText ingredientPrice;
     EditText ingredientDescription;
-
+    ImageView ingredientImage;
     TextView errMsgTxt;
 
 
@@ -81,7 +82,7 @@ public class AddShopIngrFragment extends DialogFragment {
     }
 
     /**
-     * Fragment interaction listener allows us to implement a nececary method to handle what happens when the user presses the ok/save button
+     * Fragment interaction listener allows us to implement a necessary method to handle what happens when the user presses the ok/save button
      */
     public interface OnFragmentInteractionListener {
         /**
@@ -150,7 +151,8 @@ public class AddShopIngrFragment extends DialogFragment {
         // user inputted amount
         ingredientAmount = view.findViewById(R.id.ingredient_amount);
 
-
+        // category image
+        ingredientImage = view.findViewById(R.id.ingredientImage);
         //textview for any possible error msgs
         errMsgTxt = view.findViewById(R.id.errMsgTxt);
 
@@ -163,14 +165,14 @@ public class AddShopIngrFragment extends DialogFragment {
             ingredientDescription.setText(ingredient.getDescription());
             ingredientPrice.setText(ingredient.getCost().toString());
             ingredientAmount.setText(ingredient.getCount().toString());
+            ingredientImage.setImageResource(Ingredient.getCategoryImage(ingredient.getCategory()));
 
             // disable and grey out inputs: category selector, name
             // the rest the user can modify
 
             ingredientSpinner.setEnabled(false);
-            ingredientSpinner.setBackgroundColor(Color.DKGRAY);
             ingredientName.setEnabled(false);
-            ingredientName.setBackgroundColor(Color.DKGRAY);
+            ingredientName.setTextColor(Color.WHITE);
 
         }
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import android.widget.Spinner;
@@ -54,8 +55,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
 
     LinearLayout IngredientsNav, RecipesNav, MealPlanNav;
-
-
     ShoppingListAdapter shoppingListAdapter;
 
     Spinner sortSpinner;

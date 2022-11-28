@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -88,16 +89,18 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         Ingredient ingredient = dataList.get(position);
 
         holder.tvName.setText(ingredient.getName());
-        holder.tvCost.setText(String.valueOf(ingredient.getCost()));
+        holder.tvCost.setText("$" + String.valueOf(ingredient.getCost()));
         holder.tvCount.setText(String.valueOf(ingredient.getCount()));
         holder.tvCategory.setText(String.valueOf(ingredient.getCategory()));
         holder.tvDescription.setText(ingredient.getDescription());
+        holder.ivCategoryImage.setImageResource(Ingredient.getCategoryImage(ingredient.getCategory()));
 
         // init to always be unchecked (for the case when user clicks on listview to only edit quant)
         holder.ingrPurchasedBtn.setChecked(false);
 
         holder.ingrPurchasedBtn.setOnClickListener(view -> {
             mIngrPurchasedListener.ingrPurchasedBtnClicked(ingredient, position);
+            holder.ingrPurchasedBtn.setChecked(false);
         });
     }
 
@@ -125,6 +128,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         TextView tvCost;
         TextView tvCategory;
         TextView tvDescription;
+        ImageView ivCategoryImage;
         CheckBox ingrPurchasedBtn;
 
         /**
@@ -139,6 +143,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             tvCount = itemView.findViewById(R.id.count_label);
             tvCost = itemView.findViewById(R.id.cost_label);
             tvCategory = itemView.findViewById(R.id.category_label);
+            ivCategoryImage = itemView.findViewById(R.id.category_image_view);
             ingrPurchasedBtn = itemView.findViewById(R.id.ingrPurchasedBtn);
             tvDescription = itemView.findViewById(R.id.description_label);
         }
