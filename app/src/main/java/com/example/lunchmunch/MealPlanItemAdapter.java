@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/*
+Adapter to show Meal Plan Items in a carousel, either Ingredients or Recipes
+* */
+
 public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapter.ViewHolder> {
 
     private ArrayList<MealPlanItem> dataList;
@@ -20,11 +24,18 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
 
     private OnAdapterInteractionListener listener;
 
+    /**
+     * Interface for interacting with Meal Plan Items fragment to work with the database, delete items accordingly
+     * Implemented in MealPlanActivity
+     * @see         MealPlanActivity
+     */
     public interface OnAdapterInteractionListener {
         void deleteItem(Integer position, String day);
     }
 
-
+    /**
+     * Setter for specific day this fragment is associated with
+     */
     public void setDay(String day) {
         this.day = day;
     }
@@ -33,11 +44,22 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
         return this.day;
     }
 
+    /**
+     * Setter for whether or not the Trash button should be visible in an activity/fragment
+     */
     public void setIsTrashVisible(Boolean visibility) {
         this.isTrashVisible = visibility;
     }
 
 
+    /**
+     * Differentiates view types for Recipes or Ingredients within the same meal plan date items
+     * <ul>
+     *     <li>0 is for the Recipes</li>
+     *     <li>1 is for the Ingredients</li>
+     * </ul>
+     * @param position position of MealPlanItem
+     */
     @Override
     public int getItemViewType(int position) {
         if (position >= dataList.size()) { return -1; }
@@ -104,6 +126,8 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
                     .inflate(R.layout.meal_plan_list_item_ingredient_content, parent, false);
             viewHolder = new ViewHolder(itemView, 1);
         }
+
+        // Create interface to connect to DB
         if (parent.getContext() instanceof OnAdapterInteractionListener) {
             listener = (OnAdapterInteractionListener) parent.getContext();
         }
@@ -124,7 +148,7 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
             holder.servings.setText(item.getServings().toString() + " " + "servings");
             holder.category.setText(item.getMealType());
             holder.time.setText(item.getPrepTime().toString() + " " + "minutes");
-            holder.image.setImageResource(R.drawable.recipe);
+            holder.image.setImageResource(R.drawable.recipe_icon);
         }
         else {
             holder.name.setText(item.getName());
@@ -151,6 +175,12 @@ public class MealPlanItemAdapter extends RecyclerView.Adapter<MealPlanItemAdapte
 
     }
 
+    /**
+     * Function that calls interface function to delete item in database
+     * Implemented in MealPlanActivity
+     * @param holder Viewholder for the specific meal plan item
+     * @see         MealPlanActivity
+     */
     private void callDeleteItem(ViewHolder holder) {
         listener.deleteItem(holder.getAbsoluteAdapterPosition(), day);
     }

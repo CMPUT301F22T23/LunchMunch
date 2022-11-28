@@ -32,6 +32,9 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Date;
+/*
+Second fragment to select ingredients for Meal plan
+* */
 
 public class MealPlanIngredientFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
     View view;
@@ -45,10 +48,19 @@ public class MealPlanIngredientFragment extends DialogFragment implements Adapte
     Integer selectedItem = -1;
     String day;
 
+    /**
+     * Interface for interacting with Ingredient fragment to work with the database
+     * Implemented in MealPlanActivity
+     * @see         MealPlanActivity
+     */
+
     public interface OnFragmentInteractionListener {
         void onIngredientOkPressed(Ingredient ingredient, String day);
     }
 
+    /**
+     * Setter for specific day this fragment is associated with
+     */
     public void setDay(String day) {
         this.day = day;
     }
@@ -154,7 +166,19 @@ public class MealPlanIngredientFragment extends DialogFragment implements Adapte
 
     }
 
-    private void initDBListener(CollectionReference ingrCollec) {
+    /**
+     * Gets the list of ingredients from Ingredient DB collection
+     * <ul>
+     *     <li>initializes Ingredient listview and adapter</li>
+     *     <li>Clears data list of items and re-adds</li>
+     * </ul>
+     *
+     *
+     * @param ingrCollec A reference to the Ingredeint collection in the database
+     * @see         Ingredient
+     */
+
+    public void initDBListener(CollectionReference ingrCollec) {
         dataList = new ArrayList<>();
 
         ingrCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

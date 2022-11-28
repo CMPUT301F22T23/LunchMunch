@@ -28,7 +28,9 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+/*
+Second fragment to select recipes for Meal plan
+* */
 public class MealPlanRecipeFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
     View view;
     FirebaseFirestore db;
@@ -40,10 +42,18 @@ public class MealPlanRecipeFragment extends DialogFragment implements AdapterVie
     Integer selectedItem = -1;
     String day;
 
+    /**
+     * Interface for interacting with Recipe fragment to work with the database
+     * Implemented in MealPlanActivity
+     * @see         MealPlanActivity
+     */
     public interface OnFragmentInteractionListener {
         void onRecipeOkPressed(Recipe recipe, String day);
     }
 
+    /**
+     * Setter for specific day this fragment is associated with
+     */
     public void setDay(String day) {
         this.day = day;
     }
@@ -150,6 +160,19 @@ public class MealPlanRecipeFragment extends DialogFragment implements AdapterVie
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+
+    /**
+     * Gets the list of recipes from Recipe DB collection
+     * <ul>
+     *     <li>initializes Recipe listview and adapter</li>
+     *     <li>Clears data list of items and re-adds</li>
+     * </ul>
+     *
+     *
+     * @param recipeCollec A reference to the Ingredeint collection in the database
+     * @see         Recipe
+     */
 
     void initDBListener(CollectionReference recipeCollec) {
 

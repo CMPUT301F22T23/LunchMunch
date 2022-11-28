@@ -73,6 +73,7 @@ public class MealPlanItem<T> {
         }
         if (value instanceof Ingredient) {
             this.name = ((Ingredient) value).getName();
+            this.description = ((Ingredient) value).getDescription();
             this.bestBefore = ((Ingredient) value).getBestBefore();
             this.location = ((Ingredient) value).getLocation();
             this.count = ((Ingredient) value).getCount();
