@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 
 import com.example.lunchmunch.databinding.RecipeFragmentBinding;
@@ -163,6 +164,15 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                         assert data != null;
                         recipe = (Recipe) data.getSerializableExtra("Recipe");
                         System.out.println("Recipe Ingredients: " + recipe.getIngredients().toString());
+                        // Remove recipefragments from supportFragmentManager except for the first one
+                        // This is to prevent the user from being able to go back to the recipe fragment
+                        // after they have already created a recipe
+                        if (getParentFragmentManager() != null) {
+                            System.out.println("Parent Fragment Manager is not null");
+                            System.out.println(getParentFragmentManager().getBackStackEntryCount());
+                            getParentFragmentManager().popBackStack("RecipeFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            System.out.println(getParentFragmentManager().getBackStackEntryCount());
+                        }
                         // This will not work however if you look at the println of recipe.getIngredients() it will show the correct list :)
                         String names = "";
                         for (int i = 0; i < recipe.getIngredients().size(); i++) {
@@ -170,6 +180,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                         }
 
                         ingredientNamesList.setText(names);
+
 
                     }
                 });
@@ -179,6 +190,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
             public void onClick(View view){
                 intent.putExtra("Recipe", recipe);
                 startForResult.launch(intent);
+
             }
         });
 

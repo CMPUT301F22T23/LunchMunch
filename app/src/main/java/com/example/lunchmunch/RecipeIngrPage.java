@@ -104,7 +104,9 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
                 result.putExtra("Recipe", recipe);
                 setResult(Activity.RESULT_OK, result);
                 System.out.println("list: " + recipe.getIngredients());
+
                 finish();
+
             }
     });
 
