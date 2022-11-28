@@ -46,4 +46,5 @@
     <string name ="enterPrepTime"><font size = "16">Enter Prep Time</font></string>
     <string name ="enterComments"><font size = "16">Enter Comments</font></string>
     <string name ="enterServingSize"><font size = "16">Enter Serving Size</font></string>
+    <string name="choose_image">Choose Image</string>
 </resources>

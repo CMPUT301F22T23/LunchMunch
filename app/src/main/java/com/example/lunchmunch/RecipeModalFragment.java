@@ -188,8 +188,8 @@ public void onCreate(Bundle savedInstanceState) {
 
                 System.out.println("edit args " + getArguments());
                 recipeFrag.setArguments(getArguments());
-
                 recipeFrag.show(getParentFragmentManager(), "RecipeFragment");
+
             }
         });
 

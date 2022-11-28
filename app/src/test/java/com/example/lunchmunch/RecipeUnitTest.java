@@ -49,5 +49,14 @@ public class RecipeUnitTest {
         assertEquals("newComments", recipe.getComments());
     }
 
+    @Test
+    public void scaleRecipeTest() {
+        ArrayList<String> ingredients = new ArrayList<String>();
+        Recipe recipe = new Recipe("name", ingredients, "instructions", "mealType", "image", 0, 0, "comments");
+        recipe.scaleRecipe(-1);
+        assertEquals(new Integer(0), recipe.getServings());
+        assertEquals(new Integer(0), recipe.getPrepTime());
+    }
+
 
 }
