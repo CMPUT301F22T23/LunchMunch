@@ -36,7 +36,7 @@
             android:id="@+id/meal_plan_recipe_item_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:srcCompat="@drawable/recipe" />
+            tools:srcCompat="@drawable/recipe_icon" />
     </androidx.cardview.widget.CardView>
 
     <TextView

@@ -26,7 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-
+/*
+* First fragment to edit Meal Plan details for a certain date
+* */
 public class MealPlanDateFragment extends DialogFragment implements AdapterView.OnItemSelectedListener, MealPlanItemAdapter.OnAdapterInteractionListener {
     View view;
     MealPlanItemAdapter adapter;
@@ -50,6 +52,10 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
     public interface OnFragmentInteractionListener {
     }
 
+    /**
+     * Setter for specific day this fragment is associated with
+     */
+
     public void setDay(String day) {
         this.day = day;
     }
@@ -58,8 +64,13 @@ public class MealPlanDateFragment extends DialogFragment implements AdapterView.
         return this.day;
     }
 
+    /**
+     * Sets the list of MealPlanItems for the fragment and recyclerView adapter
+     * @param dataList A list of MealPlanItems
+     * @see MealPlanItem
+     * @see MealPlanItemAdapter
+     */
     public void setDataList(ArrayList<MealPlanItem> dataList) {
-        System.out.println("SetDataList in Meal Plan Date Fragment");
         this.dataList = dataList;
         if (recyclerView != null) {
             adapter = new MealPlanItemAdapter(dataList);

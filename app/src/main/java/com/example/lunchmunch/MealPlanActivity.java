@@ -88,6 +88,13 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
     }
 
+    /**
+     * Initializes a hash map of all the recycler views for each day of the week for the meal plan
+     * <p>
+     * The keys are strings of days of the week with their corresponding recycler view value
+     * @see         RecyclerView
+     */
+
     private void initRecyclerViews() {
         recyclerViews.put("monday", findViewById(R.id.monday_meal_plan_items_list));
         recyclerViews.put("tuesday", findViewById(R.id.tuesday_meal_plan_items_list));
@@ -108,6 +115,13 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
     }
 
+    /**
+     * Initializes a hash map of all the image views of edit buttons for each day of the week for the meal plan
+     * <p>
+     * The keys are strings of days of the week with their corresponding image view value
+     * @see         ImageView
+     */
+
     private void initImageViews() {
         imageViews.put("monday", (ImageView) findViewById(R.id.monday_meal_plan_edit_pencil));
         imageViews.put("tuesday", (ImageView) findViewById(R.id.tuesday_meal_plan_edit_pencil));
@@ -119,6 +133,12 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
     }
 
+    /**
+     * Initializes a hash map of all the meal plan date fragment of edit buttons for each day of the week for the meal plan
+     * <p>
+     * The keys are strings of days of the week with their corresponding meal plan fragment value
+     * @see         MealPlanDateFragment
+     */
     private void initDateFragments() {
         for (String day: days) {
             // adding or editing a new item button
@@ -138,7 +158,23 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
     }
 
-    private void initDBListener(CollectionReference mealPlanCollec) {
+    /**
+     * Clears the meals meap and re-adds all items after processing from the database
+     * <ul>
+     *     <li>this will create meal plan items from database</li>
+     *     <li>Adds items to all meals arrays</li>
+     *     <li>Adds items to all meals hashmaps</li>
+     *     <li>Re initializes adapters for recycler views</li>
+     * </ul>
+     *
+     *
+     * @param mealPlanCollec A reference to the meal plan collection in the database
+     * @see         MealPlanItem
+     * @see         Recipe
+     * @see         Ingredient
+     */
+
+    public void initDBListener(CollectionReference mealPlanCollec) {
 
         mealPlanCollec.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -259,7 +295,19 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         });
     }
 
-
+    /**
+     * Implements MealPlanIngredientFragment interface
+     *<ul>
+     *  <li>this will create meal plan items from ingredient click and adds to the database</li>
+     *  <li>Adds item to all meals arrays</li>
+     *  <li>Adds item to all meals hashmaps</li>
+     *  <li>Re initializes adapters for recycler views</li>
+     *</ul>
+     *
+     * @param ingredient the Ingredient to store as a Meal Plan item
+     * @param day String of date to update
+     * @see         MealPlanIngredientFragment
+     */
     @Override
     public void onIngredientOkPressed(Ingredient ingredient, String day) {
         MealPlanItem item = new MealPlanItem(ingredient);
@@ -292,6 +340,19 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
 
     }
 
+    /**
+     * Implements MealPlanIngredientFragment interface
+     *<ul>
+     *  <li>this will create meal plan items from recipe click and adds to the database</li>
+     *  <li>Adds item to all meals arrays</li>
+     *  <li>Adds item to all meals hashmaps</li>
+     *  <li>Re initializes adapters for recycler views</li>
+     *</ul>
+     *
+     * @param recipe the Recipe to store as a Meal Plan item
+     * @param day String of date to update
+     * @see         MealPlanIngredientFragment
+     */
     @Override
     public void onRecipeOkPressed(Recipe recipe, String day) {
         MealPlanItem item = new MealPlanItem(recipe);
@@ -339,7 +400,17 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
     }
 
     /**
-     * Deletes an Meal Plan Item from database
+     * Allows users to delete Meal Plan Item and updates adapters accordingly
+     *<ul>
+     *  <li>this will create meal plan items from recipe click and adds to the database</li>
+     *  <li>Adds item to all meals arrays</li>
+     *  <li>Adds item to all meals hashmaps</li>
+     *  <li>Re initializes adapters for recycler views</li>
+     *</ul>
+     *
+     * @param item the Meal Plan Item to delete from database
+     * @param day String of date to update
+     * @see         MealPlanItem
      */
     public void deleteMealPlanItem(MealPlanItem item, String day) {
 
