@@ -73,7 +73,7 @@ public class MainActivityTest {
         // click on the ingredients navigation button
         solo.clickOnButton("Meal Plan");
         // checl if we are actually on the ingredients page
-        solo.assertCurrentActivity("Wrong Activity (should be Meal Plan page)", MealPlanActivityTest.class);
+        solo.assertCurrentActivity("Wrong Activity (should be Meal Plan page)", MealPlanActivity.class);
 
     }
 
