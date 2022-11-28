@@ -81,7 +81,7 @@ public class AddShopIngrFragment extends DialogFragment {
     }
 
     /**
-     * Fragment interaction listener allows us to implement a nececary method to handle what happens when the user presses the ok/save button
+     * Fragment interaction listener allows us to implement a necessary method to handle what happens when the user presses the ok/save button
      */
     public interface OnFragmentInteractionListener {
         /**

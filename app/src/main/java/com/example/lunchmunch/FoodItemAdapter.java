@@ -93,7 +93,7 @@ public class FoodItemAdapter extends ArrayAdapter<Ingredient> {
         }
 
         viewHolder.tvName.setText(foodItem.getName());
-        viewHolder.tvCost.setText(String.valueOf(foodItem.getCost()));
+        viewHolder.tvCost.setText("$" + String.valueOf(foodItem.getCost()));
         viewHolder.tvCount.setText(String.valueOf(foodItem.getCount()));
         viewHolder.categoryImage.setImageResource(Ingredient.getCategoryImage(foodItem.getCategory()));
 
