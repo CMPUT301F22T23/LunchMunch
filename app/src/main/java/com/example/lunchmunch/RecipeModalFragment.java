@@ -3,6 +3,7 @@ package com.example.lunchmunch;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * Fragment for adding/editing RecipeModal functionality
@@ -89,8 +91,11 @@ public class RecipeModalFragment extends DialogFragment implements AdapterView.O
         recipeScalePlus = view.findViewById(R.id.recipeScalePlus);
         recipeScaleMinus = view.findViewById(R.id.recipeScaleMinus);
         // Add our ingredients to our list view
-        recipeIngredientsAdapter = new FoodItemAdapter(getContext(), R.layout.recipe_modal_bottom, (ArrayList<Ingredient>) recipe.getIngredients());
-        recipeIngredients.setAdapter(recipeIngredientsAdapter);
+        if (recipe != null) {
+            recipeIngredientsAdapter = new FoodItemAdapter(getContext(), R.layout.recipe_modal_bottom, (ArrayList<Ingredient>) recipe.getIngredients());
+            recipeIngredients.setAdapter(recipeIngredientsAdapter);
+        }
+
 
 
         recipeCancel = view.findViewById(R.id.cancelRecipe);
@@ -183,13 +188,17 @@ public class RecipeModalFragment extends DialogFragment implements AdapterView.O
         editRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RecipeFragment recipeFrag = new RecipeFragment(recipe);
+                RecipeFragment recipeFrag = new RecipeFragment(recipe, recipeIngredientsAdapter);
                 // Pass our arguments across fragments
+                assert getArguments() != null;
                 recipeFrag.setArguments(getArguments());
                 recipeFrag.show(getParentFragmentManager(), "RecipeFragment");
 
+
+
             }
         });
+
 
         recipeIngredients.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
             @Override
@@ -224,8 +233,12 @@ public class RecipeModalFragment extends DialogFragment implements AdapterView.O
         super.onDetach();
 
     }
-
+    /**
+     * Update the recipe component from data found in the modal.
+     */
     public void updateRecipe() {
+        if (recipe == null)
+            return;
         recipeName.setText(recipe.getName());
         recipeInstructions.setText(recipe.getInstructions());
         recipeTime.setText(Integer.toString(recipe.getPrepTime()) + " minutes");

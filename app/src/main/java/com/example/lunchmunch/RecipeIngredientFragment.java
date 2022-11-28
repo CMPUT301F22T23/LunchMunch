@@ -117,10 +117,8 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
                             System.out.println(recipe.getIngredients().size());
                             System.out.println(ingPosition);
                             listener.onOkPressed(recipe, false, position);
-                            foodItemAdapter.notifyDataSetChanged();
-
-
                         }
+                        foodItemAdapter.notifyDataSetChanged();
 
                     }
 
@@ -132,19 +130,28 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getUserInput();
+                        String errMsg = validateIngrInputs(name , ingredientPrice.getText().toString(), ingredientAmount.getText().toString());
+                        ingredientAmount.getText().clear();
+                        ingredientPrice.getText().clear();
+                        ingredientName.getText().clear();
+                        if (errMsg != "") {
+                            Toast.makeText(getContext(), errMsg, Toast.LENGTH_LONG).show();
 
-                        Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
-                        assert getArguments() != null;
-                        Integer ingPosition = getArguments().getInt("currentIngredientPosition", -1);
-
-                        if (ingPosition == -1) {
-                            recipe.getIngredients().add(ingredient);
                         } else {
-                            recipe.getIngredients().set(ingPosition, ingredient);
+                            Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
+                            assert getArguments() != null;
+                            Integer ingPosition = getArguments().getInt("currentIngredientPosition", -1);
+
+                            if (ingPosition == -1) {
+                                recipe.getIngredients().add(ingredient);
+                            } else {
+                                recipe.getIngredients().set(ingPosition, ingredient);
+                            }
+                            int position = getArguments().getInt("position");
+                            listener.onOkPressed(recipe, false, position);
+                            foodItemAdapter.notifyDataSetChanged();
                         }
-                        int position = getArguments().getInt("position");
-                        listener.onOkPressed(recipe, false, position);
-                        foodItemAdapter.notifyDataSetChanged();
+
                     }
                 }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -154,13 +161,21 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
                 })
                 .create();
 
-        alert.setOnShowListener(a -> {
+        alert.setOnShowListener(a -> {Button delBtn = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
+
             Button positive = alert.getButton(AlertDialog.BUTTON_POSITIVE);
             positive.setTextColor(Color.BLACK);
             Button negative = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
             negative.setTextColor(Color.BLACK);
             Button neutral = alert.getButton(AlertDialog.BUTTON_NEUTRAL);
             neutral.setTextColor(Color.BLACK);
+            if (getArguments() != null) {
+                Integer ingPosition = getArguments().getInt("currentIngredientPosition", -1);
+                if (ingPosition == -1) {
+                    delBtn.setVisibility(View.GONE);
+                }
+            }
+
         });
 
         alert.show();
@@ -258,6 +273,45 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
 
     }
 
+    private String validateIngrInputs(String nameInput, String priceInput, String amountInput) {
+        // the only 3 inputs that actually have any constraints
+        String errMsg = "";
+
+        if (nameInput.equals("")) {
+            errMsg += "Enter a name, ";
+        }
+
+        if (priceInput.equals("")) {
+            errMsg += "Enter a number for price, ";
+        } else { // otherwise we have a valid int and we can parse
+            price = Float.parseFloat(priceInput);
+            //xml restricts entering neg number
+            if (price == 0) {
+                errMsg += "Enter a positive number for price, ";
+            }
+            // otherwise we have converted price to valid pos Integer and can proceed
+        }
+
+        if (amountInput.equals("")) {
+            errMsg += "Enter a number for amount, ";
+        } else { // otherwise we have a valid int and we can parse
+            amount = Float.parseFloat(amountInput);
+            //xml restricts entering neg number
+            if (amount == 0) {
+                errMsg += "Enter a positive number for amount, ";
+            }
+            // otherwise we have converted price to valid pos Integer and can proceed
+        }
+
+        // if errMsg exists remove last 2 char from total err msg (last 2 will be ", ")
+        if (!errMsg.equals("")) {
+            errMsg = errMsg.substring(0, errMsg.length() - 2);
+        }
+
+        // could add future constraints here
+        return errMsg;
+    }
+
 
     /**
      * This function sets the category and location of the ingredient in the view
@@ -295,7 +349,6 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     public void getUserInput() {
         // get user inputted name
         name = ingredientName.getText().toString();
-        ingredientName.getText().clear();
 
         // get user inputted description
         description = ingredientDescription.getText().toString();
@@ -308,7 +361,6 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
         } catch (NumberFormatException e) {
             price = Float.parseFloat("0");
         }
-        ingredientPrice.getText().clear();
 
         // get user inputted amount
         try {
@@ -317,7 +369,6 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
         } catch (NumberFormatException e) {
             amount = Float.parseFloat("0");
         }
-        ingredientAmount.getText().clear();
     }
 
     @Override
