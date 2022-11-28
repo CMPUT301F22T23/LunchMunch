@@ -28,13 +28,16 @@ import java.util.Optional;
  */
 public class ShoppingListActivity extends AppCompatActivity implements ShoppingListAdapter.ingrPurchasedListener, AddShopIngrFragment.OnFragmentInteractionListener{
 
+
     RecyclerView shoplistRecView;
+    ArrayList<Ingredient> shoppingList;
 
     FirebaseFirestore db;
     CollectionReference IngrCollec;
 
+
     LinearLayout IngredientsNav, RecipesNav, MealPlanNav;
-    ArrayList<Ingredient> shoppingList;
+
 
     ShoppingListAdapter shoppingListAdapter;
 
@@ -174,9 +177,12 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 List<Ingredient> ingredients = mealPlanItem.getIngredients();
                 for (Ingredient ingredient : ingredients) {
                     String ingrName = ingredient.getName();
+                    /*
+                    Float ingrCount = ingredient.getCount();
 
-                   
-
+                    // if the ingr not in the map then init with its count, otherwise if ingr already in map then just add this instance of the ingr's count to the count thats already in the map same as here( https://stackoverflow.com/a/37705877/17304003)
+                    ingrMap.put(ingrName, ingrMap.getOrDefault(ingrName, ingrCount) + ingrCount);
+                     */
                     if (ingrMap.containsKey(ingrName)) {
                         // if the ingredient already exists in the map then just add to its required count
                         Float newCount = ingredient.getCount() + ingrMap.get(ingrName).getCount();
