@@ -164,7 +164,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
                     // only send inputs that are necessary and could be left blank or have an invalid input (desc can leave blank, loc & cat cant be left blank)
                     String errMsg = validateIngrInputs(name , priceInput, amountInput);
                     if (errMsg.equals("")) {
-                        Ingredient ingredient = new Ingredient(name, description, expirationDate, location, price, amount, category);
+                        Ingredient ingredient = new Ingredient(name, description, expirationDate, location, amount, price, category);
                         // Check if ingredient is new
                         if (getArguments() != null) {
                             Integer position = getArguments().getInt("currentIngredientPosition");
