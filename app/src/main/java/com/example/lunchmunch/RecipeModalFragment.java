@@ -47,6 +47,7 @@ public class RecipeModalFragment extends DialogFragment implements AdapterView.O
     ListView recipeIngredients;
     FoodItemAdapter recipeIngredientsAdapter;
 
+
     @Override
 public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -90,6 +91,7 @@ public void onCreate(Bundle savedInstanceState) {
         // Add our ingredients to our list view
         recipeIngredientsAdapter = new FoodItemAdapter(getContext(), R.layout.recipe_modal_bottom, (ArrayList<Ingredient>) recipe.getIngredients());
         recipeIngredients.setAdapter(recipeIngredientsAdapter);
+
 
         recipeCancel = view.findViewById(R.id.cancelRecipe);
         recipeCancel.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +185,8 @@ public void onCreate(Bundle savedInstanceState) {
             public void onClick(View v) {
                 RecipeFragment recipeFrag = new RecipeFragment(recipe);
                 // Pass our arguments across fragments
+
+                System.out.println("edit args " + getArguments());
                 recipeFrag.setArguments(getArguments());
 
                 recipeFrag.show(getParentFragmentManager(), "RecipeFragment");

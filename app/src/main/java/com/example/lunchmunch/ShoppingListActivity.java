@@ -3,9 +3,13 @@ package com.example.lunchmunch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +46,9 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
     ShoppingListAdapter shoppingListAdapter;
 
+    Spinner sortSpinner;
+    ArrayAdapter<String> sortAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +74,12 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         shoplistRecView.setLayoutManager(new LinearLayoutManager(this));
         shoplistRecView.setAdapter(shoppingListAdapter);
 
+        // Sorting Spinner
+        sortAdapter = new ArrayAdapter<String>(ShoppingListActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sortOptionsS));
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(sortAdapter);
+
 
         shoppingListAdapter.setIngrPurchasedListener(new ShoppingListAdapter.ingrPurchasedListener() {
             @Override
@@ -86,6 +99,31 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
         MealPlanNav.setOnClickListener(view -> {
             startActivity(new Intent(ShoppingListActivity.this, MealPlanActivity.class));
+        });
+
+        // Spinner Sorting Functionality
+        // sets spinner to default
+        sortSpinner.setSelection(0);
+
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String choice = sortSpinner.getSelectedItem().toString();
+                Sort.ingredientSort(shoppingList, choice);
+                shoppingListAdapter.notifyDataSetChanged();
+                shoplistRecView.refreshDrawableState();
+
+                if(!choice.equals("Sort By")) {
+                    Toast toast = Toast.makeText(ShoppingListActivity.this, "Now sorting by " + choice, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
 
     }
@@ -139,8 +177,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 );
 
                 String ingrName = ingredient.getName();
-
-
                 //Integer ingrCount = mealPlanItem.getCount();
                 //ingrMap.put(ingrName, ingrMap.getOrDefault(ingrName, ingrCount) + ingrCount);
                 // if the ingr was added to ingrMap in a prev iter of this for loop (same ingr used in multiple meals)
@@ -158,8 +194,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         }
 
 
-
-
         // now we have a map that contains the total count of all ingredients needed
         // subtract the count of ingredients we already have from the Ingredients page
         // the remaining ingredients get added to the shopping list
@@ -170,7 +204,6 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
                 String ingrName = ingredient.getName();
                 Float ingrCount = ingredient.getCount();
                 if (ingrMap.containsKey(ingrName)) {
-
                     Float neededIngrCount = ingrMap.get(ingrName).getCount();
                     // if we have enough of this specific ingredient then remove it from the hash (dont add it to the shopping list)
                     // ingr.getCount() => neededIngrCount
@@ -211,6 +244,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
         RecipesNav = findViewById(R.id.recipesNav);
         MealPlanNav = findViewById(R.id.mealPlanNav);
         shoplistRecView = findViewById(R.id.shoplistRecView);
+        sortSpinner = findViewById(R.id.SortOptions);
     }
 
     //ignore this

@@ -89,7 +89,8 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         final FloatingActionButton addFoodButton = findViewById(R.id.add_ingredient_button);
         fragment = new IngredientItemFragment();
         fragment2 = new IngredientItemFragment();
-        addFoodButton.setOnClickListener(view -> fragment2.show(getSupportFragmentManager(), "ADD_INGREDIENT"));
+        addFoodButton.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT"));
+
 
         // Sorting Spinner
         sortSpinner = (Spinner) findViewById(R.id.SortOptions);
@@ -120,8 +121,8 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                 Bundle args = new Bundle();
                 args.putParcelable("currentIngredient", ingredientsList.get(itemPosition));
                 args.putInt("currentIngredientPosition", itemPosition);
-                fragment.setArguments(args);
-                fragment.show(getSupportFragmentManager(), "ADD_INGREDIENT");
+                fragment2.setArguments(args);
+                fragment2.show(getSupportFragmentManager(), "ADD_INGREDIENT");
                 view.refreshDrawableState();
             }
         });

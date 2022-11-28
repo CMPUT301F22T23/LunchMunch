@@ -42,4 +42,11 @@
         <item>Category</item>
     </string-array>
 
+    <string-array name="sortOptionsS">
+        <item>Sort By</item>
+        <item>Description</item>
+        <item>Category</item>
+    </string-array>
+
+
 </resources>
