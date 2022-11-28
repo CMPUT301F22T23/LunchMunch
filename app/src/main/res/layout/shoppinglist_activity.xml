@@ -49,5 +49,14 @@
         app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
         app:layout_constraintVertical_bias="1.0" />
 
+    <Spinner
+        android:id="@+id/SortOptions"
+        android:layout_width="172dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/shoplistRecView"
+        app:layout_constraintStart_toEndOf="@+id/thisWeekTxt" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
