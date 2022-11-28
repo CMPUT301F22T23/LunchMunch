@@ -7,22 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".RecipeActivity">
 
-    <include
-        android:id="@+id/app_bar_layout"
-        layout="@layout/navbar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <include
         android:id="@+id/include"
         layout="@layout/content_recipe"
-        android:layout_width="414dp"
-        android:layout_height="810dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
+        tools:layout_editor_absoluteY="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ import java.util.Map;
  * Main activity for all Ingredients functionality
  */
 public class IngredientsActivity extends AppCompatActivity implements IngredientItemFragment.OnFragmentInteractionListener {
-    Button RecipesNav, MealPlanNav, ShoppingListNav;
+    LinearLayout RecipesNav, MealPlanNav, ShoppingListNav;
     FirebaseFirestore db;
     CollectionReference IngrCollec;
 
@@ -48,7 +49,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     /**
      * Map of Ingredient instances for uniqueness
      */
-    Map<String, Ingredient> foodMap;
+    //Map<String, Ingredient> foodMap;
 
     Integer itemPosition;
     /**
@@ -77,7 +78,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
 
         // ingredient item storage
         ingredientsList = new ArrayList<Ingredient>(); // used for displaying list
-        foodMap = new HashMap<String, Ingredient>(); // used for storing unique ingredients
+        //foodMap = new HashMap<String, Ingredient>(); // used for storing unique ingredients
 
         // ingredient lists
         ingredientsListView = (ListView) findViewById(R.id.ingredient_list);
@@ -164,10 +165,11 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
     public void onOkPressed(Ingredient ingredient, int position) {
 
         sortSpinner.setSelection(0);
-        if (position != -1) {
+        // dont need this as db call below already overwrites
+        /*if (position != -1) {
             //Our ingredient is not new, so we need to update it
             ingredientsList.set(position, ingredient);
-            foodMap.put(ingredient.getName(), ingredient);
+            //foodMap.put(ingredient.getName(), ingredient);
             ingredientAdapter.notifyDataSetChanged();
 
             //Update the ingredient in the database
@@ -175,15 +177,19 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             return;
         }
 
+         */
+
         // add the new food to our current ingr list if new
 
-            if (!foodMap.containsKey(ingredient.getName())) {
+            /*if (!foodMap.containsKey(ingredient.getName())) {
                 ingredientsList.add(ingredient);
 
                 ingredientAdapter.notifyDataSetChanged();
 
             }
             foodMap.put(ingredient.getName(), ingredient);
+
+             */
             // update ingr list in db by overwriting it with the current ingredientsList
             // restructured db to have list of collections instead of one collection
             IngrCollec.document(ingredient.getName()).set(ingredient) // .add equiv to .collec().set(..)
@@ -191,6 +197,15 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                         @Override
                         public void onSuccess(Object o) {
                             System.out.println("Success");
+                            // incase already exists and we are just editing //removing if doesnt exist wont cause any errors
+                            if (position == -1) {
+                                ingredientsList.add(ingredient);
+                                ingredientAdapter.notifyDataSetChanged();
+                            }
+                            else {
+                                ingredientsList.set(position, ingredient);
+                                ingredientAdapter.notifyDataSetChanged();
+                            }
 //                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                         }
                     })
@@ -198,6 +213,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             System.out.println("Fail");
+                            Toast.makeText(getApplicationContext(),"Failed to upload "+ingredient.getName()+ " to database, try again",Toast.LENGTH_LONG).show();
 //                        Log.w(TAG, "Error adding document", e);
                         }
                     });
@@ -215,9 +231,11 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
         if (itemPosition == null) {
             return;
         }
-        String name = ingredientsList.get(itemPosition).getName();
+        Ingredient ingredient = ingredientsList.get(itemPosition);
+
 
         Log.d("ITEM POSITION", "Position is: " + String.valueOf(itemPosition));
+        /*
         if (foodMap.containsKey(name)) {
             foodMap.remove(name);
             ingredientsList.clear();
@@ -225,13 +243,19 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
             ingredientAdapter.notifyDataSetChanged();
 
         }
-        else { return; }
-        IngrCollec.document(name).delete()// .add equiv to .collec().set(..)
+        else { return; }*/
+
+        //boolean ingrExists = IngredientsActivity.ingredientsList.stream().map(Ingredient::getName).anyMatch(ingrName::equals);
+
+
+
+        IngrCollec.document(ingredient.getName()).delete()// .add equiv to .collec().set(..)
                 .addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
                         System.out.println("Success");
                         // this line should be ran in initDB when db updates from noticing change but add here incase
+                        ingredientsList.remove(ingredient);
                         ingredientAdapter.notifyDataSetChanged();
                         //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
@@ -240,7 +264,7 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         System.out.println("Fail");
-                        //Log.w(TAG, "Error adding document", e);
+                        Toast.makeText(getApplicationContext(),"Failed to delete ingredient from database, please try again.",Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -267,13 +291,31 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                             bestBefore = timestamp.toDate();
                         }
 
+                        Float cost = new Float(0);
+                        Float count = new Float(0);
+                        if (document.getData().get("cost") instanceof Double) {
+                            cost = ((Double) document.getData().get("cost")).floatValue();
+
+                        } else {
+                            cost = ((Long) document.getData().get("cost")).floatValue();
+
+                        }
+
+                        if (document.getData().get("count") instanceof Double) {
+                            count = ((Double) document.getData().get("count")).floatValue();
+
+                        } else {
+                            count = ((Long) document.getData().get("count")).floatValue();
+
+                        }
+
                         Ingredient ingredient = new Ingredient(
                                 (String) document.getData().get("name"),
                                 (String) document.getData().get("description"),
                                 bestBefore,
                                 Location.valueOf(document.getData().get("location").toString().toUpperCase()),
-                                ((Long) document.getData().get("count")).intValue(),
-                                ((Long) document.getData().get("cost")).intValue(),
+                                count,
+                                cost,
                                 IngredientCategory.valueOf(document.getData().get("category").toString().toUpperCase())
                         );
 
@@ -281,8 +323,8 @@ public class IngredientsActivity extends AppCompatActivity implements Ingredient
                         //Ingredient ingredient = document.toObject(Ingredient.class);
 
 
-                        //TODO: (Maxym) Add ingredients to sharedPreferences
-                        foodMap.put(ingredient.getName(), ingredient);
+
+                        //foodMap.put(ingredient.getName(), ingredient);
                         ingredientsList.add(ingredient);
 
                     }

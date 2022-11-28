@@ -69,10 +69,16 @@ public class MealPlanIngredientFragment extends DialogFragment implements Adapte
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.meal_plan_add_ingredient_fragment, null);
+        view = getLayoutInflater().inflate(R.layout.meal_plan_add_ingredient_fragment, null);
 
         // init firebase reference
         db = FirebaseFirestore.getInstance();
@@ -169,13 +175,31 @@ public class MealPlanIngredientFragment extends DialogFragment implements Adapte
                             bestBefore = timestamp.toDate();
                         }
 
+                        Float cost = new Float(0);
+                        Float count = new Float(0);
+                        if (document.getData().get("cost") instanceof Double) {
+                            cost = ((Double) document.getData().get("cost")).floatValue();
+
+                        } else {
+                            cost = ((Long) document.getData().get("cost")).floatValue();
+
+                        }
+
+                        if (document.getData().get("count") instanceof Double) {
+                            count = ((Double) document.getData().get("count")).floatValue();
+
+                        } else {
+                            count = ((Long) document.getData().get("count")).floatValue();
+
+                        }
+
                         Ingredient ingredient = new Ingredient(
                                 (String) document.getData().get("name"),
                                 (String) document.getData().get("description"),
                                 bestBefore,
                                 Location.valueOf(document.getData().get("location").toString().toUpperCase()),
-                                ((Long) document.getData().get("count")).intValue(),
-                                ((Long) document.getData().get("cost")).intValue(),
+                                count,
+                                cost,
                                 IngredientCategory.valueOf(document.getData().get("category").toString().toUpperCase())
                         );
 

@@ -44,11 +44,12 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
     private String description;
     private IngredientCategory category;
     private Location location;
-    private Integer price;
-    private Integer amount;
+    private Float price;
+    private Float amount;
     Date expirationDate;
     private Recipe recipe;
     private FoodItemAdapter foodItemAdapter;
+
 
 
 
@@ -283,18 +284,18 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
         // get user inputted price
         try {
             String priceInput = ingredientPrice.getText().toString();
-            price = Integer.parseInt(priceInput);
+            price = Float.parseFloat(priceInput);
         } catch (NumberFormatException e) {
-            price = 0;
+            price = Float.parseFloat("0");
         }
         ingredientPrice.getText().clear();
 
         // get user inputted amount
         try {
             String amountInput = ingredientAmount.getText().toString();
-            amount = Integer.parseInt(amountInput);
+            amount = Float.parseFloat(amountInput);
         } catch (NumberFormatException e) {
-            amount = 0;
+            amount = Float.parseFloat("0");
         }
         ingredientAmount.getText().clear();
     }

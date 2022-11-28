@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +37,7 @@ import java.util.stream.Stream;
  */
 public class MealPlanActivity extends AppCompatActivity implements MealPlanDateFragment.OnFragmentInteractionListener, MealPlanIngredientFragment.OnFragmentInteractionListener, MealPlanRecipeFragment.OnFragmentInteractionListener {
 
-    Button IngredientsNav, RecipesNav, ShoppingListNav;
+    LinearLayout IngredientsNav, RecipesNav, ShoppingListNav;
     String days[] = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
     static HashMap<String, ArrayList<MealPlanItem>> allMeals = new HashMap<>();
     HashMap<String, HashMap<String, MealPlanItem>> allMealsMap = new HashMap<>();
@@ -65,7 +66,6 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         initDBListener(MealPlanCollec);
         initDateFragments();
 
-
         IngredientsNav.setOnClickListener(view -> {
             startActivity(new Intent(MealPlanActivity.this, IngredientsActivity.class));
         });
@@ -77,6 +77,8 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
         ShoppingListNav.setOnClickListener(view -> {
             startActivity(new Intent(MealPlanActivity.this, ShoppingListActivity.class));
         });
+
+
 
 
 
@@ -159,20 +161,72 @@ public class MealPlanActivity extends AppCompatActivity implements MealPlanDateF
                                 Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
                                 Date bestBefore = timestamp.toDate();
                                 Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
-                                Integer count = ((Long) foodData.get("count")).intValue();
-                                Integer cost = ((Long) foodData.get("cost")).intValue();
+                                Float cost = new Float(0);
+                                Float count = new Float(0);
+                                if (foodData.get("cost") instanceof Double) {
+                                    cost = ((Double) foodData.get("cost")).floatValue();
+
+                                } else {
+                                    cost = ((Long) foodData.get("cost")).floatValue();
+
+                                }
+
+                                if (foodData.get("count") instanceof Double) {
+                                    count = ((Double) foodData.get("count")).floatValue();
+
+                                } else {
+                                    count = ((Long) foodData.get("count")).floatValue();
+
+                                }
                                 IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
                                 item = new MealPlanItem(new Ingredient(name, description, bestBefore, location, count, cost, category));
                             } else if (foodData.get("type").equals("RECIPE")) {
                                 String name = (String) foodData.get("name");
-                                String description = (String) foodData.get("description");
-                                Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
-                                Date bestBefore = timestamp.toDate();
-                                Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
-                                Integer count = ((Long) foodData.get("count")).intValue();
-                                Integer cost = ((Long) foodData.get("cost")).intValue();
-                                IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
-                                item = new MealPlanItem(new Ingredient(name, description, bestBefore, location, count, cost, category));
+
+                                String id = (String) foodData.get("id");
+                                String instructions = (String) foodData.get("instructions");
+                                String mealType = (String) foodData.get("mealType");
+                                String image = (String) foodData.get("image");
+                                Integer servings = ((Long) foodData.get("servings")).intValue();
+                                Integer prepTime = ((Long) foodData.get("prepTime")).intValue();
+                                String comments = (String) foodData.get("comments");
+                                ArrayList<HashMap<String, Object>> ingredientsList = (ArrayList<HashMap<String, Object>>) foodData.get("ingredients");
+
+                                ArrayList<Ingredient> newIngredientsList = new ArrayList<Ingredient>();
+                                ArrayList<String> ingredientNames = new ArrayList<String>();
+
+                                for (HashMap<String, Object> ingredient : ingredientsList) {
+                                    System.out.println(ingredient);
+
+                                    String ingredientName = (String) ingredient.get("name");
+                                    ingredientNames.add(ingredientName);
+                                    String description = (String) ingredient.get("description");
+                                    Timestamp ingredientTimestamp = (Timestamp) ingredient.get("bestBefore");
+                                    Date bestBefore = ingredientTimestamp.toDate();
+                                    Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
+                                   
+                                    Float cost = new Float(0);
+                                    Float count = new Float(0);
+                                if (foodData.get("cost") instanceof Double) {
+                                    cost = ((Double) foodData.get("cost")).floatValue();
+
+                                } else {
+                                   cost = ((Long) foodData.get("cost")).floatValue();
+
+                                }
+
+                                if (foodData.get("count") instanceof Double) {
+                                    count = ((Double) foodData.get("count")).floatValue();
+
+                                } else {
+                                    count = ((Long) foodData.get("count")).floatValue();
+
+                                }
+                                    IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
+                                    newIngredientsList.add(new Ingredient(ingredientName, description, bestBefore, location, count, cost, category));
+                                }
+
+                                item = new MealPlanItem(new Recipe(id, name, newIngredientsList, new ArrayList<String>() , instructions, mealType, image, servings, prepTime, comments));
 
                             }
 

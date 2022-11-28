@@ -69,6 +69,7 @@ public class MealPlanRecipeFragment extends DialogFragment implements AdapterVie
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         view = LayoutInflater.from(getActivity()).inflate(R.layout.meal_plan_add_recipe_fragment, null);
 
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialog);
         // init db for recipes
         db = FirebaseFirestore.getInstance();
         RecipeCollec = db.collection("Recipes");
@@ -90,7 +91,12 @@ public class MealPlanRecipeFragment extends DialogFragment implements AdapterVie
                     selectedItem = -1;
                 } else{
                     selectedItem = i;
-                    adapterView.getChildAt(i).setBackgroundColor(Color.GRAY);
+                    try {
+                        adapterView.getChildAt(selectedItem).setBackgroundColor(Color.LTGRAY);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
 
 

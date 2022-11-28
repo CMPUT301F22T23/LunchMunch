@@ -2,109 +2,97 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/rounded_square"
-    tools:padding="10dp">
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:paddingBottom="16dp">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/sl_category_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/category_image"
+        android:layout_width="74dp"
+        android:layout_height="71dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="9dp"
-        app:layout_constraintBottom_toTopOf="@+id/sl_item_name"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/category_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/dairy"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/sl_item_name"
+        android:id="@+id/cost_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="18dp"
-        android:fontFamily="@font/nunito_extrabold"
-        android:text="TextView"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sl_category_image" />
-
-    <TextView
-        android:id="@+id/sl_item_unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/nunito_extrabold"
         android:text="TextView"
         android:textColor="#808080"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sl_item_name" />
+        app:layout_constraintStart_toEndOf="@+id/count_label"
+        app:layout_constraintTop_toBottomOf="@+id/name_label" />
 
     <TextView
-        android:id="@+id/sl_item_cost"
+        android:id="@+id/count_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/nunito_extrabold"
+        android:text="TextView"
+        android:textColor="#161616"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/category_image"
+        app:layout_constraintTop_toBottomOf="@+id/name_label" />
+
+    <TextView
+        android:id="@+id/name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/nunito_extrabold"
         android:text="TextView"
         android:textColor="@color/black"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sl_item_unit" />
+        app:layout_constraintStart_toEndOf="@+id/category_image"
+        app:layout_constraintTop_toTopOf="@+id/category_image"
+        tools:text="@string/app_name" />
 
     <TextView
-        android:id="@+id/sl_item_category"
-        android:layout_width="73dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="9dp"
-        android:background="@drawable/rounded_rectangle_with_border_orange"
+        android:id="@+id/category_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/nunito_extrabold"
-        android:gravity="center"
         android:text="TextView"
-        android:textColor="#BC5510"
+        android:textColor="#808080"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sl_item_cost"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintStart_toEndOf="@+id/name_label"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/sl_item_description"
-        android:layout_width="115dp"
-        android:layout_height="63dp"
+    <Button
+        android:id="@+id/ingrPurchasedBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="9dp"
-        android:background="@drawable/rounded_rectangle_with_border_grey"
-        android:fontFamily="@font/nunito"
-        android:gravity="center"
-        android:text="TextView"
-        android:textColor="#000000"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.563"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sl_item_category"
-        app:layout_constraintVertical_bias="1.0" />
+        android:layout_marginTop="32dp"
+        android:text="Purchased"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/category_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

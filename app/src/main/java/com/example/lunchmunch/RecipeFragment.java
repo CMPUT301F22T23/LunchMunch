@@ -51,7 +51,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     String mealType = "";
     EditText recipeName;
     EditText recipeInstructions;
-    private EditText recipeImage;
+    private Button recipeImage;
     EditText servings;
     EditText prepTime;
     private EditText comments;
@@ -79,10 +79,9 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
         void onOkPressed(Recipe recipe, Boolean isNew, int position);
-
         void deleteRecipe(int position);
-
     }
+
 
 
     @Override
@@ -115,7 +114,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         prepTime = view.findViewById(R.id.prepTime);
         comments = view.findViewById(R.id.comments);
         spinner = (Spinner) view.findViewById(R.id.mealType);
-        
+
         ingredientNamesList = view.findViewById(R.id.ingredientsList);
         editIngredient = view.findViewById(R.id.editIngredientsList);
         blankNames = new ArrayList<String>();
@@ -232,10 +231,6 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                         if (finalIsNew) {
                             listener.onOkPressed(recipe, true, -1);
                         } else {
-                            List<Ingredient> pog = new ArrayList<Ingredient>();
-                            pog = recipe.getIngredients();
-                            System.out.println("Recipe INGR List: " + pog);
-                            // debug stuff
                             listener.onOkPressed(recipe, false, getArguments().getInt("position"));
                         }
                     }
@@ -279,7 +274,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         FragmentActivity activity = getActivity();
         //Find the recipe modal fragment
         assert activity != null;
-        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag("Show Recipe");
+        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag("Recipe Modal");
         // Remove the fragment and start a new one with the changed recipe
 
         if (fragment != null) {

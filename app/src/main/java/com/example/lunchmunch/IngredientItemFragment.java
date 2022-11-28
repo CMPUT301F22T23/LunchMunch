@@ -53,8 +53,8 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
     private Location location;
     private String priceInput;
     private String amountInput;
-    private Integer price;
-    private Integer amount;
+    private Float price;
+    private Float amount;
     private Date expirationDate;
 
     private OnFragmentInteractionListener listener;
@@ -79,6 +79,9 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
             throw new RuntimeException(context + "must implement listener");
         }
     }
+
+
+
     /**
      * Returns an alert object that will is used to take user input about an ingredient
      * @param savedInstanceState In case we need to restore ourselves to a previous state, can be NULL
@@ -227,7 +230,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         if (priceInput.equals("")) {
             errMsg += "Enter a number for price, ";
         } else { // otherwise we have a valid int and we can parse
-            price = Integer.parseInt(priceInput);
+            price = Float.parseFloat(priceInput);
             //xml restricts entering neg number
             if (price == 0) {
                 errMsg += "Enter a positive number for price, ";
@@ -238,7 +241,7 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
         if (amountInput.equals("")) {
             errMsg += "Enter a number for amount, ";
         } else { // otherwise we have a valid int and we can parse
-            amount = Integer.parseInt(amountInput);
+            amount = Float.parseFloat(amountInput);
             //xml restricts entering neg number
             if (amount == 0) {
                 errMsg += "Enter a positive number for amount, ";

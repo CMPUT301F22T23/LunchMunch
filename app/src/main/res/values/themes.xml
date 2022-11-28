@@ -12,10 +12,14 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/status_bar</item>
         <!-- Customize your theme here. -->
+
     </style>
     <style name="SpinnerTheme">
         <item name="android:textColor">#333333</item>
         <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:background">@drawable/gradient_spinner</item>
+        <item name="cornerRadius">10dp</item>
+
     </style>
 
     <style name="Theme.LunchMunch.NoActionBar">

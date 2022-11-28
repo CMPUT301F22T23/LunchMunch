@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ import java.util.Map;
 public class RecipeActivity extends AppCompatActivity implements RecipeFragment.OnFragmentInteractionListener {
 
     private ActivityRecipeBinding binding;
-    Button IngredientsNav, MealPlanNav, ShoppingListNav;
+    LinearLayout IngredientsNav, MealPlanNav, ShoppingListNav;
     FloatingActionButton AddRecipeButton;
     ArrayList<Recipe> recipesList;
     ListView recipesView;
@@ -112,7 +113,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                 bundle.putSerializable("recipesList", recipesList);
                 RecipeModalFragment recipeModalFragment = new RecipeModalFragment(recipe);
                 recipeModalFragment.setArguments(bundle);
-                recipeModalFragment.show(getSupportFragmentManager(), "Show Recipe");
+                recipeModalFragment.show(getSupportFragmentManager(), "Recipe Modal");
                 view.refreshDrawableState();
             }
         });
@@ -302,8 +303,8 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
                             Timestamp timestamp = (Timestamp) foodData.get("bestBefore");
                             Date bestBefore = timestamp.toDate();
                             Location location = Location.valueOf(foodData.get("location").toString().toUpperCase());
-                            Integer count = ((Long) foodData.get("count")).intValue();
-                            Integer cost = ((Long) foodData.get("cost")).intValue();
+                            Float count = ((Long) foodData.get("count")).floatValue();
+                            Float cost = ((Long) foodData.get("cost")).floatValue();
                             IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
                             ingredient = new Ingredient(name, description, bestBefore, location, count, cost, category);
 

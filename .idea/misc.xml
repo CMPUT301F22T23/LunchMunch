@@ -3,28 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../../layout/custom_preview.xml" value="0.15833333333333333" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/drawable-anydpi/ic_delete.xml" value="0.1095" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/drawable-anydpi/ic_save.xml" value="0.355" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/drawable/add.xml" value="0.127" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1095" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/drawable/pencil.xml" value="0.2695" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/drawable/popup_background.xml" value="0.2695" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/drawable/trash.xml" value="0.2695" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/activity_ingredients.xml" value="0.25" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/activity_recipe.xml" value="0.22" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/content_ingredients.xml" value="0.25" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/content_main.xml" value="0.25" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/content_recipe.xml" value="0.22" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/ingredient_item_fragment.xml" value="0.1" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/ingredients_activity.xml" value="0.22" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/recipe_fragment.xml" value="0.25" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/recipe_item_dialog.xml" value="0.25" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/recipe_list_content.xml" value="0.33" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/recipe_modal_bottom.xml" value="0.2" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/recipe_modal_bottom_content.xml" value="0.25" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/recipes_activity.xml" value="0.22" />
-        <entry key="..\:/Users/sheam/LunchMunch/app/src/main/res/layout/shoppinglist_activity.xml" value="0.22" />
         <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/drawable-anydpi/ic_save .xml" value="0.124" />
         <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/drawable/ic_launcher_background.xml" value="0.246" />
         <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/content_ingredients.xml" value="0.18802083333333333" />
@@ -43,15 +21,6 @@
         <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/recipe_fragment_2.xml" value="0.25" />
         <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/recipe_list_content.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/recipes_activity.xml" value="0.18802083333333333" />
-        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1985" />
-        <entry key="app/src/main/res/drawable/pencil.xml" value="0.227" />
-        <entry key="app/src/main/res/drawable/pencil_orange.xml" value="0.227" />
-        <entry key="app/src/main/res/drawable/popup_background.xml" value="0.1985" />
-        <entry key="app/src/main/res/drawable/rounded_rectangle_with_border.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/rounded_rectangle_with_border_grey.xml" value="0.227" />
-        <entry key="app/src/main/res/drawable/rounded_square.xml" value="0.3235" />
-        <entry key="app/src/main/res/drawable/trash.xml" value="0.1985" />
-        <entry key="app/src/main/res/drawable/vegetble.xml" value="0.1985" />
         <entry key="..\:/Users/tobio/AndroidStudioProjects/LunchMunch/app/src/main/res/layout/shopping_list_content.xml" value="0.4" />
         <entry key="app/src/main/res/layout/activity_ingredients.xml" value="0.18899230957031252" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14375" />
@@ -62,21 +31,11 @@
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.14375" />
         <entry key="app/src/main/res/layout/fragment_second2.xml" value="0.14375" />
         <entry key="app/src/main/res/layout/ingredient_item_fragment.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/ingredient_list_content.xml" value="0.9562464396158854" />
-        <entry key="app/src/main/res/layout/ingredients_activity.xml" value="0.1921875" />
-        <entry key="app/src/main/res/layout/meal_plan_add_ingredient_fragment.xml" value="0.45325779036827196" />
-        <entry key="app/src/main/res/layout/meal_plan_add_recipe_fragment.xml" value="0.24584706624348956" />
-        <entry key="app/src/main/res/layout/meal_plan_fragment.xml" value="0.38862152099609387" />
-        <entry key="app/src/main/res/layout/meal_plan_list_item_content.xml" value="0.18555145263671868" />
-        <entry key="app/src/main/res/layout/meal_plan_list_item_ingredient_content.xml" value="0.5768447875976563" />
-        <entry key="app/src/main/res/layout/meal_plan_list_item_recipe_content.xml" value="0.8093704223632813" />
-        <entry key="app/src/main/res/layout/meal_plan_page_content.xml" value="0.24308929443359376" />
-        <entry key="app/src/main/res/layout/mealplan_activity.xml" value="0.31666666666666665" />
-        <entry key="app/src/main/res/layout/recipe_fragment.xml" value="0.31666666666666665" />
-        <entry key="app/src/main/res/layout/recipe_item_dialog.xml" value="0.3799346923828125" />
-        <entry key="app/src/main/res/layout/recipe_list_content.xml" value="0.3058975219726563" />
-        <entry key="app/src/main/res/layout/recipe_modal_bottom.xml" value="0.53626708984375" />
-        <entry key="app/src/main/res/layout/recipe_modal_bottom_content.xml" value="0.25555555555555554" />
+        <entry key="app/src/main/res/layout/meal_plan_add_ingredient_fragment.xml" value="0.29010416666666666" />
+        <entry key="app/src/main/res/layout/meal_plan_list_item_ingredient_content.xml" value="0.19114583333333332" />
+        <entry key="app/src/main/res/layout/meal_plan_list_item_recipe_content.xml" value="0.3095280965169271" />
+        <entry key="app/src/main/res/layout/recipe_modal_bottom.xml" value="0.21296296296296297" />
+        <entry key="app/src/main/res/layout/recipe_modal_bottom_content.xml" value="0.21296296296296297" />
       </map>
     </option>
   </component>
