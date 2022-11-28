@@ -165,6 +165,12 @@ public class Recipe implements Serializable {
 
 
 
+
+    /**
+     * This method scales a recipe accordingly up by a number of servings.
+     * @param servings
+     * @return void
+     */
     public void scaleRecipe(Integer servings) {
         if (this.servings == 1 && servings < 0) {
             return;

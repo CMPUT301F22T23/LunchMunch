@@ -66,6 +66,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     ArrayList<Ingredient> blankIngredients = new ArrayList<Ingredient>();
     List<String> blankNames;
     ArrayList<Recipe> recipesList;
+    private FoodItemAdapter foodItemAdapter;
     private Recipe recipe;
 
     public RecipeFragment() {
@@ -74,6 +75,10 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
     public RecipeFragment(Recipe recipe) {
         this.recipe = recipe;
+    }
+    public RecipeFragment(Recipe recipe, FoodItemAdapter recipeIngredientsAdapter) {
+        this.recipe = recipe;
+        foodItemAdapter = recipeIngredientsAdapter;
     }
 
 
@@ -115,7 +120,6 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         prepTime = view.findViewById(R.id.prepTime);
         comments = view.findViewById(R.id.comments);
         spinner = (Spinner) view.findViewById(R.id.mealType);
-
         ingredientNamesList = view.findViewById(R.id.ingredientsList);
         editIngredient = view.findViewById(R.id.editIngredientsList);
         blankNames = new ArrayList<String>();
@@ -142,6 +146,10 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
             comments.setText(recipe.getComments());
             mealType = recipe.getMealType();
             spinner.setSelection(getMealTypeIndex(mealType));
+            if (!recipe.getName().isEmpty()) {
+                editIngredient.setVisibility(View.GONE);
+                ingredientNamesList.setVisibility(View.GONE);
+            }
         }
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -167,21 +175,21 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                         // This is to prevent the user from being able to go back to the recipe fragment
                         // after they have already created a recipe
 
-                        System.out.println(getParentFragmentManager().getFragments().size());
                         if (getParentFragmentManager().getFragments().size() > 4) {
                             Fragment fragment = getParentFragmentManager().findFragmentByTag("RecipeFragment");
                             assert fragment != null;
                             getParentFragmentManager().beginTransaction().remove(fragment).commit();
                             getParentFragmentManager().popBackStack();
                         }
-                        System.out.println(getParentFragmentManager().getFragments().size());
                         // This will not work however if you look at the println of recipe.getIngredients() it will show the correct list :)
+                        System.out.println("Ingredients " + recipe.getIngredients());
                         String names = "";
                         for (int i = 0; i < recipe.getIngredients().size(); i++) {
                             names += recipe.getIngredients().get(i).getName() + " ";
                         }
 
                         ingredientNamesList.setText(names);
+
 
 
                     }
@@ -213,11 +221,12 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                 .setTitle("Add/Edit Recipe")
                 .setPositiveButton("OK", (dialog, id) -> {
 
+
                             //Do nothing here because we override this button later to change the close behaviour.
                             //However, we still need this because on older versions of Android unless we
                             //pass a handler the button doesn't get instantiated
-                            int servs = 0;
-                            int prep = 0;
+                            int servs = 1;
+                            int prep = 1;
 
                             String recipeNameString = recipeName.getText().toString();
                             if (recipeNameString.isEmpty()) {
@@ -249,17 +258,24 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                                 recipe.setComments(comments.getText().toString());
                                 recipe.setMealType(mealType);
                             }
-
+                            System.out.println("Listener "+ listener);
                             if (listener != null) {
                                 if (finalIsNew) {
                                     listener.onOkPressed(recipe, true, -1);
+
                                 } else {
                                     listener.onOkPressed(recipe, false, getArguments().getInt("position"));
+
+                                }
+                                if (foodItemAdapter != null) {
+                                    System.out.println("Adapter " + adapter);
+                                    foodItemAdapter.notifyDataSetChanged();
+
                                 }
                             }
+
+
                             dialog.dismiss();
-
-
 
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {
@@ -274,7 +290,17 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
             Button negative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
             //negative.setBackgroundResource(R.drawable.ic_delete);
             negative.setTextColor(Color.BLACK);
-
+            if (recipe != null) {
+                String names = "";
+                for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                    if (i == recipe.getIngredients().size() - 1) {
+                        names += recipe.getIngredients().get(i).getName();
+                    } else {
+                        names += recipe.getIngredients().get(i).getName() + ", ";
+                    }
+                }
+                ingredientNamesList.setText(names);
+            }
         });
         return dialog;
     }
@@ -300,15 +326,18 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     public void onDismiss(DialogInterface dialog) {
         FragmentActivity activity = getActivity();
         //Find the recipe modal fragment
-        assert activity != null;
-        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag("Recipe Modal");
+        if (activity != null) {
+            Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag("Recipe Modal");
+            if (fragment != null) {
+                RecipeModalFragment recipeModalFragment = (RecipeModalFragment) fragment;
+                recipeModalFragment.recipe = recipe;
+                recipeModalFragment.updateRecipe();
+            }
+        }
+
         // Remove the fragment and start a new one with the changed recipe
 
-        if (fragment != null) {
-            RecipeModalFragment recipeModalFragment = (RecipeModalFragment) fragment;
-            recipeModalFragment.recipe = recipe;
-            recipeModalFragment.updateRecipe();
-        }
+
 
     }
 

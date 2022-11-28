@@ -65,7 +65,10 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
         foodNames = new ArrayList<String>(); // used to store unique ingredient names
 
         // pulls up fragment to add ingredients
-        addIngredients.setOnClickListener(view -> fragment.show(getSupportFragmentManager(), "Add Ingredients"));
+        addIngredients.setOnClickListener(view -> {
+            fragment.show(getSupportFragmentManager(), "Add Ingredient");
+            addIngredients.setVisibility(View.VISIBLE);
+        });
 
 
         ingredientsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,6 +79,8 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
                 Bundle args = new Bundle();
                 args.putParcelable("currentIngredient", ingredientsList.get(itemPosition));
                 args.putInt("currentIngredientPosition", itemPosition);
+                System.out.println("item position: " + itemPosition);
+                System.out.println("ingredient name: " + ingredientsList.get(itemPosition).getName());
                 fragment2.setArguments(args);
                 fragment2.show(getSupportFragmentManager(), "Add_Ingredient");
                 view.refreshDrawableState();

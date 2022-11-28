@@ -148,17 +148,27 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
             public void onShow(DialogInterface dialogInterface) {
 
                 Button delBtn = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
-                delBtn.setTextColor(Color.BLACK);
-                //saveBtn.setBackgroundResource(R.drawable.ic_save);
-                delBtn.setOnClickListener(view -> {
-                    System.out.println("DELETE");
-                    //can clear inputs now
-                    clearUserInput();
-                    // close/dismiss popup
-                    alert.dismiss();
-                    // delete ingr from app and db
-                    listener.deleteIngredient();
-                });
+                if (getArguments() != null) {
+                    Integer position = getArguments().getInt("currentIngredientPosition");
+
+                    if (position == null ) {
+                        delBtn.setVisibility(View.GONE);
+                    } else {
+                        delBtn.setTextColor(Color.BLACK);
+                        //saveBtn.setBackgroundResource(R.drawable.ic_save);
+                        delBtn.setOnClickListener(view -> {
+                            System.out.println("DELETE");
+                            //can clear inputs now
+                            clearUserInput();
+                            // close/dismiss popup
+                            alert.dismiss();
+                            // delete ingr from app and db
+                            listener.deleteIngredient();
+                        });
+                    }
+                } else {
+                    delBtn.setVisibility(View.GONE);
+                }
 
                 // using inside onShow allows us to close the dialog when we want (even if user pressed positive button (in this case would have invalid inputs))
                 Button saveBtn = alert.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -316,9 +326,13 @@ public class IngredientItemFragment extends DialogFragment implements AdapterVie
 
         // date picker dialog
         expirationDate = currentIngredient.getBestBefore();
-        String fullDate = expirationDate.toString();
-        String [] displayDate = fullDate.split(" ");
-        ingredientExpiry.setText(displayDate[1] + " " + displayDate[2] + " " + displayDate[5]);
+        String fullDate;
+        if (expirationDate != null) {
+            fullDate = expirationDate.toString();
+            String [] displayDate = fullDate.split(" ");
+            ingredientExpiry.setText(displayDate[1] + " " + displayDate[2] + " " + displayDate[5]);
+        }
+
 
         // user inputted name
         ingredientName = view.findViewById(R.id.ingredient_name);
