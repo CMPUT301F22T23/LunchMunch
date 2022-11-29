@@ -34,8 +34,11 @@ import androidx.fragment.app.FragmentManager;
 import com.example.lunchmunch.databinding.RecipeFragmentBinding;
 
 import org.checkerframework.checker.units.qual.A;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +55,6 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
     String mealType = "";
     EditText recipeName;
     EditText recipeInstructions;
-    private TextView recipeImage;
     EditText servings;
     EditText prepTime;
     private EditText comments;
@@ -84,7 +86,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
     // Interaction with fragment
     public interface OnFragmentInteractionListener {
-        void onOkPressed(Recipe recipe, Boolean isNew, int position);
+        void onOkPressed(Recipe recipe, Boolean isNew, int position) throws IOException, JSONException;
         void deleteRecipe(int position);
     }
 
@@ -115,7 +117,7 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         view = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_item_dialog, null);
         recipeName = view.findViewById(R.id.recipeName);
         recipeInstructions = view.findViewById(R.id.recipeInstructions);
-        recipeImage = view.findViewById(R.id.recipeImage);
+
         servings = view.findViewById(R.id.servings);
         prepTime = view.findViewById(R.id.prepTime);
         comments = view.findViewById(R.id.comments);
@@ -140,7 +142,6 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
         if (recipe != null) {
             recipeName.setText(recipe.getName());
             recipeInstructions.setText(recipe.getInstructions());
-            recipeImage.setText(recipe.getImage());
             servings.setText(Integer.toString(recipe.getServings()));
             prepTime.setText(Integer.toString(recipe.getPrepTime()));
             comments.setText(recipe.getComments());
@@ -247,12 +248,11 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
 
                             if (recipe == null) {
                                 List<String> ingredients = new ArrayList<String>();
-                                recipe = new Recipe(recipeNameString, ingredients, recipeInstructions.getText().toString(), mealType, recipeImage.getText().toString(), servs, prep, comments.getText().toString());
+                                recipe = new Recipe(recipeNameString, ingredients, recipeInstructions.getText().toString(), mealType, "", servs, prep, comments.getText().toString());
                             }
                             {
                                 recipe.setName(recipeNameString);
                                 recipe.setInstructions(recipeInstructions.getText().toString());
-                                recipe.setImage(recipeImage.getText().toString());
                                 recipe.setServings(servs);
                                 recipe.setPrepTime(prep);
                                 recipe.setComments(comments.getText().toString());
@@ -261,10 +261,22 @@ public class RecipeFragment extends DialogFragment implements AdapterView.OnItem
                             System.out.println("Listener "+ listener);
                             if (listener != null) {
                                 if (finalIsNew) {
-                                    listener.onOkPressed(recipe, true, -1);
+                                    try {
+                                        listener.onOkPressed(recipe, true, -1);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
 
                                 } else {
-                                    listener.onOkPressed(recipe, false, getArguments().getInt("position"));
+                                    try {
+                                        listener.onOkPressed(recipe, false, getArguments().getInt("position"));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
 
                                 }
                                 if (foodItemAdapter != null) {

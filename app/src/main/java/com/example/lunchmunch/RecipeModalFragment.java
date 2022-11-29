@@ -23,6 +23,9 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 /**
@@ -178,7 +181,13 @@ public class RecipeModalFragment extends DialogFragment implements AdapterView.O
                 recipeIngredientsAdapter.notifyDataSetChanged();
 
                 if (listener != null) {
-                    listener.onOkPressed(recipe, false, getArguments().getInt("position"));
+                    try {
+                        listener.onOkPressed(recipe, false, getArguments().getInt("position"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
