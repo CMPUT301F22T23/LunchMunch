@@ -21,14 +21,12 @@
         android:id="@+id/addIngredientsButton"
         android:layout_width="55dp"
         android:layout_height="55dp"
+        android:layout_marginTop="16dp"
         android:clickable="true"
         app:backgroundTint="#E1CFCA"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ingredient_list"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/add" />
 
     <TextView
