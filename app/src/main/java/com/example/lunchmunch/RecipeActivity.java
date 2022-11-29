@@ -2,15 +2,14 @@ package com.example.lunchmunch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,9 +27,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -54,9 +59,14 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     Spinner sortSpinner;
     ArrayAdapter<String> sortAdapter;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
 
         binding = ActivityRecipeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -152,8 +162,29 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
      */
 
     @Override
-    public void onOkPressed(Recipe recipe, Boolean isNew, int position) {
+    public void onOkPressed(Recipe recipe, Boolean isNew, int position) throws IOException, JSONException {
         if (isNew) {
+            URL url = new URL("https://api.unsplash.com/search/photos?query="+recipe.getName()+"&client_id=ptIHmvHAmudtFyE9GDgnhHCZPILTBexJzscwv9ZBwH0");
+
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept-Version", "v1");
+            connection.setRequestProperty("accept", "application/json");
+            InputStream responseStream = connection.getInputStream();
+            if (connection.getResponseCode() == 200) {
+                BufferedReader in = new BufferedReader(new java.io.InputStreamReader(responseStream));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                JSONObject jsonObject = new JSONObject(response.toString());
+                String imageURL = jsonObject.getJSONArray("results").getJSONObject(0).getJSONObject("urls").getString("regular");
+                recipe.setImage(imageURL);
+            }
+
+
             RecipeCollec.document().set(recipe) // .add equiv to .collec().set(..)
                     .addOnSuccessListener(new OnSuccessListener() {
                         @Override

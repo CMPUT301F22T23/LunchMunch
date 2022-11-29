@@ -20,7 +20,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -116,7 +118,13 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
                             recipe.getIngredients().remove(ingPosition.intValue());
                             System.out.println(recipe.getIngredients().size());
                             System.out.println(ingPosition);
-                            listener.onOkPressed(recipe, false, position);
+                            try {
+                                listener.onOkPressed(recipe, false, position);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                         foodItemAdapter.notifyDataSetChanged();
 
@@ -148,7 +156,13 @@ public class RecipeIngredientFragment extends DialogFragment implements AdapterV
                                 recipe.getIngredients().set(ingPosition, ingredient);
                             }
                             int position = getArguments().getInt("position");
-                            listener.onOkPressed(recipe, false, position);
+                            try {
+                                listener.onOkPressed(recipe, false, position);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             foodItemAdapter.notifyDataSetChanged();
                         }
 
