@@ -315,6 +315,7 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
                             } else if (foodData.get("type").equals("RECIPE")) {
                                 ArrayList<HashMap<String, Object>> ingredientsList = (ArrayList<HashMap<String, Object>>) foodData.get("ingredients");
+
                                 for (HashMap<String, Object> ingredient : ingredientsList) {
 
                                     String ingredientName = (String) ingredient.get("name");
@@ -325,23 +326,25 @@ public class ShoppingListActivity extends AppCompatActivity implements ShoppingL
 
                                     Float cost = new Float(0);
                                     Float count = new Float(0);
-                                    if (foodData.get("cost") instanceof Double) {
-                                        cost = ((Double) foodData.get("cost")).floatValue();
+                                    if (ingredient.get("cost") instanceof Double) {
+                                        cost = ((Double) ingredient.get("cost")).floatValue();
 
                                     } else {
-                                        cost = ((Long) foodData.get("cost")).floatValue();
+                                        cost = ((Long) ingredient.get("cost")).floatValue();
 
                                     }
 
-                                    if (foodData.get("count") instanceof Double) {
-                                        count = ((Double) foodData.get("count")).floatValue();
+                                    if (ingredient.get("count") instanceof Double) {
+                                        count = ((Double) ingredient.get("count")).floatValue();
 
                                     } else {
-                                        count = ((Long) foodData.get("count")).floatValue();
+                                        count = ((Long) ingredient.get("count")).floatValue();
 
                                     }
-                                    IngredientCategory category = IngredientCategory.valueOf(foodData.get("category").toString().toUpperCase());
+
+                                    IngredientCategory category = IngredientCategory.valueOf(ingredient.get("category").toString().toUpperCase());
                                     ingr = new Ingredient(ingredientName, description, bestBefore, location, count, cost, category);
+
 
                                     if (ingrMap.containsKey(ingredientName)) {
                                         // if the ingredient already exists in the map then just add to its required count
