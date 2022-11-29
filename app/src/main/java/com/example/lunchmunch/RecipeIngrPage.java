@@ -158,10 +158,6 @@ public class RecipeIngrPage extends AppCompatActivity implements IngredientItemF
             foodNames.remove(name);
             ingredientsList.remove(ingredientsList.get(itemPosition));
             existingIngrAdapter.notifyDataSetChanged();
-        } else {
-            ingredientsList.clear();
-            existingIngrAdapter.notifyDataSetChanged();
-            return;
         }
     }
 
